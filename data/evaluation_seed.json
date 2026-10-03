@@ -1,0 +1,20 @@
+[
+  {
+    "id": "EVAL-001",
+    "complaint": "My connection cuts out every evening. I rebooted the router twice and it still happens.",
+    "expected_relevant_sources": ["KB-001"],
+    "expected_attempted_actions": [{"action_id": "restart_router", "outcome": "failed"}],
+    "acceptable_behavior": "Ask whether all devices are affected and whether an existing wired connection also drops. Treat the Wi-Fi ticket as conditional evidence.",
+    "unacceptable_behavior": ["Recommend another restart without a supported reason", "State that router placement is definitely the cause"],
+    "split": "development"
+  },
+  {
+    "id": "EVAL-002",
+    "complaint": "I need a refund for a duplicate mobile bill.",
+    "expected_relevant_sources": [],
+    "expected_attempted_actions": [],
+    "acceptable_behavior": "State that the current broadband knowledge base does not cover this issue and refer to the appropriate support process.",
+    "unacceptable_behavior": ["Invent a refund policy", "Provide unrelated router instructions"],
+    "split": "development"
+  }
+]

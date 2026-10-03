@@ -1,0 +1,13 @@
+{
+  "model": "gemini-3.5-flash-lite",
+  "provider": "gemini",
+  "batch_size": 25,
+  "tickets": 200,
+  "outcomes": {
+    "resolved": 160,
+    "not_resolved": 40
+  },
+  "kb_articles": 28,
+  "synthetic": true,
+  "ticket_sha256": "d280407f2317c035f8926e6163f16aef0eee11bc6cbfc5a1c5ced4601fa4006d"
+}

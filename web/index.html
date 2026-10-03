@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PS2 · Telecom support assistant</title>
+  <style>
+    :root{font-family:system-ui,sans-serif;color:#183047;background:#f3f6fa;line-height:1.55}
+    *{box-sizing:border-box}body{margin:0}header{background:#112b43;color:white;padding:28px max(24px,calc((100vw - 1160px)/2))}header p{color:#bdd3e4;margin:6px 0}
+    h1{font-size:28px;margin:0}h2{font-size:20px;margin:0 0 18px}h3{font-size:16px;margin:14px 0 6px}
+    main{max-width:1208px;margin:auto;padding:28px 24px;display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:24px;align-items:start}
+    section{background:white;border:1px solid #dce5ee;border-radius:14px;padding:24px}label{display:block;font-weight:600;margin:16px 0 6px}
+    textarea,select,button{font:inherit}textarea,select{width:100%;border:1px solid #a9bbca;border-radius:7px;padding:10px;background:white;color:#183047}textarea{resize:vertical;min-height:140px}#observations{min-height:95px}
+    button{border:1px solid #9bb0c0;border-radius:7px;padding:10px 15px;cursor:pointer;background:white;color:#183047}.primary{background:#076d80;color:white;border-color:#076d80}button:disabled{opacity:.6;cursor:wait}
+    button:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #52b8dd;outline-offset:3px}
+    fieldset{margin:0;padding:0;border:0;min-width:0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .muted{color:#587084;font-size:14px}.notice{border-left:3px solid #dfaa42;padding-left:12px}.card{border:1px solid #dce5ee;border-radius:9px;padding:16px;margin:14px 0}.tag{display:inline-block;background:#eef3f7;padding:3px 9px;border-radius:5px;font-size:13px;margin:0 6px 6px 0}
+    .unverified{background:#fff3da;color:#7a4b00}.answer{white-space:pre-wrap}.error{color:#a32c2c}.empty{padding:35px 0;color:#587084}a{color:#076d80}summary{cursor:pointer;color:#076d80}#status{min-height:24px;margin:14px 0}.metadata{display:flex;gap:6px;flex-wrap:wrap}#health{font-size:13px}
+    @media(max-width:800px){main{grid-template-columns:1fr}header{padding:24px}h1{font-size:24px}}
+  </style>
+</head>
+<body>
+  <header><h1>Telecom support assistant</h1><p>Review a complaint. Find evidence. Prepare a grounded draft.</p><div id="health">Checking service availability…</div></header>
+  <main>
+    <section aria-labelledby="input-heading">
+      <h2 id="input-heading">Customer complaint</h2>
+      <p class="muted">Masks common email, phone and account identifiers before processing. Use fictional complaints for this prototype.</p>
+      <form id="support-form">
+        <fieldset id="inputs">
+          <label for="complaint">What is happening?</label>
+          <textarea id="complaint" required maxlength="5000" placeholder="My connection drops every evening. I restarted the router twice, but it still happens."></textarea>
+          <label for="observations">Observations and actions already tried</label>
+          <textarea id="observations" maxlength="3000" placeholder="All Wi-Fi devices disconnect. An existing wired connection stays connected. The router is inside a cupboard."></textarea>
+          <div class="filters">
+            <div><label for="mode">Evidence search</label><select id="mode"><option value="hybrid">Hybrid</option><option value="keyword">Keyword</option><option value="semantic">Semantic</option></select></div>
+            <div><label for="product">Search product</label><select id="product"><option value="">All products</option><option value="broadband">Broadband</option><option value="mobile">Mobile</option><option value="fixed_voice">Fixed voice</option><option value="iptv">IPTV</option></select></div>
+          </div>
+          <p class="muted">Search settings apply to “Find evidence”. Drafting selects relevant evidence automatically.</p>
+          <div class="actions"><button class="primary" type="submit" value="resolve">Prepare draft</button><button type="submit" value="search">Find evidence</button><button type="button" id="clear">Clear</button></div>
+        </fieldset>
+      </form>
+      <p id="status" role="status" aria-live="polite"></p>
+      <p class="muted notice">Agent review required. KB articles and generated history are synthetic; public ticket outcomes are unverified.</p>
+    </section>
+    <section aria-labelledby="results-heading" aria-live="polite" aria-busy="false" id="output">
+      <h2 id="results-heading">Review</h2>
+      <div id="results"><p class="empty">Your draft or matching evidence will appear here.</p></div>
+    </section>
+  </main>
+  <script>
+    const el = id => document.getElementById(id);
+    const tierNames = {kb:'Synthetic KB article',resolved:'Synthetic resolved ticket',unverified:'Unverified public ticket',unresolved:'Synthetic unresolved ticket'};
+    function node(tag, text, className) {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    }
+    async function request(url, payload) {
+      const response = await fetch(url, payload ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)} : {});
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(typeof data.detail === 'string' ? data.detail : 'The request could not be completed. Check the inputs and try again.');
+      }
+      return response.json();
+    }
+    async function health() {
+      try {
+        const data = await request('/health');
+        el('health').textContent = `${data.active_sources} evidence records · ${data.generation_configured ? 'Drafting configured' : 'Drafting needs configuration'}${data.status === 'degraded' ? ' · Some search services unavailable' : ''}`;
+      } catch { el('health').textContent = 'Service unavailable'; }
+    }
+    function sourceCard(source) {
+      const card = node('div', undefined, 'card');
+      const label = node('span', tierNames[source.evidence_tier] || 'Evidence record', 'tag' + (source.evidence_tier === 'unverified' ? ' unverified' : ''));
+      card.append(label, node('h3', source.record?.title || source.id));
+      const link = node('a', `${source.id} · version ${source.version}`);
+      link.href = '/sources/' + encodeURIComponent(source.id);
+      link.target = '_blank'; link.rel = 'noopener';
+      card.append(link);
+      const details = node('details'); details.append(node('summary','View evidence'));
+      let loaded = false;
+      details.addEventListener('toggle', async () => {
+        if (!details.open || loaded) return;
+        loaded = true;
+        const content = node('div', 'Loading evidence…'); details.append(content);
+        try {
+          const record = source.record || await request(link.href);
+          content.replaceChildren();
+          for (const [title, value] of [['Complaint',record.complaint],['Outcome',record.outcome_evidence || record.outcome],['Applicability',record.applicability],['Suggested response',record.suggested_steps],['Escalation',record.escalation]]) {
+            if (value) content.append(node('h3',title),node('p',value));
+          }
+          for (const [title, steps] of [['Guidance',record.steps],['Historical steps',record.resolution_steps]]) {
+            if (steps?.length) {
+              content.append(node('h3',title));
+              const list = node('ol');
+              steps.forEach(step => list.append(node('li',`${step.instruction}${step.condition ? ' Condition: '+step.condition : ''}`)));
+              content.append(list);
+            }
+          }
+          if (record.provenance) content.append(node('p','Origin: '+record.provenance,'muted'));
+          if (record.creator || record.license) content.append(node('p',[record.creator,record.license].filter(Boolean).join(' · '),'muted'));
+        } catch(error) { content.textContent = error.message; loaded = false; }
+      });
+      card.append(details);
+      return card;
+    }
+    function showDraft(data) {
+      const results = el('results');
+      results.append(node('h3',data.status === 'resolution' ? 'Resolution draft' : data.status === 'escalation' ? 'Refer to support' : 'More information needed'));
+      const metadata = node('div',undefined,'metadata');
+      for (const key of ['product','category','severity','sentiment']) metadata.append(node('span',`${key}: ${data.classification[key]}`,'tag'));
+      results.append(metadata,node('p',data.answer,'answer'));
+      if (data.reason === 'generation_not_configured') results.append(node('p','Drafting is not configured. You can still search for evidence.','muted'));
+      else if (data.generation === 'fallback') results.append(node('p','A checked draft was unavailable. Gather these details before proceeding.','muted'));
+      if (data.status === 'resolution' && data.questions?.length) {
+        results.append(node('h3','Questions to confirm'));
+        data.questions.forEach(question => results.append(node('p',question)));
+      }
+      results.append(node('h3','Cited evidence'));
+      if (!data.citations.length) results.append(node('p','No resolution steps were cited.','muted'));
+      data.citations.forEach(source => results.append(sourceCard(source)));
+      const processed = node('details'); processed.append(node('summary','Processed complaint'),node('p',data.masked_complaint));
+      results.append(processed);
+    }
+    el('support-form').addEventListener('submit',async event => {
+      event.preventDefault();
+      const action = event.submitter?.value || 'resolve';
+      const complaint = el('complaint').value.trim();
+      if (!complaint) { el('status').textContent = 'Enter a complaint first.'; return; }
+      if (action === 'search' && complaint.length > 2000) { el('status').textContent = 'For evidence search, shorten the complaint to 2,000 characters.'; return; }
+      el('inputs').disabled = true; el('output').setAttribute('aria-busy','true');
+      el('status').className = ''; el('status').textContent = action === 'resolve' ? 'Preparing a draft…' : 'Finding evidence…';
+      el('results').replaceChildren();
+      try {
+        if (action === 'resolve') showDraft(await request('/resolve',{complaint,observations:el('observations').value}));
+        else {
+          const payload = {query:complaint,mode:el('mode').value,limit:6};
+          if (el('product').value) payload.product = el('product').value;
+          const data = await request('/search',payload);
+          el('results').append(node('h3','Matching evidence'));
+          if (!data.results.length) el('results').append(node('p','No matching evidence found. Clarify the service and symptoms.'));
+          data.results.forEach(hit => el('results').append(sourceCard({...hit,evidence_tier:hit.record.evidence_tier})));
+        }
+        el('status').textContent = 'Ready for review.';
+      } catch(error) { el('status').textContent = error.message; el('status').className = 'error'; }
+      finally { el('inputs').disabled = false; el('output').setAttribute('aria-busy','false'); health(); }
+    });
+    el('clear').addEventListener('click',() => { el('support-form').reset(); el('results').replaceChildren(node('p','Your draft or matching evidence will appear here.','empty')); el('status').textContent = ''; el('complaint').focus(); });
+    health();
+  </script>
+</body>
+</html>
