@@ -27,6 +27,8 @@
       <p class="muted">Masks common email, phone and account identifiers before processing. Use fictional complaints for this prototype.</p>
       <form id="support-form">
         <fieldset id="inputs">
+          <label for="access-key">Access key (optional for local demo)</label>
+          <input id="access-key" type="password" autocomplete="off" style="width:100%;padding:10px;border:1px solid #a9bbca;border-radius:7px" placeholder="Use an agent key when access is required">
           <label for="complaint">What is happening?</label>
           <textarea id="complaint" required maxlength="5000" placeholder="My connection drops every evening. I restarted the router twice, but it still happens."></textarea>
           <label for="observations">Observations and actions already tried</label>
@@ -40,7 +42,7 @@
         </fieldset>
       </form>
       <p id="status" role="status" aria-live="polite"></p>
-      <p class="muted notice">Agent review required. KB articles and generated history are synthetic; public ticket outcomes are unverified.</p>
+      <p class="muted notice">Agent review required. Check source provenance: synthetic examples and unverified public replies are labelled.</p>
     </section>
     <section aria-labelledby="results-heading" aria-live="polite" aria-busy="false" id="output">
       <h2 id="results-heading">Review</h2>
@@ -49,7 +51,7 @@
   </main>
   <script>
     const el = id => document.getElementById(id);
-    const tierNames = {kb:'Synthetic KB article',resolved:'Synthetic resolved ticket',unverified:'Unverified public ticket',unresolved:'Synthetic unresolved ticket'};
+    const tierNames = {kb:'KB article',resolved:'Resolved history',unverified:'Unverified public ticket',unresolved:'Unresolved history'};
     function node(tag, text, className) {
       const element = document.createElement(tag);
       if (text !== undefined) element.textContent = text;
@@ -57,7 +59,10 @@
       return element;
     }
     async function request(url, payload) {
-      const response = await fetch(url, payload ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)} : {});
+      const headers = {};
+      if (el('access-key').value) headers['X-API-Key'] = el('access-key').value;
+      if (payload) headers['Content-Type'] = 'application/json';
+      const response = await fetch(url, payload ? {method:'POST',headers,body:JSON.stringify(payload)} : {headers});
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(typeof data.detail === 'string' ? data.detail : 'The request could not be completed. Check the inputs and try again.');
@@ -74,8 +79,10 @@
       const card = node('div', undefined, 'card');
       const label = node('span', tierNames[source.evidence_tier] || 'Evidence record', 'tag' + (source.evidence_tier === 'unverified' ? ' unverified' : ''));
       card.append(label, node('h3', source.record?.title || source.id));
+      const origin = source.record?.provenance || source.provenance;
+      if (origin) card.append(node('p','Origin: '+origin,'muted'));
       const link = node('a', `${source.id} · version ${source.version}`);
-      link.href = '/sources/' + encodeURIComponent(source.id);
+      link.href = '/sources/' + encodeURIComponent(source.id) + '?version=' + source.version;
       link.target = '_blank'; link.rel = 'noopener';
       card.append(link);
       const details = node('details'); details.append(node('summary','View evidence'));
@@ -111,6 +118,7 @@
       const metadata = node('div',undefined,'metadata');
       for (const key of ['product','category','severity','sentiment']) metadata.append(node('span',`${key}: ${data.classification[key]}`,'tag'));
       results.append(metadata,node('p',data.answer,'answer'));
+      if (data.classification_notice) results.append(node('p',data.classification_notice,'muted'));
       if (data.reason === 'generation_not_configured') results.append(node('p','Drafting is not configured. You can still search for evidence.','muted'));
       else if (data.generation === 'fallback') results.append(node('p','A checked draft was unavailable. Gather these details before proceeding.','muted'));
       if (data.status === 'resolution' && data.questions?.length) {

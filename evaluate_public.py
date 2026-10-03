@@ -5,6 +5,21 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from api import create_app
 from evidence import build_public_evaluation, public_records
+from privacy import mask
+from retrieval import tokens
+
+
+def near_duplicate_ids(query, records, threshold=.80):
+    def shingles(text):
+        words=tokens(mask(text)[0])
+        return {tuple(words[i:i+3]) for i in range(max(0,len(words)-2))}
+    target=shingles(query)
+    result=[]
+    for record in records:
+        candidate=shingles(record.get('complaint',''))
+        if query==record.get('complaint') or (target and candidate and len(target&candidate)/len(target|candidate)>=threshold):
+            result.append(record['id'])
+    return result
 
 
 def run(resolve=False):
@@ -17,8 +32,11 @@ def run(resolve=False):
     with TestClient(create_app(cache_path=Path('runtime/embeddings.json'))) as client:
         for case in cases:
             row = {'id': case['id'], 'annotation_status': case['annotation_status']}
-            exclusions = [r['id'] for r in indexed_public if r['complaint'] == case['query']]
+            exclusions = sorted(set(near_duplicate_ids(case['query'],indexed_public)+[case['excluded_source_id']]))
+            if len(exclusions)>50:
+                raise ValueError('More than 50 near duplicates; review the candidate corpus before evaluating.')
             row['excluded_source_ids'] = exclusions
+            row['near_duplicate_threshold'] = .80
             for mode in ('keyword', 'semantic', 'hybrid'):
                 response = client.post('/search', json={'query': case['query'][:2000], 'mode': mode,
                                                         'exclude_source_ids': exclusions})

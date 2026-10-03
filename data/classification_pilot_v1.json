@@ -1,0 +1,13 @@
+{
+  "version":"classification-pilot-v1",
+  "label_origin":"AI-assisted author labels; independent human adjudication pending",
+  "notice":"Six fictional cases are a diagnostic pilot, not a validated severity policy or real-world accuracy estimate. Category labels accept documented aliases in the existing corpus.",
+  "cases":[
+    {"id":"C01","complaint":"My broadband router loses internet on every device. I am frustrated. I restarted the router and it still does not work.","expected":{"product":["broadband"],"category":["no_connection","connectivity","intermittent_connectivity","intermittent_connection"],"sentiment":["negative"],"severity":["unknown"]},"attempted_action":"restart_router"},
+    {"id":"C02","complaint":"My mobile data cannot connect although I can still make calls. I am unhappy with this problem.","expected":{"product":["mobile"],"category":["mobile_data","data","data_connectivity","no_connection","connectivity"],"sentiment":["negative"],"severity":["unknown"]}},
+    {"id":"C03","complaint":"Our landline has no dial tone. I am frustrated because fixed voice service is unavailable.","expected":{"product":["fixed_voice"],"category":["fixed_voice","no_connection","voice","voice_quality","connectivity"],"sentiment":["negative"],"severity":["unknown"]}},
+    {"id":"C04","complaint":"Our IPTV live broadcast buffers and freezes. I am disappointed with the television service.","expected":{"product":["iptv"],"category":["streaming","buffering","slow_speed","performance"],"sentiment":["negative"],"severity":["unknown"]}},
+    {"id":"C05","complaint":"I am happy: the mobile data service works again after the support team helped.","expected":{"product":["mobile"],"category":["unknown","mobile_data","data","connectivity"],"sentiment":["positive"],"severity":["unknown","low"]}},
+    {"id":"C06","complaint":"Something is wrong, but I have not identified the service or symptoms yet.","expected":{"product":["unknown"],"category":["unknown"],"sentiment":["unknown","neutral"],"severity":["unknown"]}}
+  ]
+}

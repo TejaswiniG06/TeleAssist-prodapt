@@ -55,7 +55,7 @@ class ResolutionTests(unittest.TestCase):
         serialized = json.dumps([result, provider.payloads])
         self.assertNotIn('test@example.com', serialized)
         self.assertNotIn('9876543210', serialized)
-        self.assertEqual(result['citations'][0]['source_url'], '/sources/KB-X')
+        self.assertEqual(result['citations'][0]['source_url'], '/sources/KB-X?version=2')
 
     def test_invented_citation_and_unsupported_quote_fall_back(self):
         for bad in (draft(source='NONEXISTENT'), draft(quote='Perform an undocumented action now.')):

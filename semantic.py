@@ -2,6 +2,7 @@
 import hashlib
 import json
 import math
+from uuid import uuid4
 from pathlib import Path
 from retrieval import KeywordIndex, searchable_text
 
@@ -50,7 +51,7 @@ class SemanticIndex:
         if cache_path:
             path = Path(cache_path)
             path.parent.mkdir(parents=True, exist_ok=True)
-            temporary = path.with_suffix('.tmp')
+            temporary = path.with_name(path.name + '.' + uuid4().hex + '.tmp')
             temporary.write_text(json.dumps({k: cache[k] for k in keys}), encoding='utf-8')
             temporary.replace(path)
 

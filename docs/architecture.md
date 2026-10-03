@@ -26,7 +26,7 @@ flowchart TD
     Inspect --> Corpus
 ```
 
-All API routes currently run in one Python process. The components are separate modules, not independently deployed microservices. The provider key stays server-side. Pattern masking occurs before provider calls; it is not comprehensive anonymization. Search returns ranked evidence, whereas resolve applies additional trust and grounding rules. Only resolve generates a draft.
+The default reviewer app runs routes in one Python process. An optional split mode now runs retrieval_api and resolution_api as separate HTTP processes, reusing the same modules; see docs/09-service-deployment.md. Access roles, validated background publication, reviewed topic proposals and process metrics are also implemented. The provider key stays server-side. Pattern masking occurs before provider calls; it is not comprehensive anonymization. Search returns ranked evidence, whereas resolve applies additional trust and grounding rules. Only resolve generates a draft.
 
 The source corpus contains synthetic KB/history and lower-trust public replies. A failed historical outcome cannot supply a successful fix. Citation checks validate membership and copied evidence, but do not prove full semantic entailment or real-world resolution. A support agent reviews the draft.
 
@@ -43,7 +43,7 @@ The source corpus contains synthetic KB/history and lower-trust public replies. 
 | One plain page and one API process | Easy to run, explain and test for this prototype | Single process and local storage do not establish production scale |
 | One free provider with bounded retries | Keeps the cost constraint and predictable failure handling | Provider quotas and availability constrain generation |
 
-## Planned production path — not implemented yet
+## Production deployment path — beyond the local prototype
 
 ```mermaid
 flowchart LR
@@ -64,6 +64,6 @@ flowchart LR
     Review --> Store
 ```
 
-First demonstrate these behaviours with small local components and tests. Production separation can then scale retrieval independently of generation and ingestion. Multiple workers require shared version state, coordinated publication, persistent jobs and a shared provider quota limiter; current in-process locks do not provide these guarantees. A versioned datastore and an indexed vector backend become justified when measured corpus size, query rate or memory exceeds local limits. No arbitrary user-count capacity claim is made.
+The local prototype demonstrates the main behaviours with small components and tests. Production deployment still needs external identity/gateway integration, shared stores and a durable queue. Service separation can scale retrieval independently of generation and ingestion. Multiple workers require shared version state, coordinated publication, persistent jobs and a shared provider quota limiter; current in-process locks do not provide these guarantees. A versioned datastore and an indexed vector backend become justified when measured corpus size, query rate or memory exceeds local limits. No arbitrary user-count capacity claim is made.
 
 Measure corpus load time, cold/warm search latency, generation latency, process memory, queue delay and fallback/error rates. Test failed ingestion, missing provider, invalid source versions and concurrent readers. Set capacity and service objectives from measurements and deployment needs. Provider timeouts/circuit breaking, backups, rollback, encrypted storage, least-privilege access and retention policy are production requirements to discuss and validate before a real deployment.

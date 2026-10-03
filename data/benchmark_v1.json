@@ -1,0 +1,32 @@
+{
+  "version": "pilot-v1",
+  "label_origin": "AI-assisted author labels from article scope; independent human review pending",
+  "split": "frozen pilot development benchmark, not an independently blinded holdout",
+  "notice": "Reference IDs are partial positive labels. Other corpus records may also be relevant. No operational resolution-success claim.",
+  "cases": [
+    {"id":"P01","query":"Broadband Wi-Fi disconnects every evening but my wired computer remains connected.","product":"broadband","references":["KB-001","TICKET-001"]},
+    {"id":"P02","query":"Broadband downloads crawl and videos buffer; I have not compared speeds on other devices.","product":"broadband","references":["KB-002"]},
+    {"id":"P03","query":"No broadband internet on any device and the router has no visible power light.","product":"broadband","references":["KB-003"]},
+    {"id":"P04","query":"Wi-Fi only reaches the room beside the router, with poor coverage upstairs.","product":"broadband","references":["KB-004"]},
+    {"id":"P05","query":"My mobile data cannot connect, although voice calls still work.","product":"mobile","references":["KB-005"]},
+    {"id":"P06","query":"Cellular voice calls drop halfway through a conversation.","product":"mobile","references":["KB-006"]},
+    {"id":"P07","query":"My landline has no dial tone and the fixed voice service is unavailable.","product":"fixed_voice","references":["KB-007"]},
+    {"id":"P08","query":"The fibre terminal loses its signal intermittently and goes offline.","product":"broadband","references":["KB-GEN-001"]},
+    {"id":"P09","query":"There is loud static on our fixed voice line whenever it rains.","product":"fixed_voice","references":["KB-GEN-002"]},
+    {"id":"P10","query":"Mobile LTE data stalls when my phone changes radio bands.","product":"mobile","references":["KB-GEN-003"]},
+    {"id":"P11","query":"Our IPTV live broadcasts keep buffering and freezing.","product":"iptv","references":["KB-GEN-004"]},
+    {"id":"P12","query":"The gateway Wi-Fi network name is no longer broadcasting.","product":"broadband","references":["KB-GEN-005"]},
+    {"id":"P13","query":"Our VoIP handset cannot register with the SIP voice service.","product":"fixed_voice","references":["KB-GEN-006"]},
+    {"id":"P14","query":"Cellular voice service disappears indoors, but works outside the building.","product":"mobile","references":["KB-GEN-007"]},
+    {"id":"P15","query":"The IPTV set-top box shows a blank picture after an HDMI handshake error.","product":"iptv","references":["KB-GEN-008"]},
+    {"id":"P16","query":"Broadband online gaming has very high latency and noticeable lag.","product":"broadband","references":["KB-GEN-009"]},
+    {"id":"P17","query":"Fixed voice calls have an echo and a delay in the audio.","product":"fixed_voice","references":["KB-GEN-010"]},
+    {"id":"P18","query":"My mobile hotspot disconnects tethered devices repeatedly.","product":"mobile","references":["KB-GEN-011"]},
+    {"id":"P19","query":"The IPTV electronic programme guide has disappeared.","product":"iptv","references":["KB-GEN-012"]},
+    {"id":"P20","query":"Broadband login fails with an authentication timeout.","product":"broadband","references":["KB-GEN-013"]},
+    {"id":"P21","query":"My mobile phone cannot send MMS messages with pictures.","product":"mobile","references":["KB-GEN-015"]},
+    {"id":"P22","query":"The IPTV surround-sound audio keeps dropping out.","product":"iptv","references":["KB-GEN-016"]},
+    {"id":"P23","query":"Mobile roaming data is blocked while I am travelling abroad.","product":"mobile","references":["KB-GEN-019"]},
+    {"id":"P24","query":"Our IPTV remote responds several seconds after each button press.","product":"iptv","references":["KB-GEN-020"]}
+  ]
+}

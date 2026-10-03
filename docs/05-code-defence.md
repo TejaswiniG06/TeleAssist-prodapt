@@ -10,7 +10,7 @@ Start with the flow: complaint → mask common identifiers → classify and iden
 | evidence.py | Load evidence and preserve trust/provenance | Include past suggestions honestly without assuming successful outcomes | Synthetic outcomes are scenario labels; public outcomes are unknown |
 | llm.py | Free provider calls and structured JSON | One provider, explicit configuration, bounded retry and pacing | Free quotas can interrupt generation; fallback is necessary |
 | resolution.py | Classify, select and check steps | Use source-backed actions and avoid repeating completed/failed actions | Exact quote and customer-text checks cannot establish full semantic entailment |
-| api.py | Validate inputs and expose services | Keep HTTP handling separate from retrieval and grounding | Currently one local process with authentication still pending |
+| api.py | Validate inputs and expose services | Keep HTTP handling separate from retrieval and grounding | Single-process default; optional split services and agent/editor access are implemented |
 | web/index.html | Agent review interface | A single page calls the API and exposes evidence | Agent review is still required |
 
 ## Why the source filter was simplified
@@ -25,7 +25,7 @@ Explain this as: **choose eligible sources first, rank those sources second, ret
 - **Why synthetic tickets?** The brief permits them, and they provide explicit steps/outcomes unavailable in public replies. Label them visibly and report evaluation limits.
 - **Why retain public tickets?** They add complaint variety and suggested past responses. Their lower trust and unknown outcomes must remain explicit.
 - **Why clarification?** Missing conditions, unsupported steps and provider failures should not produce a confident unchecked fix.
-- **Is it production ready?** It has production-oriented controls and documented tradeoffs; authentication, updates, monitoring and capacity/quality measurements are still outstanding.
+- **Is it production ready?** Access roles, versioned updates, monitoring and local capacity/quality pilots are implemented. External identity, shared storage/queues, coordinated quotas and independent quality validation remain outstanding.
 - **Is it unique?** The useful combination is trust-aware historical grounding plus attempted-action handling and inspectable evidence. The underlying retrieval techniques are established.
 
 Keep functions organized around these responsibilities. Simplify indirection when it obscures the flow, but retain validation, failure handling and meaningful tests. Final file cleanup waits until all agreed prototype features are complete.

@@ -28,7 +28,7 @@ Run `python -m uvicorn api:app --host 127.0.0.1 --port 8000` inside the virtual 
 - `GET /sources/{id}`: returns an active evidence record; missing/retired IDs return 404.
 - `GET /health`: reports active source count and semantic readiness. Embeddings load lazily on first semantic/hybrid search, so keyword search needs no model download. Embedding failure yields 503 for semantic/hybrid; keyword remains usable and health reports degradation.
 
-The API validates blank/oversized queries, result limits, modes and thresholds. `/resolve` now adds masking, classification, attempted-action awareness and checked source-based generation as described in the trust and resolution walkthrough. Authentication, controlled edits and background ingestion remain on the agreed roadmap. `/search` itself returns evidence without generating an answer.
+The API validates blank/oversized queries, result limits, modes and thresholds. `/resolve` adds masking, classification, attempted-action awareness and checked source-based generation. Agent/editor access and validated background updates are now implemented; see docs/06-access-and-updates.md. `/search` itself returns evidence without generating an answer.
 
 Official references: https://www.sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html and https://fastapi.tiangolo.com/tutorial/first-steps/.
 
@@ -38,4 +38,4 @@ Verified on 2026-10-03 with Python 3.13: all nine unit tests pass, including the
 
 `python smoke_services.py` also passed using the real downloaded MiniLM model through FastAPI TestClient. For “My internet crawls and videos keep stalling”, semantic returned TICKET-002 then KB-002; hybrid ranked KB-002 first. The mobile-filtered query retrieved KB-005, source lookup worked, and health reported nine active sources with semantic readiness. The report is saved in ignored `runtime/smoke-report.json`. This is an integration smoke check, not a full quality benchmark or live network-server test. Existing evaluation seeds remain development data, not a held-out benchmark.
 
-`requirements-lock.txt` records installed dependency versions. The current Starlette test client emits an httpx deprecation warning; requests and assertions passed. No hosted generation provider has been integrated.
+`requirements-lock.txt` records installed dependency versions. The current Starlette test client emits an httpx deprecation warning; requests and assertions passed. This section records the original retrieval milestone; current free-provider generation and evidence counts are described in README.md and docs/03-trust-and-resolution.md.

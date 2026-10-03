@@ -55,3 +55,6 @@ The starter KB smoke check now explicitly filters broadband/articles before chec
 ## Remaining work
 
 Authentication, restricted edits, full PII controls, live interface, background ingestion, emerging-topic grouping and reviewed taxonomy updates, resource monitoring, frozen evaluation, production design and interview rehearsal remain in scope.
+# Additional privacy coverage
+
+Masking also handles explicitly labelled names/street addresses and common unlabelled provider-key formats before processing. These are narrow patterns, not a general personal-data recognizer: unlabelled names, unusual addresses, other secret formats and contextual identifiers can remain. Synthetic or appropriately anonymized inputs are still required for the educational demo.

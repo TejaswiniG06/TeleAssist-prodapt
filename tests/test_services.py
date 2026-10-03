@@ -73,7 +73,7 @@ class ServicesTests(unittest.TestCase):
                 for mode in ('keyword', 'semantic', 'hybrid'):
                     response = client.post('/search', json={'query': 'router', 'mode': mode})
                     self.assertEqual(response.status_code, 200)
-                    self.assertEqual(response.json()['results'][0]['source_url'], '/sources/a')
+                    self.assertEqual(response.json()['results'][0]['source_url'], '/sources/a?version=1')
                 self.assertEqual(client.get('/sources/old').status_code, 404)
                 self.assertEqual(client.get('/sources/a').status_code, 200)
                 response = client.post('/search', json={'query': 'router', 'product': 'mobile'})
