@@ -1,0 +1,2942 @@
+{
+  "version": "query-enrichment-pilot-v1",
+  "measured_at": "2026-10-03T14:25:08.059567+00:00",
+  "corpus_sha256": "17151eaa5825dc74b8104e4619bbace2ba17df85d491e3a906cea185f94547b0",
+  "query_sets_sha256": "82450226f9d9090c1b8ec2f0ad3255f25b3957df3c573f53de8f1caac8554770",
+  "classification_cache_sha256": "1b294ec2d409e1a0b87fee366a66caa4faf43a25f6d4369718e4fdc01637242d",
+  "query_builder_sha256": "e8426a76b6105c761ab4701ab881b9f5e88f8f61b1383611502d79fc379f069e",
+  "active_sources": 487,
+  "classifier": {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "classification_code_sha256": "ec2b6b171eea5da09a2209905e28836318d3036c4b7b68fe3e38bcd19675460e",
+    "category_schema_sha256": "bdd54503fe1b7edfd7e447a9274e955eeceeaa1923607d68365745c9e175cde1",
+    "min_call_interval_seconds": 15.0
+  },
+  "new_classification_calls_this_run": 0,
+  "query_rewrite_llm_calls": 0,
+  "settings": {
+    "limit": 20,
+    "assessed_k": 5,
+    "min_semantic_score": 0.3,
+    "product_filter": null,
+    "record_type_filter": null
+  },
+  "notice": "Same frozen queries, references, corpus, models, ranking and thresholds. Shared cached prediction per query; expected labels never enrich the query. Partial-reference development results, not independent human accuracy.",
+  "cohorts": {
+    "pilot_24": {
+      "cases": 24,
+      "classification_failures": 0,
+      "metrics": {
+        "raw": {
+          "keyword": {
+            "reference_hit_at_5": 0.9583,
+            "partial_reference_recall_at_5": 0.9375,
+            "reference_reciprocal_rank_at_5": 0.6458
+          },
+          "semantic": {
+            "reference_hit_at_5": 0.9583,
+            "partial_reference_recall_at_5": 0.9583,
+            "reference_reciprocal_rank_at_5": 0.7653
+          },
+          "hybrid": {
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 0.7882
+          }
+        },
+        "enriched": {
+          "keyword": {
+            "reference_hit_at_5": 0.9167,
+            "partial_reference_recall_at_5": 0.9167,
+            "reference_reciprocal_rank_at_5": 0.6424
+          },
+          "semantic": {
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 0.7896
+          },
+          "hybrid": {
+            "reference_hit_at_5": 0.9583,
+            "partial_reference_recall_at_5": 0.9583,
+            "reference_reciprocal_rank_at_5": 0.7708
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "P01",
+          "classification_error": null,
+          "raw_query": "Broadband Wi-Fi disconnects every evening but my wired computer remains connected.",
+          "enriched_query": "Broadband Wi-Fi disconnects every evening but my wired computer remains connected.\nbroadband; Wi-Fi coverage/interference; Wi-Fi disconnection; compare wired connection",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "TICKET-001",
+                  "SYN-01-14",
+                  "SYN-07-01",
+                  "PUBLIC-00074",
+                  "SYN-02-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 0.5,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "TICKET-001",
+                  "PUBLIC-06522",
+                  "KB-001",
+                  "PUBLIC-08932",
+                  "PUBLIC-00595"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "TICKET-001",
+                  "SYN-01-14",
+                  "KB-001",
+                  "SYN-03-01",
+                  "PUBLIC-00595"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-004",
+                  "KB-001",
+                  "SYN-01-14",
+                  "TICKET-001",
+                  "SYN-02-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "TICKET-001",
+                  "KB-001",
+                  "KB-004",
+                  "SYN-01-14",
+                  "SYN-01-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-004",
+                  "KB-001",
+                  "TICKET-001",
+                  "SYN-01-14",
+                  "SYN-03-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "P02",
+          "classification_error": null,
+          "raw_query": "Broadband downloads crawl and videos buffer; I have not compared speeds on other devices.",
+          "enriched_query": "Broadband downloads crawl and videos buffer; I have not compared speeds on other devices.\nbroadband; slow speed; slow broadband downloads; video buffering",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-03-07",
+                  "KB-002",
+                  "TICKET-002",
+                  "SYN-07-25",
+                  "SYN-03-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "TICKET-002",
+                  "SYN-03-03",
+                  "KB-002",
+                  "SYN-03-07",
+                  "SYN-05-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "hybrid": {
+                "top_5": [
+                  "TICKET-002",
+                  "SYN-03-07",
+                  "KB-002",
+                  "SYN-08-02",
+                  "SYN-03-03"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-002",
+                  "TICKET-002",
+                  "SYN-03-07",
+                  "SYN-07-20",
+                  "SYN-06-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "TICKET-002",
+                  "SYN-03-03",
+                  "KB-002",
+                  "SYN-03-07",
+                  "SYN-08-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "hybrid": {
+                "top_5": [
+                  "TICKET-002",
+                  "KB-002",
+                  "SYN-03-07",
+                  "SYN-03-03",
+                  "SYN-07-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "P03",
+          "classification_error": null,
+          "raw_query": "No broadband internet on any device and the router has no visible power light.",
+          "enriched_query": "No broadband internet on any device and the router has no visible power light.\nbroadband; no connection; No broadband internet; router has no visible power light",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-08",
+                  "KB-GEN-001",
+                  "SYN-08-10",
+                  "SYN-01-05"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-01-05",
+                  "KB-GEN-005",
+                  "KB-003",
+                  "SYN-01-13",
+                  "PUBLIC-20886"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-05",
+                  "KB-GEN-005",
+                  "SYN-08-01",
+                  "SYN-01-13"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-08",
+                  "KB-GEN-001",
+                  "SYN-08-10",
+                  "SYN-01-05"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-01-05",
+                  "KB-003",
+                  "SYN-01-13",
+                  "PUBLIC-00760",
+                  "PUBLIC-26760"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-05",
+                  "SYN-01-13",
+                  "SYN-01-08",
+                  "SYN-08-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P04",
+          "classification_error": null,
+          "raw_query": "Wi-Fi only reaches the room beside the router, with poor coverage upstairs.",
+          "enriched_query": "Wi-Fi only reaches the room beside the router, with poor coverage upstairs.\nbroadband; Wi-Fi coverage/interference; poor Wi-Fi coverage; limited Wi-Fi range",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-02-06",
+                  "SYN-02-14",
+                  "SYN-02-23",
+                  "KB-004",
+                  "TICKET-001"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-02-01",
+                  "SYN-02-12",
+                  "SYN-02-19",
+                  "SYN-02-23",
+                  "SYN-02-05"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-01",
+                  "SYN-02-23",
+                  "SYN-02-06",
+                  "KB-004",
+                  "SYN-02-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-02-14",
+                  "SYN-02-06",
+                  "TICKET-001",
+                  "SYN-02-19",
+                  "SYN-02-23"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-02-01",
+                  "SYN-02-12",
+                  "SYN-02-19",
+                  "SYN-02-11",
+                  "KB-004"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.2
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-19",
+                  "SYN-02-01",
+                  "SYN-02-06",
+                  "SYN-02-11",
+                  "SYN-02-12"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P05",
+          "classification_error": null,
+          "raw_query": "My mobile data cannot connect, although voice calls still work.",
+          "enriched_query": "My mobile data cannot connect, although voice calls still work.\nmobile; mobile data; mobile data disconnection; voice calls working",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-05-08",
+                  "SYN-06-01",
+                  "SYN-07-22",
+                  "SYN-06-02",
+                  "SYN-06-25"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-005",
+                  "SYN-04-07",
+                  "SYN-04-13",
+                  "SYN-04-01",
+                  "SYN-04-17"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-005",
+                  "SYN-04-17",
+                  "SYN-04-01",
+                  "SYN-06-19",
+                  "SYN-05-08"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-05-08",
+                  "SYN-04-05",
+                  "KB-GEN-007",
+                  "SYN-04-13",
+                  "SYN-06-21"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-005",
+                  "SYN-04-07",
+                  "SYN-04-01",
+                  "SYN-04-13",
+                  "SYN-05-07"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-04-13",
+                  "KB-005",
+                  "SYN-04-01",
+                  "SYN-04-17",
+                  "SYN-06-19"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "P06",
+          "classification_error": null,
+          "raw_query": "Cellular voice calls drop halfway through a conversation.",
+          "enriched_query": "Cellular voice calls drop halfway through a conversation.\nmobile; voice; call dropping",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-02",
+                  "SYN-06-21",
+                  "SYN-06-04",
+                  "KB-006",
+                  "SYN-07-22"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-07-18",
+                  "SYN-07-02",
+                  "KB-GEN-007",
+                  "SYN-06-21",
+                  "KB-006"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.2
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-07-02",
+                  "SYN-06-21",
+                  "KB-006",
+                  "KB-GEN-007",
+                  "KB-GEN-010"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-02",
+                  "SYN-06-21",
+                  "KB-006",
+                  "SYN-07-22",
+                  "SYN-06-04"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-07-18",
+                  "KB-GEN-007",
+                  "SYN-07-02",
+                  "KB-006",
+                  "SYN-06-21"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-07-02",
+                  "SYN-06-21",
+                  "KB-006",
+                  "KB-GEN-007",
+                  "SYN-05-15"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            }
+          }
+        },
+        {
+          "id": "P07",
+          "classification_error": null,
+          "raw_query": "My landline has no dial tone and the fixed voice service is unavailable.",
+          "enriched_query": "My landline has no dial tone and the fixed voice service is unavailable.\nfixed voice; no dial tone; fixed voice service unavailable",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-007",
+                  "SYN-06-01",
+                  "SYN-06-24",
+                  "SYN-01-13",
+                  "SYN-06-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-06-01",
+                  "KB-007",
+                  "SYN-06-24",
+                  "SYN-06-10",
+                  "SYN-06-16"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-007",
+                  "SYN-06-01",
+                  "SYN-06-24",
+                  "SYN-06-16",
+                  "SYN-06-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-007",
+                  "SYN-06-01",
+                  "SYN-06-24",
+                  "SYN-01-13",
+                  "SYN-06-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-007",
+                  "SYN-06-01",
+                  "SYN-06-24",
+                  "SYN-06-10",
+                  "SYN-06-16"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-007",
+                  "SYN-06-01",
+                  "SYN-06-24",
+                  "SYN-06-16",
+                  "SYN-07-15"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P08",
+          "classification_error": null,
+          "raw_query": "The fibre terminal loses its signal intermittently and goes offline.",
+          "enriched_query": "The fibre terminal loses its signal intermittently and goes offline.\nbroadband; intermittent connection; offline status; signal loss",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-001",
+                  "PUBLIC-00245",
+                  "SYN-03-13",
+                  "SYN-01-16",
+                  "KB-003"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-01-01",
+                  "KB-GEN-001",
+                  "SYN-01-15",
+                  "SYN-03-25",
+                  "SYN-01-08"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-001",
+                  "SYN-01-01",
+                  "SYN-01-18",
+                  "SYN-03-25",
+                  "SYN-08-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-001",
+                  "SYN-01-01",
+                  "KB-003",
+                  "SYN-01-18",
+                  "SYN-01-16"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-01-01",
+                  "KB-GEN-001",
+                  "SYN-01-15",
+                  "SYN-01-08",
+                  "SYN-01-11"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-001",
+                  "SYN-01-01",
+                  "SYN-01-18",
+                  "SYN-01-24",
+                  "SYN-08-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P09",
+          "classification_error": null,
+          "raw_query": "There is loud static on our fixed voice line whenever it rains.",
+          "enriched_query": "There is loud static on our fixed voice line whenever it rains.\nfixed voice; Line Quality; loud static on fixed voice line",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-04",
+                  "SYN-07-03",
+                  "SYN-08-04",
+                  "KB-GEN-002",
+                  "SYN-08-22"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-07-03",
+                  "KB-GEN-002",
+                  "SYN-06-04",
+                  "SYN-08-22",
+                  "SYN-08-04"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-07-03",
+                  "SYN-06-04",
+                  "KB-GEN-002",
+                  "SYN-08-04",
+                  "SYN-08-22"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-04",
+                  "KB-GEN-002",
+                  "SYN-07-03",
+                  "SYN-08-04",
+                  "SYN-08-22"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-002",
+                  "SYN-06-04",
+                  "SYN-07-03",
+                  "SYN-08-04",
+                  "SYN-06-13"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-002",
+                  "SYN-06-04",
+                  "SYN-07-03",
+                  "SYN-08-04",
+                  "SYN-06-13"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P10",
+          "classification_error": null,
+          "raw_query": "Mobile LTE data stalls when my phone changes radio bands.",
+          "enriched_query": "Mobile LTE data stalls when my phone changes radio bands.\nmobile; mobile data; mobile data stalls; radio band switching issue",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-05-17",
+                  "KB-GEN-003",
+                  "SYN-07-14",
+                  "SYN-07-18",
+                  "SYN-04-25"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-003",
+                  "SYN-04-25",
+                  "SYN-04-03",
+                  "SYN-04-17",
+                  "SYN-04-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-003",
+                  "SYN-04-25",
+                  "SYN-04-03",
+                  "SYN-04-17",
+                  "SYN-05-17"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-14",
+                  "SYN-05-17",
+                  "KB-GEN-003",
+                  "SYN-04-15",
+                  "SYN-04-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-003",
+                  "SYN-04-03",
+                  "SYN-04-25",
+                  "SYN-04-17",
+                  "SYN-04-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-003",
+                  "SYN-07-14",
+                  "SYN-04-25",
+                  "SYN-04-15",
+                  "SYN-04-17"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P11",
+          "classification_error": null,
+          "raw_query": "Our IPTV live broadcasts keep buffering and freezing.",
+          "enriched_query": "Our IPTV live broadcasts keep buffering and freezing.\niptv; Video Quality; IPTV buffering; video freezing",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-04",
+                  "KB-GEN-004",
+                  "SYN-06-12",
+                  "SYN-06-23",
+                  "SYN-07-24"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-07-04",
+                  "KB-GEN-004",
+                  "SYN-06-03",
+                  "SYN-06-23",
+                  "SYN-02-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-07-04",
+                  "KB-GEN-004",
+                  "SYN-06-23",
+                  "SYN-06-03",
+                  "SYN-06-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-23",
+                  "KB-GEN-004",
+                  "SYN-07-04",
+                  "SYN-06-12",
+                  "SYN-07-24"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-004",
+                  "SYN-07-04",
+                  "SYN-06-03",
+                  "SYN-06-23",
+                  "SYN-08-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-004",
+                  "SYN-06-23",
+                  "SYN-07-04",
+                  "SYN-06-03",
+                  "SYN-06-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P12",
+          "classification_error": null,
+          "raw_query": "The gateway Wi-Fi network name is no longer broadcasting.",
+          "enriched_query": "The gateway Wi-Fi network name is no longer broadcasting.\nbroadband; Wi-Fi coverage/interference; Wi-Fi network name not broadcasting",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-005",
+                  "PUBLIC-00577",
+                  "SYN-02-02",
+                  "KB-GEN-015",
+                  "SYN-02-07"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-005",
+                  "PUBLIC-27927",
+                  "PUBLIC-11114",
+                  "PUBLIC-24703",
+                  "PUBLIC-16940"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-005",
+                  "PUBLIC-00375",
+                  "PUBLIC-00577",
+                  "PUBLIC-27927",
+                  "PUBLIC-11114"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-005",
+                  "SYN-02-02",
+                  "SYN-02-12",
+                  "SYN-02-07",
+                  "SYN-02-25"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-005",
+                  "PUBLIC-27927",
+                  "PUBLIC-00387",
+                  "PUBLIC-09991",
+                  "PUBLIC-12082"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-005",
+                  "SYN-02-12",
+                  "PUBLIC-27927",
+                  "SYN-02-02",
+                  "PUBLIC-00387"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P13",
+          "classification_error": null,
+          "raw_query": "Our VoIP handset cannot register with the SIP voice service.",
+          "enriched_query": "Our VoIP handset cannot register with the SIP voice service.\nfixed voice; SIP Registration; SIP registration failure",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-05",
+                  "SYN-06-02",
+                  "KB-007",
+                  "KB-GEN-006",
+                  "SYN-06-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-006",
+                  "SYN-06-05",
+                  "SYN-06-25",
+                  "SYN-06-20",
+                  "SYN-06-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-06-05",
+                  "KB-GEN-006",
+                  "SYN-06-02",
+                  "KB-007",
+                  "SYN-06-25"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-05",
+                  "KB-GEN-006",
+                  "SYN-06-02",
+                  "KB-007",
+                  "SYN-06-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-06-05",
+                  "KB-GEN-006",
+                  "SYN-06-25",
+                  "SYN-06-20",
+                  "SYN-06-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-06-05",
+                  "KB-GEN-006",
+                  "SYN-06-02",
+                  "SYN-06-25",
+                  "SYN-06-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "P14",
+          "classification_error": null,
+          "raw_query": "Cellular voice service disappears indoors, but works outside the building.",
+          "enriched_query": "Cellular voice service disappears indoors, but works outside the building.\nmobile; indoor coverage; indoor coverage loss; cellular voice service unavailable indoors",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-007",
+                  "SYN-07-22",
+                  "SYN-08-22",
+                  "SYN-06-24",
+                  "SYN-08-18"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-007",
+                  "SYN-07-22",
+                  "SYN-05-15",
+                  "SYN-05-20",
+                  "KB-GEN-018"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-007",
+                  "SYN-07-22",
+                  "SYN-05-15",
+                  "SYN-06-24",
+                  "SYN-08-18"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-22",
+                  "KB-GEN-007",
+                  "SYN-05-15",
+                  "SYN-05-25",
+                  "SYN-05-20"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-007",
+                  "SYN-07-22",
+                  "SYN-05-15",
+                  "SYN-05-20",
+                  "SYN-07-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-007",
+                  "SYN-07-22",
+                  "SYN-05-15",
+                  "SYN-05-20",
+                  "SYN-07-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P15",
+          "classification_error": null,
+          "raw_query": "The IPTV set-top box shows a blank picture after an HDMI handshake error.",
+          "enriched_query": "The IPTV set-top box shows a blank picture after an HDMI handshake error.\niptv; Video Quality; blank picture; HDMI handshake error",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-008",
+                  "SYN-07-12",
+                  "SYN-06-06",
+                  "KB-GEN-020",
+                  "SYN-06-15"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-008",
+                  "SYN-06-15",
+                  "SYN-07-12",
+                  "SYN-06-06",
+                  "SYN-07-16"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-008",
+                  "SYN-07-12",
+                  "SYN-06-15",
+                  "SYN-06-06",
+                  "KB-GEN-020"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-008",
+                  "SYN-06-23",
+                  "SYN-06-15",
+                  "SYN-08-02",
+                  "SYN-07-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-008",
+                  "SYN-06-15",
+                  "SYN-07-12",
+                  "SYN-06-18",
+                  "SYN-06-06"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-008",
+                  "SYN-06-15",
+                  "SYN-06-23",
+                  "SYN-07-12",
+                  "SYN-06-06"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P16",
+          "classification_error": null,
+          "raw_query": "Broadband online gaming has very high latency and noticeable lag.",
+          "enriched_query": "Broadband online gaming has very high latency and noticeable lag.\nbroadband; speed; high latency; noticeable lag",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-02-06",
+                  "SYN-07-09",
+                  "SYN-02-20",
+                  "KB-GEN-009",
+                  "SYN-02-17"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-009",
+                  "SYN-07-09",
+                  "SYN-02-06",
+                  "SYN-03-18",
+                  "SYN-05-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-06",
+                  "SYN-07-09",
+                  "KB-GEN-009",
+                  "SYN-03-18",
+                  "SYN-05-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-02-06",
+                  "SYN-07-09",
+                  "SYN-02-20",
+                  "KB-GEN-009",
+                  "SYN-03-18"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-009",
+                  "SYN-07-09",
+                  "SYN-02-06",
+                  "SYN-03-03",
+                  "KB-002"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-06",
+                  "SYN-07-09",
+                  "KB-GEN-009",
+                  "SYN-03-18",
+                  "SYN-05-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            }
+          }
+        },
+        {
+          "id": "P17",
+          "classification_error": null,
+          "raw_query": "Fixed voice calls have an echo and a delay in the audio.",
+          "enriched_query": "Fixed voice calls have an echo and a delay in the audio.\nfixed voice; Audio Quality; call echo; audio delay",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-010",
+                  "SYN-06-17",
+                  "SYN-06-07",
+                  "SYN-07-11",
+                  "SYN-06-22"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-06-07",
+                  "KB-GEN-010",
+                  "SYN-06-17",
+                  "SYN-07-11",
+                  "KB-GEN-014"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-010",
+                  "SYN-06-07",
+                  "SYN-06-17",
+                  "SYN-07-11",
+                  "SYN-06-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-010",
+                  "SYN-06-17",
+                  "SYN-06-07",
+                  "SYN-06-22",
+                  "SYN-08-06"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-06-07",
+                  "SYN-06-17",
+                  "KB-GEN-010",
+                  "SYN-07-11",
+                  "KB-007"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-010",
+                  "SYN-06-07",
+                  "SYN-06-17",
+                  "SYN-07-11",
+                  "SYN-08-06"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P18",
+          "classification_error": null,
+          "raw_query": "My mobile hotspot disconnects tethered devices repeatedly.",
+          "enriched_query": "My mobile hotspot disconnects tethered devices repeatedly.\nmobile; tethering; mobile hotspot disconnection; tethered devices disconnect",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-011",
+                  "SYN-02-12",
+                  "SYN-07-10",
+                  "PUBLIC-00577",
+                  "SYN-04-25"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-011",
+                  "PUBLIC-00612",
+                  "PUBLIC-06522",
+                  "PUBLIC-06059",
+                  "PUBLIC-05814"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-011",
+                  "PUBLIC-00612",
+                  "SYN-07-10",
+                  "PUBLIC-00525",
+                  "SYN-04-15"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-011",
+                  "SYN-08-11",
+                  "SYN-04-25",
+                  "SYN-06-21",
+                  "SYN-02-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-011",
+                  "PUBLIC-06059",
+                  "PUBLIC-05814",
+                  "PUBLIC-01270",
+                  "PUBLIC-06522"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-011",
+                  "SYN-07-10",
+                  "KB-001",
+                  "PUBLIC-06522",
+                  "PUBLIC-08932"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P19",
+          "classification_error": null,
+          "raw_query": "The IPTV electronic programme guide has disappeared.",
+          "enriched_query": "The IPTV electronic programme guide has disappeared.\niptv; EPG Services; EPG missing",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-06",
+                  "SYN-07-12",
+                  "SYN-08-09",
+                  "KB-GEN-012",
+                  "SYN-06-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-012",
+                  "SYN-07-12",
+                  "SYN-06-06",
+                  "SYN-06-15",
+                  "SYN-08-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-06-06",
+                  "SYN-07-12",
+                  "KB-GEN-012",
+                  "SYN-08-09",
+                  "SYN-06-03"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-06",
+                  "SYN-07-12",
+                  "KB-GEN-012",
+                  "SYN-08-09",
+                  "SYN-06-03"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-07-12",
+                  "SYN-06-06",
+                  "KB-GEN-012",
+                  "SYN-06-15",
+                  "SYN-08-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-06-06",
+                  "SYN-07-12",
+                  "KB-GEN-012",
+                  "SYN-08-09",
+                  "SYN-06-03"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            }
+          }
+        },
+        {
+          "id": "P20",
+          "classification_error": null,
+          "raw_query": "Broadband login fails with an authentication timeout.",
+          "enriched_query": "Broadband login fails with an authentication timeout.\nbroadband; authentication failure; authentication timeout; broadband login failure",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-10",
+                  "KB-GEN-013",
+                  "SYN-01-12",
+                  "SYN-05-18",
+                  "SYN-08-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-013",
+                  "SYN-08-12",
+                  "SYN-01-05",
+                  "SYN-01-12",
+                  "SYN-08-19"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-013",
+                  "SYN-07-10",
+                  "SYN-08-12",
+                  "SYN-01-12",
+                  "SYN-08-19"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-10",
+                  "SYN-08-12",
+                  "KB-GEN-013",
+                  "SYN-01-12",
+                  "SYN-05-18"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-013",
+                  "SYN-08-12",
+                  "SYN-01-05",
+                  "SYN-01-12",
+                  "SYN-07-10"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-013",
+                  "SYN-08-12",
+                  "SYN-07-10",
+                  "SYN-01-12",
+                  "SYN-01-05"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P21",
+          "classification_error": null,
+          "raw_query": "My mobile phone cannot send MMS messages with pictures.",
+          "enriched_query": "My mobile phone cannot send MMS messages with pictures.\nmobile; messaging; MMS message failure",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-04-07",
+                  "KB-GEN-015",
+                  "SYN-05-07",
+                  "SYN-04-08",
+                  "SYN-05-08"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-015",
+                  "SYN-04-07",
+                  "SYN-04-17",
+                  "SYN-05-07",
+                  "SYN-04-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-015",
+                  "SYN-04-07",
+                  "SYN-05-07",
+                  "SYN-04-08",
+                  "SYN-04-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-015",
+                  "SYN-04-07",
+                  "SYN-04-08",
+                  "SYN-05-07",
+                  "PUBLIC-00867"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-015",
+                  "SYN-04-07",
+                  "SYN-04-17",
+                  "SYN-05-07",
+                  "SYN-04-02"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-015",
+                  "SYN-04-07",
+                  "SYN-05-07",
+                  "SYN-04-08",
+                  "KB-005"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P22",
+          "classification_error": null,
+          "raw_query": "The IPTV surround-sound audio keeps dropping out.",
+          "enriched_query": "The IPTV surround-sound audio keeps dropping out.\niptv; Audio Quality; audio dropping out",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-016",
+                  "SYN-06-09",
+                  "SYN-08-23",
+                  "SYN-06-12",
+                  "SYN-06-17"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-016",
+                  "SYN-06-09",
+                  "SYN-06-03",
+                  "SYN-07-08",
+                  "SYN-07-04"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-016",
+                  "SYN-06-09",
+                  "SYN-08-23",
+                  "SYN-07-08",
+                  "SYN-07-16"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-016",
+                  "SYN-08-23",
+                  "SYN-06-17",
+                  "SYN-06-09",
+                  "SYN-06-08"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-016",
+                  "SYN-06-18",
+                  "SYN-06-09",
+                  "SYN-06-15",
+                  "SYN-06-03"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-016",
+                  "SYN-06-09",
+                  "SYN-06-18",
+                  "SYN-08-23",
+                  "SYN-06-23"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "P23",
+          "classification_error": null,
+          "raw_query": "Mobile roaming data is blocked while I am travelling abroad.",
+          "enriched_query": "Mobile roaming data is blocked while I am travelling abroad.\nmobile; roaming; mobile roaming data unavailable",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-04-05",
+                  "KB-GEN-019",
+                  "SYN-05-11",
+                  "SYN-04-01",
+                  "SYN-05-24"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-019",
+                  "SYN-04-05",
+                  "SYN-04-01",
+                  "SYN-05-05",
+                  "SYN-04-18"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-019",
+                  "SYN-04-05",
+                  "SYN-04-01",
+                  "SYN-05-05",
+                  "SYN-05-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-04-01",
+                  "SYN-04-05",
+                  "KB-GEN-019",
+                  "SYN-05-11",
+                  "SYN-05-24"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-019",
+                  "SYN-04-01",
+                  "SYN-04-05",
+                  "SYN-05-05",
+                  "SYN-04-18"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-04-01",
+                  "KB-GEN-019",
+                  "SYN-04-05",
+                  "SYN-05-05",
+                  "SYN-05-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "P24",
+          "classification_error": null,
+          "raw_query": "Our IPTV remote responds several seconds after each button press.",
+          "enriched_query": "Our IPTV remote responds several seconds after each button press.\niptv; hardware; remote control delay",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-07-18",
+                  "SYN-07-05",
+                  "SYN-07-04",
+                  "KB-GEN-005"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-06-06",
+                  "SYN-07-12",
+                  "SYN-08-09",
+                  "SYN-06-23"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-07-04",
+                  "KB-GEN-012",
+                  "SYN-06-12",
+                  "SYN-07-08"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-07-18",
+                  "KB-GEN-005",
+                  "SYN-08-17",
+                  "SYN-01-24"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-06-06",
+                  "SYN-06-23",
+                  "SYN-07-12",
+                  "SYN-06-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-06-23",
+                  "SYN-08-17",
+                  "SYN-07-04",
+                  "SYN-06-15"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "hard_10": {
+      "cases": 10,
+      "classification_failures": 0,
+      "metrics": {
+        "raw": {
+          "keyword": {
+            "reference_hit_at_5": 0.3,
+            "partial_reference_recall_at_5": 0.3,
+            "reference_reciprocal_rank_at_5": 0.2333
+          },
+          "semantic": {
+            "reference_hit_at_5": 0.2,
+            "partial_reference_recall_at_5": 0.2,
+            "reference_reciprocal_rank_at_5": 0.2
+          },
+          "hybrid": {
+            "reference_hit_at_5": 0.3,
+            "partial_reference_recall_at_5": 0.3,
+            "reference_reciprocal_rank_at_5": 0.225
+          }
+        },
+        "enriched": {
+          "keyword": {
+            "reference_hit_at_5": 0.8,
+            "partial_reference_recall_at_5": 0.75,
+            "reference_reciprocal_rank_at_5": 0.475
+          },
+          "semantic": {
+            "reference_hit_at_5": 0.6,
+            "partial_reference_recall_at_5": 0.6,
+            "reference_reciprocal_rank_at_5": 0.3583
+          },
+          "hybrid": {
+            "reference_hit_at_5": 0.9,
+            "partial_reference_recall_at_5": 0.9,
+            "reference_reciprocal_rank_at_5": 0.5283
+          }
+        }
+      },
+      "rows": [
+        {
+          "id": "H01",
+          "classification_error": null,
+          "raw_query": "after dinner evryones screens go nope for a bit, but the laptop with a lead into the little blinking box carries on fine",
+          "enriched_query": "after dinner evryones screens go nope for a bit, but the laptop with a lead into the little blinking box carries on fine\nbroadband; wifi issue; Wi-Fi disconnection; Intermittent connection; compare wired connection",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-03-19",
+                  "PUBLIC-00577",
+                  "KB-GEN-010",
+                  "KB-GEN-013",
+                  "SYN-07-18"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-02-18"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-18",
+                  "SYN-03-19",
+                  "PUBLIC-00577",
+                  "KB-GEN-010",
+                  "KB-GEN-013"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-001",
+                  "KB-004",
+                  "PUBLIC-08932",
+                  "PUBLIC-06522",
+                  "SYN-01-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 0.5,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "TICKET-001",
+                  "SYN-01-19",
+                  "PUBLIC-00760",
+                  "KB-001",
+                  "PUBLIC-00577"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-001",
+                  "TICKET-001",
+                  "PUBLIC-00577",
+                  "SYN-01-14",
+                  "SYN-03-01"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "H02",
+          "classification_error": null,
+          "raw_query": "clips take aaages to start and that spinning circle wont leave, same on everything in the house",
+          "enriched_query": "clips take aaages to start and that spinning circle wont leave, same on everything in the house\nbroadband; Video Streaming; slow video loading; buffering indicator displayed",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "TICKET-001",
+                  "SYN-07-04",
+                  "SYN-03-17",
+                  "PUBLIC-00644",
+                  "PUBLIC-09578"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "TICKET-001",
+                  "SYN-07-04",
+                  "SYN-03-17",
+                  "PUBLIC-00644",
+                  "PUBLIC-09578"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-12",
+                  "SYN-02-14",
+                  "KB-GEN-004",
+                  "SYN-03-18",
+                  "SYN-07-04"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-004",
+                  "SYN-02-14",
+                  "SYN-06-12",
+                  "SYN-08-13",
+                  "SYN-06-23"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-004",
+                  "SYN-06-12",
+                  "SYN-02-14",
+                  "SYN-07-04",
+                  "SYN-03-07"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            }
+          }
+        },
+        {
+          "id": "H03",
+          "classification_error": null,
+          "raw_query": "nothng in the house gets online and the little box by the wall has no lamps on at all",
+          "enriched_query": "nothng in the house gets online and the little box by the wall has no lamps on at all\nbroadband; no connection; total internet outage; router power failure",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-13",
+                  "SYN-01-05",
+                  "SYN-06-24",
+                  "SYN-08-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-05",
+                  "SYN-01-13"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-05",
+                  "SYN-01-13",
+                  "SYN-06-24",
+                  "SYN-08-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-05",
+                  "SYN-06-24",
+                  "SYN-01-08",
+                  "SYN-01-13"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-05",
+                  "SYN-01-13",
+                  "SYN-01-24",
+                  "PUBLIC-00375"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-003",
+                  "SYN-01-05",
+                  "SYN-01-13",
+                  "SYN-08-01",
+                  "SYN-01-24"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "H04",
+          "classification_error": null,
+          "raw_query": "its fine sitting beside the little blinking box but upstairs the pages just wont open",
+          "enriched_query": "its fine sitting beside the little blinking box but upstairs the pages just wont open\nbroadband; Wi-Fi coverage/interference; Wi-Fi dead zone; web pages not loading",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-01-18",
+                  "SYN-01-13",
+                  "KB-GEN-013",
+                  "SYN-04-09",
+                  "KB-GEN-003"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "PUBLIC-20886"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "PUBLIC-20886",
+                  "SYN-01-18",
+                  "SYN-01-13",
+                  "KB-GEN-013",
+                  "SYN-04-09"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-02-01",
+                  "SYN-02-21",
+                  "SYN-02-05",
+                  "KB-004",
+                  "SYN-02-25"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-02-01",
+                  "SYN-01-13",
+                  "SYN-01-24",
+                  "PUBLIC-00760",
+                  "KB-003"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-01",
+                  "KB-004",
+                  "SYN-01-24",
+                  "SYN-01-13",
+                  "TICKET-001"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "H05",
+          "classification_error": null,
+          "raw_query": "bars are all lit on my fone and i can ring mum, but maps and pages wont open when im away from home",
+          "enriched_query": "bars are all lit on my fone and i can ring mum, but maps and pages wont open when im away from home\nmobile; mobile data; mobile data unavailable; pages won't load",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-02-01",
+                  "PUBLIC-00245",
+                  "PUBLIC-00577",
+                  "SYN-01-13",
+                  "KB-GEN-003"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-01",
+                  "PUBLIC-00245",
+                  "PUBLIC-00577",
+                  "SYN-01-13",
+                  "KB-GEN-003"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-04-03",
+                  "KB-005",
+                  "KB-GEN-003",
+                  "SYN-02-01",
+                  "SYN-08-11"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-003",
+                  "KB-005",
+                  "SYN-04-01",
+                  "KB-GEN-019",
+                  "SYN-05-05"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-003",
+                  "KB-005",
+                  "SYN-04-03",
+                  "SYN-05-05",
+                  "SYN-04-07"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "H06",
+          "classification_error": null,
+          "raw_query": "halfway through chatting on my fone the other person vanishes and i have to ring again",
+          "enriched_query": "halfway through chatting on my fone the other person vanishes and i have to ring again\nmobile; voice; call drop",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "PUBLIC-00807",
+                  "PUBLIC-00577",
+                  "PUBLIC-00644",
+                  "PUBLIC-00648",
+                  "PUBLIC-00074"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-018",
+                  "SYN-06-16",
+                  "SYN-06-10",
+                  "SYN-07-19",
+                  "PUBLIC-01270"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-018",
+                  "PUBLIC-00807",
+                  "PUBLIC-00577",
+                  "SYN-06-16",
+                  "PUBLIC-00644"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "PUBLIC-00807",
+                  "PUBLIC-00644",
+                  "PUBLIC-00577",
+                  "KB-006",
+                  "SYN-07-18"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-018",
+                  "SYN-06-16",
+                  "SYN-07-18",
+                  "KB-GEN-007",
+                  "SYN-07-15"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-07-18",
+                  "SYN-06-16",
+                  "KB-006",
+                  "SYN-07-15",
+                  "SYN-06-10"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              }
+            }
+          }
+        },
+        {
+          "id": "H07",
+          "classification_error": null,
+          "raw_query": "pick up the kitchen receiver and theres silence instead of the usual brrrr before i press the numbers",
+          "enriched_query": "pick up the kitchen receiver and theres silence instead of the usual brrrr before i press the numbers\nfixed voice; no dial tone",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-02-16",
+                  "SYN-02-03",
+                  "PUBLIC-27927",
+                  "PUBLIC-24703"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-02-16",
+                  "KB-GEN-014",
+                  "KB-GEN-010",
+                  "SYN-06-17",
+                  "SYN-06-07"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-02-16",
+                  "SYN-02-03",
+                  "KB-GEN-020",
+                  "KB-GEN-014",
+                  "KB-GEN-010"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-01",
+                  "KB-007",
+                  "SYN-06-24",
+                  "SYN-01-13",
+                  "SYN-08-08"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-014",
+                  "SYN-06-16",
+                  "KB-GEN-010",
+                  "SYN-06-20",
+                  "SYN-06-07"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-06-01",
+                  "KB-GEN-014",
+                  "SYN-06-20",
+                  "KB-GEN-010",
+                  "KB-007"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.2
+              }
+            }
+          }
+        },
+        {
+          "id": "H08",
+          "classification_error": null,
+          "raw_query": "watching football through the little box our company gave us, the players get stuck then jump ahead every few seconds",
+          "enriched_query": "watching football through the little box our company gave us, the players get stuck then jump ahead every few seconds\niptv; Video Sync; video lagging; video stuttering",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-07-13",
+                  "SYN-07-04",
+                  "KB-GEN-004",
+                  "KB-GEN-020",
+                  "SYN-01-12"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-06-23"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-06-23",
+                  "SYN-07-13",
+                  "SYN-07-04",
+                  "KB-GEN-004",
+                  "KB-GEN-020"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-06-23",
+                  "SYN-07-04",
+                  "SYN-06-09",
+                  "KB-GEN-004",
+                  "SYN-08-13"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-06-23",
+                  "KB-GEN-004",
+                  "SYN-07-24",
+                  "SYN-06-09",
+                  "SYN-02-14"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-06-23",
+                  "KB-GEN-004",
+                  "SYN-06-09",
+                  "SYN-07-04",
+                  "SYN-06-03"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.5
+              }
+            }
+          }
+        },
+        {
+          "id": "H09",
+          "classification_error": null,
+          "raw_query": "i press the clicker once and the channel only changes ten seconds later, its driving me mad",
+          "enriched_query": "i press the clicker once and the channel only changes ten seconds later, its driving me mad\niptv; Video Sync; slow channel change; video sync delay",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-01-15",
+                  "SYN-07-04",
+                  "KB-GEN-011",
+                  "KB-003"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-06-23",
+                  "SYN-06-09",
+                  "KB-GEN-016",
+                  "SYN-06-03"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-07-04",
+                  "SYN-01-15",
+                  "SYN-06-23",
+                  "SYN-06-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-08-17",
+                  "SYN-07-04",
+                  "SYN-07-16",
+                  "SYN-06-09"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-06-23",
+                  "SYN-06-09",
+                  "KB-GEN-020",
+                  "SYN-06-03",
+                  "SYN-06-06"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.3333333333333333
+              },
+              "hybrid": {
+                "top_5": [
+                  "KB-GEN-020",
+                  "SYN-06-09",
+                  "SYN-08-17",
+                  "SYN-06-03",
+                  "SYN-07-04"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 1.0
+              }
+            }
+          }
+        },
+        {
+          "id": "H10",
+          "classification_error": null,
+          "raw_query": "im abroad, can ring home from my pocket thing but maps wont open unless im in a cafe",
+          "enriched_query": "im abroad, can ring home from my pocket thing but maps wont open unless im in a cafe\nmobile; roaming; mobile roaming data unavailable; maps app not loading",
+          "variants": {
+            "raw": {
+              "keyword": {
+                "top_5": [
+                  "SYN-01-13",
+                  "SYN-02-01",
+                  "PUBLIC-00245",
+                  "PUBLIC-00577",
+                  "SYN-05-05"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-05-01",
+                  "SYN-04-01",
+                  "SYN-05-05",
+                  "SYN-05-24",
+                  "SYN-05-08"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-05-05",
+                  "SYN-04-24",
+                  "SYN-05-24",
+                  "SYN-06-10",
+                  "SYN-01-13"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              }
+            },
+            "enriched": {
+              "keyword": {
+                "top_5": [
+                  "SYN-04-01",
+                  "SYN-05-05",
+                  "SYN-04-24",
+                  "SYN-05-14",
+                  "SYN-05-11"
+                ],
+                "reference_hit_at_5": 0.0,
+                "partial_reference_recall_at_5": 0.0,
+                "reference_reciprocal_rank_at_5": 0.0
+              },
+              "semantic": {
+                "top_5": [
+                  "SYN-04-01",
+                  "SYN-05-05",
+                  "SYN-05-01",
+                  "KB-GEN-019",
+                  "SYN-04-05"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              },
+              "hybrid": {
+                "top_5": [
+                  "SYN-04-01",
+                  "SYN-05-05",
+                  "SYN-04-24",
+                  "KB-GEN-019",
+                  "SYN-04-05"
+                ],
+                "reference_hit_at_5": 1.0,
+                "partial_reference_recall_at_5": 1.0,
+                "reference_reciprocal_rank_at_5": 0.25
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

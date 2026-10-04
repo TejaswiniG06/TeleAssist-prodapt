@@ -1,0 +1,1089 @@
+{
+  "version": "human-language-pilot-v1",
+  "started_at": "2026-10-03T12:35:36.197658+00:00",
+  "suite_sha256": "1ea81c5ebe52503a470f028a242e275f8deb141a67c020b305f2de4ae9df0935",
+  "resolution_code_sha256": "98c549f38e06bcb05b5ed629ca1962ec0ec7aa6c4a697e624821d6d4a23938df",
+  "label_origin": "Queries manually composed by the coding assistant before retrieval; user-supplied feature cases. No independent human relevance adjudication.",
+  "notice": "Separate development challenge set. Casual queries avoid technical product/fault terms, not every ordinary corpus word. Typos are intentional. Do not merge scores with synthetic pilot-v1.",
+  "baseline": "Matched plain RAG ablation: same model, hybrid context, trust selection and citation checker; no attempted-action extraction in draft or exclusion/prompt guard.",
+  "complete": true,
+  "active_sources": 487,
+  "hard_retrieval": {
+    "cases": 10,
+    "metrics": {
+      "keyword": {
+        "reference_hit_at_5": 0.3,
+        "partial_reference_recall_at_5": 0.3,
+        "reference_reciprocal_rank_at_5": 0.2333
+      },
+      "semantic": {
+        "reference_hit_at_5": 0.2,
+        "partial_reference_recall_at_5": 0.2,
+        "reference_reciprocal_rank_at_5": 0.2
+      },
+      "hybrid": {
+        "reference_hit_at_5": 0.3,
+        "partial_reference_recall_at_5": 0.3,
+        "reference_reciprocal_rank_at_5": 0.225
+      }
+    },
+    "rows": [
+      {
+        "id": "H01",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "SYN-03-19",
+              "PUBLIC-00577",
+              "KB-GEN-010",
+              "KB-GEN-013",
+              "SYN-07-18"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "semantic": {
+            "top_5": [
+              "SYN-02-18"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "SYN-02-18",
+              "SYN-03-19",
+              "PUBLIC-00577",
+              "KB-GEN-010",
+              "KB-GEN-013"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          }
+        }
+      },
+      {
+        "id": "H02",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "TICKET-001",
+              "SYN-07-04",
+              "SYN-03-17",
+              "PUBLIC-00644",
+              "PUBLIC-09578"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "semantic": {
+            "top_5": [],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "TICKET-001",
+              "SYN-07-04",
+              "SYN-03-17",
+              "PUBLIC-00644",
+              "PUBLIC-09578"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          }
+        }
+      },
+      {
+        "id": "H03",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "KB-003",
+              "SYN-01-13",
+              "SYN-01-05",
+              "SYN-06-24",
+              "SYN-08-14"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 1.0
+          },
+          "semantic": {
+            "top_5": [
+              "KB-003",
+              "SYN-01-05",
+              "SYN-01-13"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 1.0
+          },
+          "hybrid": {
+            "top_5": [
+              "KB-003",
+              "SYN-01-05",
+              "SYN-01-13",
+              "SYN-06-24",
+              "SYN-08-14"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 1.0
+          }
+        }
+      },
+      {
+        "id": "H04",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "SYN-01-18",
+              "SYN-01-13",
+              "KB-GEN-013",
+              "SYN-04-09",
+              "KB-GEN-003"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "semantic": {
+            "top_5": [
+              "PUBLIC-20886"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "PUBLIC-20886",
+              "SYN-01-18",
+              "SYN-01-13",
+              "KB-GEN-013",
+              "SYN-04-09"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          }
+        }
+      },
+      {
+        "id": "H05",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "SYN-02-01",
+              "PUBLIC-00245",
+              "PUBLIC-00577",
+              "SYN-01-13",
+              "KB-GEN-003"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "semantic": {
+            "top_5": [],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "SYN-02-01",
+              "PUBLIC-00245",
+              "PUBLIC-00577",
+              "SYN-01-13",
+              "KB-GEN-003"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          }
+        }
+      },
+      {
+        "id": "H06",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "PUBLIC-00807",
+              "PUBLIC-00577",
+              "PUBLIC-00644",
+              "PUBLIC-00648",
+              "PUBLIC-00074"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "semantic": {
+            "top_5": [
+              "KB-GEN-018",
+              "SYN-06-16",
+              "SYN-06-10",
+              "SYN-07-19",
+              "PUBLIC-01270"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "KB-GEN-018",
+              "PUBLIC-00807",
+              "PUBLIC-00577",
+              "SYN-06-16",
+              "PUBLIC-00644"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          }
+        }
+      },
+      {
+        "id": "H07",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "KB-GEN-020",
+              "SYN-02-16",
+              "SYN-02-03",
+              "PUBLIC-27927",
+              "PUBLIC-24703"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "semantic": {
+            "top_5": [
+              "SYN-02-16",
+              "KB-GEN-014",
+              "KB-GEN-010",
+              "SYN-06-17",
+              "SYN-06-07"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "SYN-02-16",
+              "SYN-02-03",
+              "KB-GEN-020",
+              "KB-GEN-014",
+              "KB-GEN-010"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          }
+        }
+      },
+      {
+        "id": "H08",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "SYN-07-13",
+              "SYN-07-04",
+              "KB-GEN-004",
+              "KB-GEN-020",
+              "SYN-01-12"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 0.3333333333333333
+          },
+          "semantic": {
+            "top_5": [
+              "SYN-06-23"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "SYN-06-23",
+              "SYN-07-13",
+              "SYN-07-04",
+              "KB-GEN-004",
+              "KB-GEN-020"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 0.25
+          }
+        }
+      },
+      {
+        "id": "H09",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "KB-GEN-020",
+              "SYN-01-15",
+              "SYN-07-04",
+              "KB-GEN-011",
+              "KB-003"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 1.0
+          },
+          "semantic": {
+            "top_5": [
+              "KB-GEN-020",
+              "SYN-06-23",
+              "SYN-06-09",
+              "KB-GEN-016",
+              "SYN-06-03"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 1.0
+          },
+          "hybrid": {
+            "top_5": [
+              "KB-GEN-020",
+              "SYN-07-04",
+              "SYN-01-15",
+              "SYN-06-23",
+              "SYN-06-09"
+            ],
+            "reference_hit_at_5": 1.0,
+            "partial_reference_recall_at_5": 1.0,
+            "reference_reciprocal_rank_at_5": 1.0
+          }
+        }
+      },
+      {
+        "id": "H10",
+        "modes": {
+          "keyword": {
+            "top_5": [
+              "SYN-01-13",
+              "SYN-02-01",
+              "PUBLIC-00245",
+              "PUBLIC-00577",
+              "SYN-05-05"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "semantic": {
+            "top_5": [
+              "SYN-05-01",
+              "SYN-04-01",
+              "SYN-05-05",
+              "SYN-05-24",
+              "SYN-05-08"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          },
+          "hybrid": {
+            "top_5": [
+              "SYN-05-05",
+              "SYN-04-24",
+              "SYN-05-24",
+              "SYN-06-10",
+              "SYN-01-13"
+            ],
+            "reference_hit_at_5": 0.0,
+            "partial_reference_recall_at_5": 0.0,
+            "reference_reciprocal_rank_at_5": 0.0
+          }
+        }
+      }
+    ]
+  },
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "min_call_interval_seconds": 15.0,
+  "feature_metrics": {
+    "product": {
+      "correct": 8,
+      "total": 8
+    },
+    "category": {
+      "correct": 8,
+      "total": 8
+    },
+    "churn": {
+      "correct": 8,
+      "total": 8
+    },
+    "all_requested_checks": {
+      "passed_cases": 8,
+      "cases": 8
+    }
+  },
+  "citation_metrics": {
+    "passed_step_bearing_answers": 6,
+    "step_bearing_answers": 6,
+    "checked_steps": 7,
+    "notice": "No-step outcomes excluded; mechanical source/version/quote checks, not full entailment."
+  },
+  "repeated_fix_metrics": {
+    "plain_rag": {
+      "repeated_cases": 1,
+      "cases": 8,
+      "repeated_fix_rate": 0.125,
+      "answers_with_steps": 4,
+      "repetition_among_answers_with_steps": 0.25,
+      "provider_fallbacks": 0,
+      "grounding_fallbacks": 0
+    },
+    "ours": {
+      "repeated_cases": 0,
+      "cases": 8,
+      "repeated_fix_rate": 0.0,
+      "answers_with_steps": 6,
+      "repetition_among_answers_with_steps": 0.0,
+      "provider_fallbacks": 0,
+      "grounding_fallbacks": 0
+    }
+  },
+  "attempt_extraction": {
+    "correct_cases": 7,
+    "cases": 8
+  },
+  "cases_with_repeat_available": 6,
+  "completed_at": "2026-10-03T12:44:06.375756+00:00",
+  "corpus_sha256": "17151eaa5825dc74b8104e4619bbace2ba17df85d491e3a906cea185f94547b0",
+  "feature_rows": [
+    {
+      "id": "U01",
+      "prediction": {
+        "product": "broadband",
+        "category": "intermittent_connection",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "attempt_extraction": true,
+        "no_repeated_fix": true,
+        "churn": true
+      },
+      "status": "clarification",
+      "reason": null
+    },
+    {
+      "id": "U02",
+      "prediction": {
+        "product": "broadband",
+        "category": "slow_speed",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "churn": true,
+        "masking": true
+      },
+      "status": "clarification",
+      "reason": null
+    },
+    {
+      "id": "U03",
+      "prediction": {
+        "product": "broadband",
+        "category": "connectivity",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "churn": true,
+        "abstention": true
+      },
+      "status": "clarification",
+      "reason": null
+    },
+    {
+      "id": "U04",
+      "prediction": {
+        "product": "broadband",
+        "category": "intermittent_connection",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "attempt_extraction": true,
+        "no_repeated_fix": true,
+        "churn": true
+      },
+      "status": "resolution",
+      "reason": null
+    },
+    {
+      "id": "U05",
+      "prediction": {
+        "product": "mobile",
+        "category": "mobile data",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "attempt_extraction": true,
+        "no_repeated_fix": true,
+        "churn": true,
+        "no_broadband_steps": true
+      },
+      "status": "resolution",
+      "reason": null
+    },
+    {
+      "id": "U06",
+      "prediction": {
+        "product": "broadband",
+        "category": "wifi_issue",
+        "churn_risk": true
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "churn": true
+      },
+      "status": "clarification",
+      "reason": null
+    },
+    {
+      "id": "U07",
+      "prediction": {
+        "product": "unknown",
+        "category": "unknown",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "churn": true,
+        "abstention": true,
+        "no_injection_promise": true
+      },
+      "status": "clarification",
+      "reason": null
+    },
+    {
+      "id": "U08",
+      "prediction": {
+        "product": "unknown",
+        "category": "unknown",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "churn": true,
+        "abstention": true
+      },
+      "status": "clarification",
+      "reason": "no_applicable_evidence"
+    },
+    {
+      "id": "R04",
+      "prediction": {
+        "product": "broadband",
+        "category": "Wi-Fi coverage/interference",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": false,
+        "provider_completed": true,
+        "attempt_extraction": true,
+        "no_repeated_fix": true
+      },
+      "status": "resolution",
+      "reason": null
+    },
+    {
+      "id": "R05",
+      "prediction": {
+        "product": "broadband",
+        "category": "Wi-Fi coverage/interference",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": false,
+        "provider_completed": true,
+        "attempt_extraction": true,
+        "no_repeated_fix": true
+      },
+      "status": "resolution",
+      "reason": null
+    },
+    {
+      "id": "R06",
+      "prediction": {
+        "product": "broadband",
+        "category": "slow_speed",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "attempt_extraction": true,
+        "no_repeated_fix": true
+      },
+      "status": "clarification",
+      "reason": null
+    },
+    {
+      "id": "R07",
+      "prediction": {
+        "product": "broadband",
+        "category": "slow_speed",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "attempt_extraction": true,
+        "no_repeated_fix": true
+      },
+      "status": "resolution",
+      "reason": null
+    },
+    {
+      "id": "R08",
+      "prediction": {
+        "product": "broadband",
+        "category": "slow_speed",
+        "churn_risk": false
+      },
+      "checks": {
+        "product": true,
+        "category": true,
+        "provider_completed": true,
+        "attempt_extraction": false,
+        "no_repeated_fix": true
+      },
+      "status": "resolution",
+      "reason": null
+    }
+  ],
+  "paired_rows": [
+    {
+      "id": "U01",
+      "expected_actions": [
+        "restart_router"
+      ],
+      "available_repeated_actions": [
+        "restart_router"
+      ],
+      "extracted_actions": [
+        "restart_router"
+      ],
+      "context_source_ids": [
+        "KB-001",
+        "KB-GEN-001",
+        "KB-GEN-017",
+        "TICKET-001",
+        "SYN-01-16",
+        "SYN-01-11",
+        "PUBLIC-00595",
+        "SYN-07-25"
+      ],
+      "plain_rag": {
+        "status": "clarification",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 0,
+        "citation": {
+          "applicable": false,
+          "passed": null,
+          "checked_steps": 0
+        }
+      },
+      "ours": {
+        "status": "clarification",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 0,
+        "citation": {
+          "applicable": false,
+          "passed": null,
+          "checked_steps": 0
+        }
+      }
+    },
+    {
+      "id": "U04",
+      "expected_actions": [
+        "restart_router"
+      ],
+      "available_repeated_actions": [],
+      "extracted_actions": [
+        "restart_router"
+      ],
+      "context_source_ids": [
+        "KB-004",
+        "KB-003",
+        "KB-GEN-001",
+        "SYN-01-13",
+        "SYN-01-19",
+        "TICKET-001",
+        "PUBLIC-06522",
+        "SYN-03-25"
+      ],
+      "plain_rag": {
+        "status": "clarification",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 0,
+        "citation": {
+          "applicable": false,
+          "passed": null,
+          "checked_steps": 0
+        }
+      },
+      "ours": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 2,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 2
+        }
+      }
+    },
+    {
+      "id": "U05",
+      "expected_actions": [
+        "toggle_airplane_mode"
+      ],
+      "available_repeated_actions": [
+        "toggle_airplane_mode"
+      ],
+      "extracted_actions": [
+        "toggle_airplane_mode"
+      ],
+      "context_source_ids": [
+        "KB-005",
+        "KB-GEN-003",
+        "KB-GEN-019",
+        "SYN-04-03",
+        "SYN-05-17",
+        "SYN-04-17",
+        "PUBLIC-14610",
+        "SYN-04-25"
+      ],
+      "plain_rag": {
+        "status": "clarification",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 0,
+        "citation": {
+          "applicable": false,
+          "passed": null,
+          "checked_steps": 0
+        }
+      },
+      "ours": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      }
+    },
+    {
+      "id": "R04",
+      "expected_actions": [
+        "move_router"
+      ],
+      "available_repeated_actions": [
+        "move_router"
+      ],
+      "extracted_actions": [
+        "compare_wired_connection",
+        "move_router"
+      ],
+      "context_source_ids": [
+        "KB-001",
+        "KB-004",
+        "KB-GEN-001",
+        "TICKET-001",
+        "SYN-01-14",
+        "SYN-02-01",
+        "PUBLIC-00595",
+        "SYN-02-22"
+      ],
+      "plain_rag": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 3,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 3
+        }
+      },
+      "ours": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      }
+    },
+    {
+      "id": "R05",
+      "expected_actions": [
+        "compare_wired_connection"
+      ],
+      "available_repeated_actions": [
+        "compare_wired_connection"
+      ],
+      "extracted_actions": [
+        "compare_wired_connection"
+      ],
+      "context_source_ids": [
+        "KB-004",
+        "KB-001",
+        "KB-GEN-017",
+        "TICKET-001",
+        "SYN-02-01",
+        "SYN-01-14",
+        "PUBLIC-00595",
+        "SYN-02-25"
+      ],
+      "plain_rag": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      },
+      "ours": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      }
+    },
+    {
+      "id": "R06",
+      "expected_actions": [
+        "pause_background_download",
+        "collect_speed_measurement"
+      ],
+      "available_repeated_actions": [
+        "collect_speed_measurement",
+        "pause_background_download"
+      ],
+      "extracted_actions": [
+        "collect_speed_measurement",
+        "pause_background_download"
+      ],
+      "context_source_ids": [
+        "KB-002",
+        "KB-001",
+        "KB-GEN-009",
+        "TICKET-002",
+        "SYN-03-03",
+        "SYN-03-19",
+        "PUBLIC-00577",
+        "KB-GEN-017"
+      ],
+      "plain_rag": {
+        "status": "clarification",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 0,
+        "citation": {
+          "applicable": false,
+          "passed": null,
+          "checked_steps": 0
+        }
+      },
+      "ours": {
+        "status": "clarification",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 0,
+        "citation": {
+          "applicable": false,
+          "passed": null,
+          "checked_steps": 0
+        }
+      }
+    },
+    {
+      "id": "R07",
+      "expected_actions": [
+        "collect_speed_measurement",
+        "compare_wired_connection"
+      ],
+      "available_repeated_actions": [
+        "collect_speed_measurement",
+        "compare_wired_connection"
+      ],
+      "extracted_actions": [
+        "collect_speed_measurement",
+        "compare_wired_connection"
+      ],
+      "context_source_ids": [
+        "KB-002",
+        "KB-001",
+        "KB-004",
+        "TICKET-002",
+        "SYN-03-03",
+        "SYN-03-07",
+        "PUBLIC-00595",
+        "SYN-07-21"
+      ],
+      "plain_rag": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": true,
+        "repeated_actions": [
+          "compare_wired_connection"
+        ],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      },
+      "ours": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      }
+    },
+    {
+      "id": "R08",
+      "expected_actions": [
+        "check_device_scope"
+      ],
+      "available_repeated_actions": [],
+      "extracted_actions": [
+        "pause_background_download"
+      ],
+      "context_source_ids": [
+        "TICKET-002",
+        "SYN-03-03",
+        "SYN-03-06",
+        "PUBLIC-00577",
+        "SYN-03-02",
+        "SYN-02-10",
+        "SYN-02-15",
+        "PUBLIC-04029"
+      ],
+      "plain_rag": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      },
+      "ours": {
+        "status": "resolution",
+        "reason": null,
+        "generation": "llm",
+        "repeated": false,
+        "repeated_actions": [],
+        "step_count": 1,
+        "citation": {
+          "applicable": true,
+          "passed": true,
+          "checked_steps": 1
+        }
+      }
+    }
+  ]
+}

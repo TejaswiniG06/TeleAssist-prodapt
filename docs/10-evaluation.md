@@ -1,5 +1,7 @@
 # Repeatable evaluation and honest interpretation
 
+The synthetic pilot queries below share vocabulary with the corpus. See [human-language evaluation](12-human-language-evaluation.md) for separately frozen casual/typo retrieval results, matched plain RAG repeated-fix comparison, product/category labels and mechanical citation pass rate. These cohorts must not be merged into one accuracy claim.
+
 `python evaluate_benchmark.py` compares keyword, semantic and hybrid on frozen `data/benchmark_v1.json`: 24 fictional queries across broadband, mobile, fixed voice and IPTV. The labels were authored with AI assistance from article scope before the first run. They are partial positive source references, not exhaustive relevance judgements or an independently blinded holdout. A canonical content hash test prevents silently changing pilot-v1 after seeing results; publish a new benchmark version for any label change.
 
 All modes use the same 487-record base corpus, unfiltered queries, score threshold 0.30 and limit 20 before assessing the first five. The report records benchmark/corpus hashes and case-level IDs, so misses are inspectable. Metrics are reference hit@5, recall over the supplied partial references, and reciprocal rank of the first supplied reference within five. Unlabelled histories may be relevant and are not established negatives. These numbers do not measure answer success, citation entailment or customer outcomes.

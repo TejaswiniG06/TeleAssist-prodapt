@@ -19,4 +19,5 @@ def create_retrieval_app(**kwargs):
 load_environment()
 ROOT = Path(__file__).parent
 app = create_retrieval_app(cache_path=ROOT/'runtime/embeddings.json',
+                           case_path=ROOT/'runtime/cases.sqlite3',
                            state_path=ROOT/'runtime/evidence_state.json',topic_path=ROOT/'runtime/topic_state.json')

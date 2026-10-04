@@ -12,6 +12,7 @@ Start with the flow: complaint → mask common identifiers → classify and iden
 | resolution.py | Classify, select and check steps | Use source-backed actions and avoid repeating completed/failed actions | Exact quote and customer-text checks cannot establish full semantic entailment |
 | api.py | Validate inputs and expose services | Keep HTTP handling separate from retrieval and grounding | Single-process default; optional split services and agent/editor access are implemented |
 | web/index.html | Agent review interface | A single page calls the API and exposes evidence | Agent review is still required |
+| dashboard.py / dashboard_client.py | Case workspace screens and HTTP client | Separate Python presentation calls the real API; no duplicated decision logic | Extra process; API keys are prototype roles, not individual identities |
 
 ## Why the source filter was simplified
 

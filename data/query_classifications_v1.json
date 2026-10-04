@@ -1,0 +1,589 @@
+{
+  "rows": {
+    "pilot_24:P01": {
+      "query_sha256": "5d151b8f96ccb292c0f9a6689859f51d1d22d4b21c167520d531d06b018cafab",
+      "classification": {
+        "product": "broadband",
+        "category": "Wi-Fi coverage/interference",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "Wi-Fi disconnection"
+        ],
+        "attempted_actions": [
+          {
+            "action_id": "compare_wired_connection",
+            "outcome": "unknown",
+            "evidence": "my wired computer remains connected"
+          }
+        ],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P02": {
+      "query_sha256": "55b9d88f2646a34d8b53aa3e4dc0eb3b40647e9d556893bd237f25381555227a",
+      "classification": {
+        "product": "broadband",
+        "category": "slow_speed",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "slow broadband downloads",
+          "video buffering"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P03": {
+      "query_sha256": "6493ee57369ee177cbc8deae3f6c4db65a15d0d1e920fa75b80bbbf3f84a3331",
+      "classification": {
+        "product": "broadband",
+        "category": "no_connection",
+        "severity": "high",
+        "sentiment": "negative",
+        "symptoms": [
+          "No broadband internet",
+          "router has no visible power light"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P04": {
+      "query_sha256": "6c2c82cfd1d9c753c31eaa3e3e165cc9c23f1901d4278966f01fdd737ee9f23f",
+      "classification": {
+        "product": "broadband",
+        "category": "Wi-Fi coverage/interference",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "poor Wi-Fi coverage",
+          "limited Wi-Fi range"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P05": {
+      "query_sha256": "2cb5422ccbecc2ff709705e0e6bc5b01012171acf59c47dcb2b783379a6674cd",
+      "classification": {
+        "product": "mobile",
+        "category": "mobile data",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "mobile data disconnection",
+          "voice calls working"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P06": {
+      "query_sha256": "34e571a93e705406b3699b2d185de7eba1654c454e308323c7695b0ef74bbab3",
+      "classification": {
+        "product": "mobile",
+        "category": "voice",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "call dropping"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P07": {
+      "query_sha256": "7bd4f49235208dbefe8a54ce7fb7855b0e08a09cefad5647ab1333eb922a3116",
+      "classification": {
+        "product": "fixed_voice",
+        "category": "fixed_voice",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "no dial tone",
+          "fixed voice service unavailable"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P08": {
+      "query_sha256": "5f049a80cd6902ef6f656d77ff59dc8de532dc2c9f6ce5a0fa8181701f3c1346",
+      "classification": {
+        "product": "broadband",
+        "category": "intermittent_connection",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "intermittent connection",
+          "offline status",
+          "signal loss"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P09": {
+      "query_sha256": "2ef3e6d3e6a34d07d1007a8b10c68754cbe01f8858b318433f9bf058f54897a8",
+      "classification": {
+        "product": "fixed_voice",
+        "category": "Line Quality",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "loud static on fixed voice line"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P10": {
+      "query_sha256": "1afb1c587d004c1c868553623bf815f80f6966c95dae9af5441f18f6f478a746",
+      "classification": {
+        "product": "mobile",
+        "category": "mobile data",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "mobile data stalls",
+          "radio band switching issue"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P11": {
+      "query_sha256": "486ecc85d46274f02af31b07797a617b01d69a628ce46a6e8a08cb510af51b70",
+      "classification": {
+        "product": "iptv",
+        "category": "Video Quality",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "IPTV buffering",
+          "video freezing"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P12": {
+      "query_sha256": "752e9d291bfacba7662dea5bdee68516b6717eba3820672b7ccad940bc2be7c2",
+      "classification": {
+        "product": "broadband",
+        "category": "Wi-Fi coverage/interference",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "Wi-Fi network name not broadcasting"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P13": {
+      "query_sha256": "38b56b68303abab811757699b2c77b1e8c780b159626b23eb6c29f81166a3031",
+      "classification": {
+        "product": "fixed_voice",
+        "category": "SIP Registration",
+        "severity": "medium",
+        "sentiment": "neutral",
+        "symptoms": [
+          "SIP registration failure"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P14": {
+      "query_sha256": "7aa250b34532c86ee11a06b0a908156d882d2930cbc667ad004cdc78fcb22a45",
+      "classification": {
+        "product": "mobile",
+        "category": "indoor_coverage",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "indoor coverage loss",
+          "cellular voice service unavailable indoors"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P15": {
+      "query_sha256": "db85310d06f30c2d0d8b535da2084d3cff1fa09ae0b7f4d13e304bffaae32037",
+      "classification": {
+        "product": "iptv",
+        "category": "Video Quality",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "blank picture",
+          "HDMI handshake error"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P16": {
+      "query_sha256": "69d1079c8a898b8247210684073e338343c80ecf794a39a9e1697d5ab6a9260f",
+      "classification": {
+        "product": "broadband",
+        "category": "speed",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "high latency",
+          "noticeable lag"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P17": {
+      "query_sha256": "7f67b51a76a599dc67d93db738b2ca7b1c020d3441e1a90398494791640097ba",
+      "classification": {
+        "product": "fixed_voice",
+        "category": "Audio Quality",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "call echo",
+          "audio delay"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P18": {
+      "query_sha256": "07583a3f9ae0e0e701f2e4b97579c818fcf507574b12baba4fdd7a3a3316c69a",
+      "classification": {
+        "product": "mobile",
+        "category": "tethering",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "mobile hotspot disconnection",
+          "tethered devices disconnect"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P19": {
+      "query_sha256": "cded020c9ddf8d669f70e544bdb4e3f2f2b03d0f437116697c9c3a4cea4d5807",
+      "classification": {
+        "product": "iptv",
+        "category": "EPG Services",
+        "severity": "medium",
+        "sentiment": "neutral",
+        "symptoms": [
+          "EPG missing"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P20": {
+      "query_sha256": "61b3e5abe4450525f57752736da527c07858518880d042c7ed05046429cae4d5",
+      "classification": {
+        "product": "broadband",
+        "category": "authentication_failure",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "authentication timeout",
+          "broadband login failure"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P21": {
+      "query_sha256": "80e524db487046c646f375e1f0a9aff1f1fdc04a932eba04129c843d3f547517",
+      "classification": {
+        "product": "mobile",
+        "category": "messaging",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "MMS message failure"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P22": {
+      "query_sha256": "82662fd3ca625ce5c860ef8b58bd16592ba59ed8ad6ff05b9a3af6977dc88d19",
+      "classification": {
+        "product": "iptv",
+        "category": "Audio Quality",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "audio dropping out"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P23": {
+      "query_sha256": "b336cb6883946155e6a5ba3734cb60ec7066260dbda34ab7d7673b10fae61239",
+      "classification": {
+        "product": "mobile",
+        "category": "roaming",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "mobile roaming data unavailable"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "pilot_24:P24": {
+      "query_sha256": "8f8da554700d5a833b9c7eb54f1d808fc9489ae0fb586dfaf8c9cbebb60cf236",
+      "classification": {
+        "product": "iptv",
+        "category": "hardware",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "remote control delay"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H01": {
+      "query_sha256": "4931c30301c960fe3ee7937deef4b4181c1dee27e8b24a79f7f8dd0e04c7fa83",
+      "classification": {
+        "product": "broadband",
+        "category": "wifi_issue",
+        "severity": "medium",
+        "sentiment": "neutral",
+        "symptoms": [
+          "Wi-Fi disconnection",
+          "Intermittent connection"
+        ],
+        "attempted_actions": [
+          {
+            "action_id": "compare_wired_connection",
+            "outcome": "successful",
+            "evidence": "the laptop with a lead into the little blinking box carries on fine"
+          }
+        ],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H02": {
+      "query_sha256": "cd8f0ca1bfeab52f50e9d52568b18e947760ce7b43a7bf771cb9cba822c4cd67",
+      "classification": {
+        "product": "broadband",
+        "category": "Video Streaming",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "slow video loading",
+          "buffering indicator displayed"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H03": {
+      "query_sha256": "a807618f801df561b769249c2d6e4d6b366c6e82eb5802ab028f0039b3b756e1",
+      "classification": {
+        "product": "broadband",
+        "category": "no_connection",
+        "severity": "high",
+        "sentiment": "negative",
+        "symptoms": [
+          "total internet outage",
+          "router power failure"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H04": {
+      "query_sha256": "731609aac7a5df0103e5f9d61059994da6bfec87a563e7e881137b1637d3e00f",
+      "classification": {
+        "product": "broadband",
+        "category": "Wi-Fi coverage/interference",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "Wi-Fi dead zone",
+          "web pages not loading"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H05": {
+      "query_sha256": "10fed21e086918dfe0decac3e2dec73ce4f701f8e8419c6ba069d0f6bc495db0",
+      "classification": {
+        "product": "mobile",
+        "category": "mobile data",
+        "severity": "medium",
+        "sentiment": "neutral",
+        "symptoms": [
+          "mobile data unavailable",
+          "pages won't load"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H06": {
+      "query_sha256": "00ac4e5c02ed04ff6e75afa80c8da2142bdfff8befd00bcbf9b60868475eaa40",
+      "classification": {
+        "product": "mobile",
+        "category": "voice",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "call drop"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H07": {
+      "query_sha256": "bb5a6f87b107849ebce97231c7b95894eb4826c324b94546df0a2e3796c60d70",
+      "classification": {
+        "product": "fixed_voice",
+        "category": "fixed_voice",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "no dial tone"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H08": {
+      "query_sha256": "8e1517ca06c132cc8b5c64d2fe1f1e826702f070485d4dfe9ee6f388ac5a66e6",
+      "classification": {
+        "product": "iptv",
+        "category": "Video Sync",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "video lagging",
+          "video stuttering"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H09": {
+      "query_sha256": "f155d134d153ec5bb9a7e535237ee02f1ab17ea56ad32fbf4e3a18d8eefff5c8",
+      "classification": {
+        "product": "iptv",
+        "category": "Video Sync",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "slow channel change",
+          "video sync delay"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    },
+    "hard_10:H10": {
+      "query_sha256": "554e8876a8371d0f20650105c80996ebdbb3439e24df528e483295523eea8406",
+      "classification": {
+        "product": "mobile",
+        "category": "roaming",
+        "severity": "medium",
+        "sentiment": "negative",
+        "symptoms": [
+          "mobile roaming data unavailable",
+          "maps app not loading"
+        ],
+        "attempted_actions": [],
+        "churn_risk": false,
+        "churn_evidence": ""
+      },
+      "error": null
+    }
+  },
+  "classification_code_sha256": "ec2b6b171eea5da09a2209905e28836318d3036c4b7b68fe3e38bcd19675460e",
+  "category_schema_sha256": "bdd54503fe1b7edfd7e447a9274e955eeceeaa1923607d68365745c9e175cde1",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "label_origin": "Provider predictions from query and allowed taxonomy only; no benchmark labels.",
+  "min_call_interval_seconds": 15.0
+}

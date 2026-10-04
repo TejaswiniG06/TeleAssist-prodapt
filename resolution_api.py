@@ -109,7 +109,7 @@ def create_resolution_app(retrieval_url=None, retrieval_key=None, provider=None,
     @app.post('/resolve')
     def resolve(request:ResolveRequest,role=Depends(access.agent)):
         try:
-            result=resolver.resolve(request.complaint,request.observations,request.exclude_source_ids)
+            result=resolver.resolve(request.complaint,request.observations,request.exclude_source_ids,query_mode=request.query_mode)
         except HTTPException as error:
             if error.status_code != 503:
                 raise
@@ -119,6 +119,7 @@ def create_resolution_app(retrieval_url=None, retrieval_key=None, provider=None,
                 counts[name]=counts.get(name,0)+count
             result=resolver.fallback(complaint,counts,local_classification(complaint+'\n'+observations),'retrieval_unavailable')
         metrics.resolution(result)
+        result['query_mode']=request.query_mode
         return result
 
     return app

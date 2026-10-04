@@ -118,6 +118,7 @@
       const metadata = node('div',undefined,'metadata');
       for (const key of ['product','category','severity','sentiment']) metadata.append(node('span',`${key}: ${data.classification[key]}`,'tag'));
       results.append(metadata,node('p',data.answer,'answer'));
+      if (data.classification.churn_risk) results.append(node('p','Explicit cancellation threat: '+data.classification.churn_evidence,'notice'));
       if (data.classification_notice) results.append(node('p',data.classification_notice,'muted'));
       if (data.reason === 'generation_not_configured') results.append(node('p','Drafting is not configured. You can still search for evidence.','muted'));
       else if (data.generation === 'fallback') results.append(node('p','A checked draft was unavailable. Gather these details before proceeding.','muted'));

@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 from api import create_app
 from llm import ProviderUnavailable
 from privacy import mask
-from resolution import Resolver, select_evidence
+from resolution import Resolver, select_evidence, canonical_action, churn_signal
 
 
 class FakeProvider:
@@ -44,6 +44,33 @@ COMPLAINT = 'My connection drops. A wired connection is available.'
 
 
 class ResolutionTests(unittest.TestCase):
+    def test_explicit_churn_is_distinct_from_frustration_and_negation(self):
+        self.assertTrue(churn_signal("If it isn't fixed tomorrow I'm cancelling my contract."))
+        for text in ('I am frustrated and work from home.', "I'm not cancelling my contract.",
+                     'The agent said I should cancel my contract.', "I'll cancel my appointment.",
+                     'I am leaving for Chennai tomorrow.'):
+            self.assertEqual(churn_signal(text), '')
+
+    def test_casual_and_opaque_action_aliases(self):
+        self.assertEqual(canonical_action('collect_speed_measurement','I ran a speed test on a wired laptop.'),'collect_speed_measurement')
+        self.assertEqual(canonical_action('ACT_002','Customer moved the router to an open location.'),'move_router')
+        self.assertEqual(canonical_action('power_cycle','already switched the box off and on'),'restart_router')
+        self.assertEqual(canonical_action('flight_mode_toggle','Turn flight mode off and on.'),'toggle_airplane_mode')
+
+    def test_unknown_attempt_outcome_is_not_repeated(self):
+        classification = dict(CLASSIFICATION,attempted_actions=[{'action_id':'compare_wired_connection',
+            'outcome':'unknown','evidence':'I tried a wired comparison.'}])
+        result = Resolver(lambda q,e:[hit(article())],FakeProvider([classification])).resolve('I tried a wired comparison.')
+        self.assertEqual(result['reason'],'no_safe_applicable_steps')
+
+    def test_opaque_source_action_cannot_repeat_a_moved_router(self):
+        record = article('ACT_002')
+        record['steps'][0]['instruction'] = 'Move the router to an open elevated position.'
+        classification = dict(CLASSIFICATION,attempted_actions=[{'action_id':'move_router',
+            'outcome':'failed','evidence':'I moved the router but it did not help.'}])
+        result=Resolver(lambda q,e:[hit(record)],FakeProvider([classification])).resolve('I moved the router but it did not help.')
+        self.assertEqual(result['reason'],'no_safe_applicable_steps')
+
     def test_account_mask_distinguishes_identifier_from_instruction(self):
         self.assertIn('[ACCOUNT]', mask('My subscriber ID is ABCDE12345.')[0])
         self.assertEqual(mask('Check subscriber ID verification status.')[1], {})

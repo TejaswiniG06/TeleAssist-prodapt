@@ -4,7 +4,10 @@
 
 ```mermaid
 flowchart TD
-    Agent[Support agent in plain browser] --> API[FastAPI: interface and endpoints]
+    Agent[Support agent in browser] --> Dashboard[Streamlit Case workspace]
+    Dashboard --> API[FastAPI endpoints]
+    Agent --> Lightweight[Original lightweight interface]
+    Lightweight --> API
     API --> Search[POST /search]
     API --> Resolve[POST /resolve]
     API --> Inspect[GET /sources/id and /health]
@@ -12,7 +15,8 @@ flowchart TD
     Resolve --> Mask
     Mask --> Classify[Structured classification and attempted actions]
     Mask --> Retrieve[BM25 / local cosine / hybrid RRF]
-    Classify --> Retrieve
+    Classify --> Enrich[Append product, category, symptoms and normalized actions]
+    Enrich --> Retrieve
     Corpus[Versioned active KB and ticket records] --> Retrieve
     Local[Local MiniLM and content-keyed embedding cache] --> Retrieve
     Retrieve --> Trust[Relevant KB and resolved history preferred]
@@ -21,6 +25,11 @@ flowchart TD
     Draft --> Check[Validate source version, action, quote and customer evidence]
     Check --> Result[Cited draft or clarification / escalation]
     Result --> Agent
+    Agent --> Case[Explicitly save pending case in SQLite]
+    Case --> Outcome[Record actual actions and observed outcome]
+    Outcome --> Editor[Editor review and applicability conditions]
+    Editor --> Ingest[Background validated evidence publication]
+    Ingest --> Corpus
     Resolve --> Fallback[Provider / retrieval / validation failure fallback]
     Fallback --> Result
     Inspect --> Corpus
@@ -37,10 +46,11 @@ The source corpus contains synthetic KB/history and lower-trust public replies. 
 | Keep BM25 | Cheap, inspectable baseline for exact terms | Paraphrases may miss; compare on labelled queries |
 | Run embeddings locally | No paid embedding API; enables semantic matching | First model load and CPU/memory cost must be measured |
 | Fuse ranks with RRF | Combines exact and semantic signals without comparing incompatible raw scores | Fixed fusion settings are a baseline; quality is not yet established |
+| Reuse classification to enrich the query | Bridges casual wording to telecom terms without another LLM call | Paired evaluation improves hard-query retrieval but regresses pilot hybrid; raw mode remains available |
 | Use explicit evidence tiers | Retains public language without inventing verified outcomes | Trust alone cannot establish relevance or applicability |
 | Select actions from source records | Limits invented operational instructions and exposes provenance | Evidence conditions still need customer confirmation; checker is not a complete safety proof |
 | Clarify on uncertainty/failure | Avoids offering unchecked steps when dependencies or evidence fail | More abstentions; measure useful resolution and appropriate fallback together |
-| One plain page and one API process | Easy to run, explain and test for this prototype | Single process and local storage do not establish production scale |
+| Separate Streamlit dashboard and API | Small Python UI with real HTTP separation; original lightweight page remains available | Additional process; single-writer local storage does not establish production scale |
 | One free provider with bounded retries | Keeps the cost constraint and predictable failure handling | Provider quotas and availability constrain generation |
 
 ## Production deployment path — beyond the local prototype

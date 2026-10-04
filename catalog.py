@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from threading import Lock
 from typing import Literal
+from uuid import uuid4
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from privacy import mask
 from resolution import SUSPICIOUS
@@ -173,7 +174,7 @@ class Catalog:
                         if field in old:
                             updated[field] = old[field]
                 changes[record_id] = updated
-            job_id = f'job-{len(self.jobs) + 1}'
+            job_id = 'job-' + uuid4().hex  # Persisted case links cannot collide after a restart.
             self.jobs[job_id] = {'id':job_id, 'status':'queued', 'base_version':self.current.version}
             self.executor.submit(self._build, job_id, changes, role)
             return dict(self.jobs[job_id])

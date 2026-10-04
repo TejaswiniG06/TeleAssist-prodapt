@@ -5,21 +5,26 @@ from pathlib import Path
 from typing import Literal
 from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from retrieval import DATA, KeywordIndex
 from semantic import SemanticIndex, HybridIndex
 from evidence import load_records
-from resolution import Resolver
+from resolution import Resolver, Classification
+from retrieval_query import build_search_query
 from privacy import mask
 from access import AccessPolicy
 from catalog import Catalog, IngestRequest, Conflict
 from monitoring import Metrics, install_monitoring
 from topics import TopicMonitor, TopicReview, ReplayRequest
+from cases import CaseStore
+from case_api import install_case_routes
 
 
 class SearchRequest(BaseModel):
     query: str = Field(min_length=1, max_length=2000)
     mode: Literal['keyword', 'semantic', 'hybrid'] = 'hybrid'
+    query_mode: Literal['raw', 'enriched'] = 'raw'
+    classification: Classification | None = None
     limit: int = Field(default=4, ge=1, le=20)
     min_semantic_score: float = Field(default=0.30, ge=0, le=1)
     product: str | None = None
@@ -35,11 +40,18 @@ class SearchRequest(BaseModel):
             raise ValueError('Query must not be blank.')
         return value
 
+    @model_validator(mode='after')
+    def enrichment_input(self):
+        if self.query_mode == 'enriched' and self.classification is None:
+            raise ValueError('Enriched search requires an existing classification; search never calls the LLM.')
+        return self
+
 
 class ResolveRequest(BaseModel):
     complaint: str = Field(min_length=1, max_length=5000)
     observations: str = Field(default='', max_length=3000)
     exclude_source_ids: list[str] = Field(default_factory=list, max_length=50)
+    query_mode: Literal['raw', 'enriched'] = 'enriched'
 
     @field_validator('complaint')
     @classmethod
@@ -49,7 +61,7 @@ class ResolveRequest(BaseModel):
         return value
 
 
-def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, include_public=None, access=None, state_path=None, topic_path=None):
+def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, include_public=None, access=None, state_path=None, topic_path=None, case_path=None):
     state = {}
 
     @asynccontextmanager
@@ -57,10 +69,12 @@ def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, inc
         records = load_records(data_path, include_public=Path(data_path) == DATA if include_public is None else include_public)
         state['catalog'] = Catalog(records, encoder, cache_path, state_path)
         state['topics'] = TopicMonitor({r.get('category','unknown') for r in records},topic_path)
+        state['cases'] = CaseStore(case_path)
         try:
             yield
         finally:
             state['catalog'].close()
+            state['cases'].close()
 
     app = FastAPI(title='PS2 evidence retrieval', lifespan=lifespan)
     metrics = Metrics()
@@ -78,6 +92,7 @@ def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, inc
 
     resolver = Resolver(resolution_search, provider, categories=lambda:state['topics'].taxonomy())
     access = access or AccessPolicy.from_environment()
+    install_case_routes(app, state, access)
 
     @app.get('/admin/access')
     def editor_access(role=Depends(access.editor)):
@@ -184,14 +199,14 @@ def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, inc
     def search(request: SearchRequest, role=Depends(access.agent)):
         snapshot = state['catalog'].current
         hits = perform_search(request,snapshot)
-        return {'mode': request.mode, 'index_version':snapshot.version, 'results': [dict(hit, source_url='/sources/' + hit['id'] + '?version=' + str(hit['version'])) for hit in hits],
+        return {'mode': request.mode, 'query_mode':request.query_mode, 'index_version':snapshot.version, 'results': [dict(hit, source_url='/sources/' + hit['id'] + '?version=' + str(hit['version'])) for hit in hits],
                 'evidence_notice': 'Evidence tiers distinguish synthetic KB/history and unverified public suggestions; similarity does not establish applicability.'}
 
     def perform_search(request, snapshot=None):
         snapshot = snapshot or state['catalog'].current
         if request.expected_index_version is not None and request.expected_index_version != snapshot.version:
             raise HTTPException(409,'Index version changed; retry with a consistent version.')
-        query = mask(request.query)[0]
+        query = build_search_query(request.query, request.classification.model_dump() if request.classification else None, request.query_mode)
         selected = [r for r in snapshot.records
                     if (request.product is None or r['product'] == request.product)
                     and (request.record_type is None or r['record_type'] == request.record_type)
@@ -216,13 +231,13 @@ def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, inc
             weak = max(scores,default=0) < .40
         # Filtered/excluded searches can miss deliberately; do not treat that as novelty.
         if weak and request.min_semantic_score <= .30 and request.product is None and request.record_type is None and not request.exclude_source_ids:
-            state['topics'].observe(query,snapshot.version,'weak_'+request.mode+'_match')
+            state['topics'].observe(mask(request.query)[0],snapshot.version,'weak_'+request.mode+'_match')
         return hits
 
     @app.post('/resolve')
     def resolve(request: ResolveRequest, role=Depends(access.agent)):
         try:
-            result = resolver.resolve(request.complaint, request.observations, request.exclude_source_ids)
+            result = resolver.resolve(request.complaint, request.observations, request.exclude_source_ids, query_mode=request.query_mode)
         except HTTPException as error:
             if error.status_code != 503:
                 raise
@@ -233,6 +248,7 @@ def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, inc
                 counts[name] = counts.get(name,0) + count
             result = resolver.fallback(complaint, counts, local_classification(complaint+'\n'+observations), 'retrieval_unavailable')
         metrics.resolution(result)
+        result['query_mode'] = request.query_mode
         if result.get('reason') == 'no_applicable_evidence' and not request.exclude_source_ids:
             state['topics'].observe(result['masked_complaint'],state['catalog'].current.version,'no_applicable_evidence')
         return result
@@ -241,5 +257,6 @@ def create_app(data_path=DATA, encoder=None, cache_path=None, provider=None, inc
 
 
 app = create_app(cache_path=Path(__file__).parent / 'runtime' / 'embeddings.json',
+                 case_path=Path(__file__).parent / 'runtime' / 'cases.sqlite3',
                  state_path=Path(__file__).parent / 'runtime' / 'evidence_state.json',
                  topic_path=Path(__file__).parent / 'runtime' / 'topic_state.json')
