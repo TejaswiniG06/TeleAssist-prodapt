@@ -1,5 +1,5 @@
 import unittest
-from retrieval import KeywordIndex, load_index
+from teleassist.retrieval.keyword import KeywordIndex, load_index
 
 
 class RetrievalTests(unittest.TestCase):

@@ -27,7 +27,7 @@ Inspected `aa_dataset-tickets-multi-lang-5-2-50-version.csv`, SHA256 `f187c090e5
 
 Columns: subject, body, answer, type, queue, priority, language, version, tag_1 through tag_8. Priority is a source label, not a verified telecom severity. An agent answer is not proof of a successful resolution; there is no customer-confirmed outcome field.
 
-`prepare_tickets.py` selects English rows with explicit telecom/network terms in subject/body, deduplicates by text hash, and retains source rows, original labels, licence, attribution, and match terms. It produced 257 candidates. Raw data and candidate text remain in ignored scratch storage. No external answer was promoted into the active knowledge base.
+`scripts/data/prepare_tickets.py` selects English rows with explicit telecom/network terms in subject/body, deduplicates by text hash, and retains source rows, original labels, licence, attribution, and match terms. It produced 257 candidates. Raw data and candidate text remain in ignored scratch storage. No external answer was promoted into the active knowledge base.
 
 The stricter terms broadband, telecom, mobile network, SIM card, VoIP, internet service, fiber/fibre, 4G, and 5G matched none of those candidates. The broader matches are largely router, Wi-Fi, modem, or internet-connection references. Manual inspection of rows 12, 42, 74, 179, 183 and 245 found VPN infrastructure, doorbell integration, NAS connectivity, adapter/OS compatibility, analytics integration, and smart-camera connectivity. These are adjacent IT/device problems, not verified telecom service fixes. Row 245's answer even assumes dual-band router capability without the complaint establishing it.
 
@@ -37,7 +37,7 @@ Twenty-five public complaint texts are reserved as query-only evaluation cases, 
 
 ## Reproducible optional public setup
 
-Run `python download_public.py`. It downloads the audited CSV from revision `ddf1c81a5475992c4fa6752bf1e8b4e31f07bbeb`, verifies SHA256 `f187c090e59581c2bbf3aa1377c8db4dd647464ecf2ae51bf8966e42e0ed6bc0`, and runs the existing filter. The [source file page](https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets/blob/ddf1c81a5475992c4fa6752bf1e8b4e31f07bbeb/aa_dataset-tickets-multi-lang-5-2-50-version.csv) exposes the file/hash; dataset attribution and CC-BY-NC-4.0 remain unchanged. Checksum mismatch preserves previous data. Re-running reuses a matching local file. Raw/candidate data stay ignored, and held-out query labels are not regenerated.
+Run `python -m scripts.data.download_public`. It downloads the audited CSV from revision `ddf1c81a5475992c4fa6752bf1e8b4e31f07bbeb`, verifies SHA256 `f187c090e59581c2bbf3aa1377c8db4dd647464ecf2ae51bf8966e42e0ed6bc0`, and runs the existing filter. The [source file page](https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets/blob/ddf1c81a5475992c4fa6752bf1e8b4e31f07bbeb/aa_dataset-tickets-multi-lang-5-2-50-version.csv) exposes the file/hash; dataset attribution and CC-BY-NC-4.0 remain unchanged. Checksum mismatch preserves previous data. Re-running reuses a matching local file. Raw/candidate data stay ignored, and held-out query labels are not regenerated.
 
 ## Telecom Conversation Corpus inspection (3 October 2026)
 

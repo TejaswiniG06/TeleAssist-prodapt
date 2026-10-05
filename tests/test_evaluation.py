@@ -2,8 +2,8 @@ import json
 import hashlib
 from pathlib import Path
 import unittest
-from evaluate_benchmark import reference_metrics
-from evaluate_public import near_duplicate_ids
+from scripts.evaluation.evaluate_benchmark import reference_metrics
+from scripts.evaluation.evaluate_public import near_duplicate_ids
 
 
 class EvaluationTests(unittest.TestCase):

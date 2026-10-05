@@ -5,9 +5,9 @@ import tempfile
 import unittest
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
-from access import AccessPolicy
-from api import create_app
-from catalog import Catalog, Conflict, EvidenceRecord, IngestRequest
+from teleassist.common.access import AccessPolicy
+from teleassist.services.combined import create_app
+from teleassist.ingestion.catalog import Catalog, Conflict, EvidenceRecord, IngestRequest
 
 
 def article(title='Router guidance'):

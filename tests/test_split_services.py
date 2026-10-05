@@ -2,11 +2,12 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 import httpx
 from fastapi.testclient import TestClient
-from access import AccessPolicy
-from retrieval_api import create_retrieval_app
-from resolution_api import create_resolution_app, RemoteEvidence
+from teleassist.common.access import AccessPolicy
+from teleassist.services.retrieval import create_retrieval_app
+from teleassist.services.resolution import create_resolution_app, RemoteEvidence
 
 
 class NoProvider:
@@ -14,6 +15,30 @@ class NoProvider:
 
 
 class SplitTests(unittest.TestCase):
+    def test_no_applicable_evidence_reaches_shared_topics_but_monitor_outage_is_safe(self):
+        observed = []
+        def forward(request):
+            observed.append(request)
+            return httpx.Response(200, json={'recorded':True})
+        result = {'status':'clarification', 'generation':'fallback', 'reason':'no_applicable_evidence',
+                  'masked_complaint':'Satellite dish loses signal in rain. Contact [EMAIL].'}
+        app = create_resolution_app(provider=NoProvider(), access=AccessPolicy(),
+                                    transport=httpx.MockTransport(forward))
+        with patch('teleassist.services.resolution.Resolver.resolve', return_value=result), TestClient(app) as client:
+            self.assertEqual(client.post('/resolve', json={'complaint':'Satellite dish loses signal.'}).json(),
+                             {**result, 'query_mode':'enriched'})
+            self.assertEqual(observed[0].url.path, '/topics/observations')
+            self.assertEqual(json.loads(observed[0].content)['complaint'], result['masked_complaint'])
+            client.post('/resolve', json={'complaint':'Satellite dish loses signal.', 'exclude_source_ids':['a']})
+            self.assertEqual(len(observed), 1)
+        def fail(request):
+            raise httpx.ConnectError('private diagnostics')
+        app = create_resolution_app(provider=NoProvider(), access=AccessPolicy(),transport=httpx.MockTransport(fail))
+        with patch('teleassist.services.resolution.Resolver.resolve', return_value=result), TestClient(app) as client:
+            response = client.post('/resolve', json={'complaint':'Satellite dish loses signal.'})
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn('private diagnostics', response.text)
+
     def test_http_contract_and_roles(self):
         with tempfile.TemporaryDirectory() as folder:
             path=Path(folder)/'data.json'

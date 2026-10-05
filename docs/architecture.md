@@ -4,38 +4,28 @@
 
 ```mermaid
 flowchart TD
-    Agent[Support agent in browser] --> Dashboard[Streamlit Case workspace]
-    Dashboard --> API[FastAPI endpoints]
-    Agent --> Lightweight[Original lightweight interface]
-    Lightweight --> API
-    API --> Search[POST /search]
-    API --> Resolve[POST /resolve]
-    API --> Inspect[GET /sources/id and /health]
-    Search --> Mask[Pattern masking]
-    Resolve --> Mask
-    Mask --> Classify[Structured classification and attempted actions]
-    Mask --> Retrieve[BM25 / local cosine / hybrid RRF]
-    Classify --> Enrich[Append product, category, symptoms and normalized actions]
-    Enrich --> Retrieve
-    Corpus[Versioned active KB and ticket records] --> Retrieve
-    Local[Local MiniLM and content-keyed embedding cache] --> Retrieve
-    Retrieve --> Trust[Relevant KB and resolved history preferred]
-    Trust --> Draft[Select evidence-backed actions with Gemini free-tier API]
-    Classify --> Draft
-    Draft --> Check[Validate source version, action, quote and customer evidence]
-    Check --> Result[Cited draft or clarification / escalation]
-    Result --> Agent
-    Agent --> Case[Explicitly save pending case in SQLite]
-    Case --> Outcome[Record actual actions and observed outcome]
-    Outcome --> Editor[Editor review and applicability conditions]
-    Editor --> Ingest[Background validated evidence publication]
-    Ingest --> Corpus
-    Resolve --> Fallback[Provider / retrieval / validation failure fallback]
-    Fallback --> Result
-    Inspect --> Corpus
+    User[Agent or editor] --> UI[Streamlit dashboard :8501]
+    UI -->|Draft / search / inspect| Resolution[Resolution API :8002]
+    UI -->|Save cases / record outcomes / editor actions| Retrieval[Retrieval and evidence API :8001]
+    Resolution --> Mask[Masking and classification]
+    Mask --> Enrich[Reuse classification to enrich query]
+    Enrich -->|HTTP with expected index version| Retrieval
+    Retrieval --> Search[BM25 / MiniLM cosine / hybrid RRF]
+    Search --> Evidence[Versioned KB and ticket evidence]
+    Retrieval --> Cases[SQLite saved cases and outcomes]
+    Retrieval --> Topics[Weak-match grouping and reviewed taxonomy]
+    Retrieval --> Ingest[Background indexing and atomic publication]
+    Ingest --> Evidence
+    Resolution --> Provider[Gemini free-tier drafting]
+    Provider --> Checks[Attempted-fix / citation / applicability checks]
+    Checks --> Result[Cited draft or clarification / escalation]
+    Result --> UI
+    Retrieval --> History[Persistent evidence versions and audit]
+    Resolution --> RM[Resolution metrics and readiness]
+    Retrieval --> EM[Retrieval metrics and readiness]
 ```
 
-The default reviewer app runs routes in one Python process. An optional split mode now runs retrieval_api and resolution_api as separate HTTP processes, reusing the same modules; see docs/09-service-deployment.md. Access roles, validated background publication, reviewed topic proposals and process metrics are also implemented. The provider key stays server-side. Pattern masking occurs before provider calls; it is not comprehensive anonymization. Search returns ranked evidence, whereas resolve applies additional trust and grounding rules. Only resolve generates a draft.
+The recommended reviewer startup runs retrieval_api and resolution_api as separate HTTP processes, reusing the same tested modules; see [service deployment](09-service-deployment.md). The combined api process remains a compatibility mode. Access roles, validated background publication, reviewed topic proposals and process metrics are also implemented. The provider key stays server-side. Pattern masking occurs before provider calls; it is not comprehensive anonymization. Search returns ranked evidence, whereas resolve applies additional trust and grounding rules. Only resolve generates a draft.
 
 The source corpus contains synthetic KB/history and lower-trust public replies. A failed historical outcome cannot supply a successful fix. Citation checks validate membership and copied evidence, but do not prove full semantic entailment or real-world resolution. A support agent reviews the draft.
 

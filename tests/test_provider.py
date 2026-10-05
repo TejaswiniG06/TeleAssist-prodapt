@@ -3,7 +3,7 @@ import os
 import unittest
 from unittest.mock import patch
 import httpx
-from llm import FreeLLM, ProviderUnavailable
+from teleassist.resolution.llm import FreeLLM, ProviderUnavailable
 
 
 class ProviderTests(unittest.TestCase):

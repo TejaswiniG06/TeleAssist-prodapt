@@ -1,22 +1,72 @@
-# Single process and separated service modes
+# Local microservice deployment
 
-Keep the default reviewer setup: `uvicorn api:app --host 127.0.0.1 --port 8000`. It runs the same modules in one process and serves the interface.
+The recommended reviewer setup runs **two separate FastAPI services** and a Streamlit dashboard. No Docker installation is needed. Each backend has its own process, port, lifecycle and metrics; the resolution service calls retrieval over HTTP.
 
-To demonstrate separate services, start two terminals from the project environment:
+## One-command startup
+
+From the repository folder, after installing requirements:
 
 ```powershell
-python -m uvicorn retrieval_api:app --host 127.0.0.1 --port 8001
-python -m uvicorn resolution_api:app --host 127.0.0.1 --port 8002
+./.venv/Scripts/python.exe start.py
 ```
 
-Open http://127.0.0.1:8002/. The resolution service owns masking/classification, LLM calls, grounding checks and the interface. It forwards evidence/search/taxonomy requests over HTTP to the retrieval service. The retrieval service owns the catalog, embeddings, updates, topic review and source history; it has no `/resolve` route and requires no provider key. These are separately executable service processes, not just different endpoint names.
+| Process | Address | Owns |
+| --- | --- | --- |
+| Retrieval/evidence | http://127.0.0.1:8001/docs | Corpus, MiniLM, search, versioned sources, ingestion, case database, topics and editor actions |
+| Resolution | http://127.0.0.1:8002/docs | Masking, classification, query enrichment, provider calls, attempted-action protection, citation checks and fallbacks |
+| Dashboard | http://127.0.0.1:8501 | Role navigation, complaint entry and existing agent/editor workflows |
 
-`RETRIEVAL_URL` selects the upstream service. With required authentication, set `RETRIEVAL_API_KEY` to an application agent key accepted by retrieval; never supply the provider key there. User access is checked by resolution, and its service credential is checked by retrieval. Editor evidence/topic actions go directly to retrieval's editor APIs. Each service has its own liveness/readiness and role-protected metrics. Resolution health depends on upstream health but does not claim a configured LLM is reachable.
+The launcher loads backend configuration from `.env`, checks authentication and available ports, starts retrieval, warms local semantic search without a provider call, starts resolution, then starts Streamlit with the correct API addresses. Provider credentials are removed from the dashboard child's environment. Press Ctrl+C to stop only these owned process trees; saved data remains on disk. Logs are written to ignored `runtime/logs`. On Windows, shutdown also stops the Python children of virtual-environment launchers. A child failure stops the remaining owned processes and exits with an error.
 
-Resolution fetches one index version and requests each evidence pool with that expected version. An update between pools produces a safe retry/clarification rather than mixed-version grounding. Versioned citations remain inspectable after publication. Upstream connection, access or availability errors produce a controlled fallback. External service URLs are configuration, never customer-input destinations. Use HTTPS, identity/service credentials and coordinated quotas before public deployment.
+The first model download needs internet and can take longer than the 180-second warmup budget. Pre-download with `python -m scripts.smoke.smoke_services`, or use `python start.py --skip-warmup` for keyword-only startup; the first semantic query then loads the model. This option does not claim semantic readiness. Cold and warm response times differ.
 
-`python smoke_split.py` starts two temporary local processes on unused ports, warms retrieval, checks real HTTP hybrid search and versioned evidence, checks key-free drafting, then stops its own retrieval child and verifies outage fallback. It uses already downloaded model weights with Hugging Face offline mode, disables provider calls and terminates only its own child processes. Run smoke_services.py first if the weights are not cached. Logs stay in ignored runtime storage. Unit tests additionally cover separate user/service keys and version conflict responses.
+## Authentication and routing
 
-The gateway's retrieval timeout is 60 seconds. Cold model initialization can exceed an interactive budget: an initial HTTP smoke attempt timed out during its first hybrid call. Warm retrieval before opening semantic-dependent traffic and check `/ready?require_semantic=true`; keyword remains available while the model has not loaded. Cached/offline smoke verification checks service behaviour without depending on hub metadata availability.
+`AUTH_MODE=local` permits anonymous agent access only; editor actions require `TELEASSIST_EDITOR_KEY`. Required mode needs distinct agent and editor application keys. The launcher uses `TELEASSIST_AGENT_KEY` as the retrieval service credential unless `RETRIEVAL_API_KEY` is explicitly supplied. That credential must be accepted by retrieval. Never use the Gemini key as an application/service key. Resolution validates the user key, while retrieval validates the service credential on forwarded calls. Direct case/editor calls validate the user's key at retrieval.
 
-Do not run two retrieval writers or the all-in-one server and split retrieval against the same runtime state simultaneously. The file catalog is single-writer; multi-worker retrieval requires shared versioned storage and coordination. Separating processes demonstrates the boundary, not horizontal scale. Local single-process mode remains the simplest reviewer path.
+The dashboard sends drafting, search and source inspection to resolution. Case saving, actual outcomes, evidence updates, topic review and editor verification go directly to retrieval. Health displays both services' metrics rather than losing resolution outcomes. The same application agent/editor keys should be configured on both services for the local dashboard; tests also cover different gateway and service credentials.
+
+Resolution fetches one index version before searching each evidence tier. Publication between requests triggers a controlled retry/fallback, not mixed-version grounding. Exact source versions remain inspectable after retirement. Weak searches are captured by retrieval; resolution reports no-applicable-evidence complaints to its topic monitor through an authenticated, masked observation request. Topic-monitor transport failure does not invalidate a response. Editor approval is still required to change taxonomy.
+
+## Storage and compatibility
+
+Retrieval alone owns `runtime/cases.sqlite3`, `runtime/evidence_state.json` and `runtime/topic_state.json` in split mode. Existing combined-mode data is reused when switching modes; no migration or deletion is performed. `TELEASSIST_STATE_DIR` overrides this directory for isolated checks or separate installations. Downloaded model weights remain in the shared local model cache. Pending drafts never become retrieval evidence until an actual outcome and editor review have been recorded.
+
+The original combined backend is retained:
+
+```powershell
+./.venv/Scripts/python.exe start.py --mode combined
+```
+
+It serves the same functionality on port 8000 with Streamlit on 8501. Stop the running setup before switching. **Never run two retrieval writers or the combined backend and split retrieval against the same state directory.** Startup rejects busy standard ports, but arbitrary manually launched writers on custom ports still require operator coordination. Local file storage is single-writer; this prototype does not claim horizontal scalability.
+
+## Manual startup
+
+Use three terminals in the same repository/environment. Stop the launcher first.
+
+```powershell
+./.venv/Scripts/python.exe -m uvicorn retrieval_api:app --host 127.0.0.1 --port 8001
+```
+
+```powershell
+# Required mode: supply the retrieval application agent key in this shell.
+$env:RETRIEVAL_URL = 'http://127.0.0.1:8001'
+# $env:RETRIEVAL_API_KEY = 'your-application-agent-key'
+./.venv/Scripts/python.exe -m uvicorn resolution_api:app --host 127.0.0.1 --port 8002
+```
+
+```powershell
+$env:TELEASSIST_API_URL = 'http://127.0.0.1:8002'
+$env:TELEASSIST_EDITOR_URL = 'http://127.0.0.1:8001'
+./.venv/Scripts/python.exe -m streamlit run dashboard.py
+```
+
+The launcher accepts `--retrieval-port`, `--resolution-port`, `--dashboard-port` and `--combined-port` for isolated checks. It sets the corresponding child-process URLs automatically.
+
+## Verification and production limits
+
+`python -m scripts.smoke.smoke_split` starts real HTTP services on unused ports with real cached MiniLM, disables provider calls and uses temporary case/evidence storage. It verifies hybrid search, exact citation versions, no-key fallback, save/outcome/review/publication, future search in all three modes, retirement with historical citation access, and retrieval-outage fallback. Logs stay in ignored runtime storage. It stops only its owned process trees. Run `scripts/smoke/smoke_services.py` first if weights are missing.
+
+The 87-test checkpoint covers both combined and split dashboard case lifecycles, role enforcement, version conflicts, monitored topic forwarding, safe upstream failures, busy-port rejection and child-process shutdown, alongside existing functionality. A browser audit against real split HTTP services and real MiniLM verified editor access, all four editor tabs, topic approval, case publication, evidence addition/retirement and a 360px layout with isolated fictional data. A live Gemini check through the split returned a one-step cited resolution, passed citation validation, masked the fictional email and did not repeat the tried router restart. Restarting the real services preserved the published case and approved taxonomy. These are functional checks on fictional inputs, not independent resolution-quality evaluation.
+
+Production deployment still requires HTTPS, external identity/service credentials, coordinated provider quotas, shared versioned storage, durable jobs, backups and measured capacity. Docker is optional packaging; the executable service boundary is already HTTP between independent processes.

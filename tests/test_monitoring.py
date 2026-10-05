@@ -3,9 +3,9 @@ from pathlib import Path
 import tempfile
 import unittest
 from fastapi.testclient import TestClient
-from access import AccessPolicy
-from api import create_app
-from monitoring import Metrics
+from teleassist.common.access import AccessPolicy
+from teleassist.services.combined import create_app
+from teleassist.common.monitoring import Metrics
 
 
 class NoProvider:

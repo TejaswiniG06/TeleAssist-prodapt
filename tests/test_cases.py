@@ -5,9 +5,9 @@ import tempfile
 import time
 import unittest
 from fastapi.testclient import TestClient
-from access import AccessPolicy
-from api import create_app
-from cases import CaseStore
+from teleassist.common.access import AccessPolicy
+from teleassist.services.combined import create_app
+from teleassist.cases.store import CaseStore
 
 
 class Encoder:
@@ -183,7 +183,7 @@ class CaseTests(unittest.TestCase):
             with TestClient(self.app(folder)) as client:
                 case = self.record(client)
             store = CaseStore(Path(folder)/'cases.sqlite3')
-            from cases import CaseReview
+            from teleassist.cases.store import CaseReview
             store.review(case['id'], CaseReview(**review(case['revision'])), 'editor')
             store.attach_job(case['id'], 'job-that-never-completed'); store.close()
             with TestClient(self.app(folder)) as client:

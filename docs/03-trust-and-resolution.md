@@ -10,15 +10,15 @@ The retrieval API combines 28 KB articles, the original two history records, 200
 
 ## Corpus generation
 
-Run `python generate_corpus.py` using a locally configured free-plan key. It requests eight batches of 25 tickets (200 total: 160 resolved and 40 not_resolved) and one article batch to reach 28 KB articles. Each ticket contains complaint, product, observations, attempted actions, conditional resolution steps, explicit `resolved`/`not_resolved` outcome and outcome evidence. Batch prompts target 20 resolved and five unresolved records. Resumable intermediate files live in ignored `runtime/corpus_batches`.
+Run `python -m scripts.data.generate_corpus` using a locally configured free-plan key. It requests eight batches of 25 tickets (200 total: 160 resolved and 40 not_resolved) and one article batch to reach 28 KB articles. Each ticket contains complaint, product, observations, attempted actions, conditional resolution steps, explicit `resolved`/`not_resolved` outcome and outcome evidence. Batch prompts target 20 resolved and five unresolved records. Resumable intermediate files live in ignored `runtime/corpus_batches`.
 
 Pydantic validates every batch; exact duplicates and PII-like generated text are rejected. Partial batches are not silently published. Final output records the provider/model, counts and a checksum. Schema validation cannot prove technical correctness or diversity; generated guidance needs review before provider use. A large corpus is only useful if retrieval quality and answer grounding are evaluated.
 
 ## Masking and classification
 
-`privacy.py` masks email, phone-like sequences, IPv4 addresses, labelled account IDs and labelled secrets before retrieval or hosted generation. It does not log raw input or retain a reverse mapping. Pattern masking is incomplete for names, postal addresses and unusual identifier formats; this is a prototype privacy control, not comprehensive anonymization.
+`teleassist/common/privacy.py` masks email, phone-like sequences, IPv4 addresses, labelled account IDs and labelled secrets before retrieval or hosted generation. It does not log raw input or retain a reverse mapping. Pattern masking is incomplete for names, postal addresses and unusual identifier formats; this is a prototype privacy control, not comprehensive anonymization.
 
-`resolution.py` classifies product, category, severity, sentiment and attempted actions through structured LLM output. Categories remain extensible and unknown labels are allowed. Attempted actions must cite an exact passage in the current complaint/observations. Successfully completed or failed actions are excluded from suggestions; common router restart aliases normalize to one action ID. Unrecognized actions and ambiguous outcomes still require clarification. With no key, a limited local classifier supports a clearly marked fallback.
+`teleassist/resolution/pipeline.py` classifies product, category, severity, sentiment and attempted actions through structured LLM output. Categories remain extensible and unknown labels are allowed. Attempted actions must cite an exact passage in the current complaint/observations. Successfully completed or failed actions are excluded from suggestions; common router restart aliases normalize to one action ID. Unrecognized actions and ambiguous outcomes still require clarification. With no key, a limited local classifier supports a clearly marked fallback.
 
 ## Cited draft and validation
 
@@ -38,7 +38,7 @@ Official references: [Gemini pricing](https://ai.google.dev/gemini-api/docs/pric
 
 ## Public-query evaluation
 
-`python evidence.py` reserves 25 public complaint queries with stable hash-based selection. `python evaluate_public.py` compares keyword, semantic and hybrid results while excluding the original public record from each query. All public records remain searchable for normal requests. Use `--resolve` only when intentionally evaluating generation and its API quota.
+`python -m teleassist.retrieval.evidence` reserves 25 public complaint queries with stable hash-based selection. `python -m scripts.evaluation.evaluate_public` compares keyword, semantic and hybrid results while excluding the original public record from each query. All public records remain searchable for normal requests. Use `--resolve` only when intentionally evaluating generation and its API quota.
 
 The public query file retains source attribution. It is query-only: manual relevance and expected-behaviour annotation is still needed. Self-match exclusion is not a substitute for near-duplicate audit. These cases are not a finished benchmark, and no recall/accuracy claims should be made until labels and split isolation are reviewed. Use public out-of-taxonomy records later for emerging-topic detection.
 

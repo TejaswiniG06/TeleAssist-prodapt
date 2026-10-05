@@ -4,15 +4,15 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from fastapi.testclient import TestClient
-from api import create_app
-from resolution import Resolver
-from retrieval_query import build_search_query
+from teleassist.services.combined import create_app
+from teleassist.resolution.pipeline import Resolver
+from teleassist.retrieval.query import build_search_query
 
 
 class QueryEnrichmentTests(unittest.TestCase):
     def test_committed_predictions_replay_without_provider_calls(self):
-        from evaluate_query_enrichment import classify_queries, query_sets
-        with patch('evaluate_query_enrichment.FreeLLM',side_effect=AssertionError('Unexpected provider initialization')):
+        from scripts.evaluation.evaluate_query_enrichment import classify_queries, query_sets
+        with patch('scripts.evaluation.evaluate_query_enrichment.FreeLLM',side_effect=AssertionError('Unexpected provider initialization')):
             cache,calls=classify_queries(query_sets())
         self.assertEqual(calls,0)
         self.assertEqual(len(cache['rows']),34)

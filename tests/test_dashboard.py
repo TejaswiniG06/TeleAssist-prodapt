@@ -6,7 +6,7 @@ import time
 from unittest.mock import patch
 import httpx
 from streamlit.testing.v1 import AppTest
-from dashboard_client import DashboardClient, DashboardError
+from frontend.client import DashboardClient, DashboardError
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,8 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class DashboardTests(unittest.TestCase):
     def test_editor_screens_and_ingestion_use_real_api_contract(self):
         from fastapi.testclient import TestClient
-        from access import AccessPolicy
-        from api import create_app
+        from teleassist.common.access import AccessPolicy
+        from teleassist.services.combined import create_app
         class Encoder:
             def encode(self, texts): return [[1,0] for _ in texts]
         class NoProvider:
@@ -32,12 +32,14 @@ class DashboardTests(unittest.TestCase):
                     raise DashboardError(str(response.json()['detail']),response.status_code)
                 return response.json()
             with patch.object(DashboardClient,'request',send):
-                health=AppTest.from_string('from dashboard import health\nfrom dashboard_client import DashboardClient\nhealth(DashboardClient())').run()
+                health=AppTest.from_string('from frontend.views.health import health\nfrom frontend.client import DashboardClient\nhealth(DashboardClient())').run()
                 self.assertFalse(health.exception)
                 self.assertEqual(health.metric[0].value,str(initial_count))
-                knowledge=AppTest.from_string('from dashboard import knowledge\nfrom dashboard_client import DashboardClient\nknowledge(DashboardClient())').run()
+                knowledge=AppTest.from_string('from frontend.views.evidence import editor_evidence\nfrom frontend.client import DashboardClient\neditor_evidence(DashboardClient())').run()
                 self.assertFalse(knowledge.exception)
-                self.assertTrue(any('No topic proposals' in x.value for x in knowledge.info))
+                topics=AppTest.from_string('from frontend.views.topics import topics_view\nfrom frontend.client import DashboardClient\ntopics_view(DashboardClient())').run()
+                self.assertFalse(topics.exception)
+                self.assertTrue(any('No topic proposals' in x.value for x in topics.info))
                 record={'id':'KB-UI-TEST','title':'UI submitted guidance','record_type':'article',
                     'product':'broadband','category':'no_connection','provenance':'synthetic_demo',
                     'applicability':'Router has no connection.',
@@ -58,7 +60,7 @@ class DashboardTests(unittest.TestCase):
                 self.assertEqual(job['status'],'published')
                 health.run()
                 self.assertEqual(health.metric[0].value,str(initial_count + 1))
-                self.assertEqual(health.metric[1].value,'2')
+                self.assertTrue(any('Meaning-based search' == item.label for item in health.metric))
 
     def test_http_auth_and_exact_version(self):
         seen = []
@@ -113,27 +115,29 @@ class DashboardTests(unittest.TestCase):
             raise AssertionError(path)
         with patch.object(DashboardClient,'request',backend):
             app=AppTest.from_file(str(ROOT/'dashboard.py')).run()
+            next(b for b in app.button if b.label=='Open Support Agent workspace').click().run()
             self.assertFalse(app.exception)
             app.text_area(key='complaint').set_value('Slow broadband')
             app.text_area(key='observations').set_value('Restart failed')
-            next(b for b in app.button if b.label=='Prepare response').click().run()
+            next(b for b in app.button if b.label=='Prepare troubleshooting draft').click().run()
             self.assertFalse(app.exception)
             self.assertEqual(submitted,[{'complaint':'Slow broadband','observations':'Restart failed','query_mode':'enriched'}])
-            next(b for b in app.button if b.label=='New complaint').click().run()
+            next(b for b in app.button if b.label=='Start another case').click().run()
             self.assertEqual(app.text_area(key='complaint').value,'')
             self.assertNotIn('case_result',app.session_state)
             app.text_area(key='complaint').set_value('Mobile has no signal')
-            next(b for b in app.button if b.label=='Prepare response').click().run()
+            next(b for b in app.button if b.label=='Prepare troubleshooting draft').click().run()
             self.assertEqual(submitted[-1],{'complaint':'Mobile has no signal','observations':'','query_mode':'enriched'})
             app.text_area(key='complaint').set_value("I'm cancelling my contract.")
-            next(b for b in app.button if b.label=='Prepare response').click().run()
+            next(b for b in app.button if b.label=='Prepare troubleshooting draft').click().run()
             self.assertTrue(any('Explicit cancellation threat' in x.value for x in app.warning))
-            app.text_input(key='application_key').set_value('another-agent').run()
+            app.text_input(key='application_key').set_value('another-agent')
+            next(b for b in app.button if b.label=='Apply access key').click().run()
             self.assertNotIn('case_result',app.session_state)
             self.assertEqual(app.text_area(key='complaint').value,'')
             with patch.object(DashboardClient,'request',side_effect=DashboardError('API unavailable')):
                 app.text_area(key='complaint').set_value('Test outage')
-                next(b for b in app.button if b.label=='Prepare response').click().run()
+                next(b for b in app.button if b.label=='Prepare troubleshooting draft').click().run()
                 self.assertFalse(app.exception)
                 self.assertTrue(any('API unavailable' in e.value for e in app.error))
                 self.assertNotIn('case_result',app.session_state)

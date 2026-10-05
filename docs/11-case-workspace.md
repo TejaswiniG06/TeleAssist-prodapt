@@ -1,57 +1,46 @@
 # Case workspace dashboard
 
-Start the backend and dashboard in separate terminals from the repository folder:
+For a visual, task-by-task guide, see the [screenshot walkthrough](17-dashboard-walkthrough.md). The dashboard uses real FastAPI requests; UI role choice never grants backend permissions.
+
+## Start the current application
+
+From the repository root, after completing the README setup:
 
 ```powershell
-./.venv/Scripts/python.exe -m uvicorn api:app --host 127.0.0.1 --port 8000
+./.venv/Scripts/python.exe start.py
 ```
 
-```powershell
-./.venv/Scripts/python.exe -m streamlit run dashboard.py
-```
+Open http://127.0.0.1:8501/. The recommended launcher starts retrieval on 8001, resolution on 8002 and Streamlit on 8501. It warms the local semantic model and configures the dashboard addresses. `--mode combined` retains the API on 8000 and the original lightweight interface. See [service deployment](09-service-deployment.md) for manual process configuration.
 
-Open http://127.0.0.1:8501. The original lightweight interface remains available on port 8000. Both call the same backend; the dashboard does not import retrieval, masking, classification or provider modules. Streamlit's native [top navigation](https://docs.streamlit.io/develop/api-reference/navigation/st.navigation) provides the Case workspace layout without a custom component framework.
+## Screens and backend operations
 
-## Screens and live data
+| Screen | What the user does | API operations |
+| --- | --- | --- |
+| Support Assistant | Describe a complaint, prepare a checked draft, answer clarification, inspect sources or explicitly save a case | POST /resolve, POST /search, exact GET /sources reads, POST /cases |
+| Saved Cases | Open a saved case, report actual actions/outcome, review and publish with editor permissions | GET /cases, POST outcome and editor review |
+| Evidence Explorer | Search by words, meaning or both; filter service/type; inspect cited versions | POST /search, GET /sources |
+| Editor Evidence | Add/update/retire through readable forms; check jobs and publication activity | POST /admin/ingest, GET jobs/audit |
+| Topics | Review grouped weak-match complaints and browse current categories | GET topics/taxonomy, POST topic review |
+| Health | Inspect live service readiness, response times, errors and optional diagnostics | GET /health, /ready, /admin/metrics |
 
-| Screen | Backend operations |
-| --- | --- |
-| Support Assistant | POST /resolve; GET exact /sources/id?version=N |
-| Saved Cases | POST/GET /cases; POST actual outcome; editor-only review through existing background ingestion |
-| Evidence Explorer | POST /search with mode/product/type filters; inspect current or exact source versions |
-| Knowledge & Topics | Editor GET /admin/topics and /admin/audit; POST topic review and /admin/ingest; GET job status; GET taxonomy |
-| System Health | GET /health, /ready and editor /admin/metrics |
+## Complaint and clarification flow
 
-There are no demo role pickers, sample cases, fabricated topic proposals, fixed corpus counts or test-score tiles. Counts/readiness/latency/errors/outcomes come from the APIs. Empty queues, missing measurements, absent credentials and unavailable services are shown explicitly. Evaluation results remain documented checkpoints, separate from operational health.
+Examples are collapsed and only fill the form. Device selection is optional and appends context to observations; it does not force a product classification. Action tags add only actions actually performed with unknown outcomes until the agent supplies results. Advanced search retains raw and enriched modes; query enrichment reuses classification output without a separate rewriting call.
 
-Each response request sends only the current complaint and observations. Session state retains the current displayed result and form fields for rerenders, but never sends conversation history. New complaint clears the fields/result without deleting saved cases. Changing the application key clears preceding identity's displayed results. Explicit Save pending case sends a draft snapshot to masked backend SQLite storage; actual actions/outcomes require a separate report and editor review before entering retrieval. See [case feedback](14-case-feedback.md). The dashboard does not save keys/results to its own files or browser local storage. Customer/evidence strings use plain text rendering, not executable HTML. The Streamlit server necessarily receives the application key; it never reads the provider .env or sends the Gemini key to the browser.
+Prepare troubleshooting draft sends the complaint and observations to /resolve. Search supporting sources only retrieves evidence and does not generate a draft. A clarification response displays each unique question once with an answer field beneath it. Continue combines answered question/answer pairs with the retained original complaint and observations, then calls the same API. Empty answers do not trigger a request. There is no conversational model memory; each request contains its own current-case context.
 
-The Resolution search query selector chooses enriched (default) or raw. Enriched appends the already computed classification's technical terms for retrieval; it adds no model call or conversation memory. The displayed result reports the chosen mode. Evidence Explorer retains raw, key-free retrieval; it does not silently classify each search.
+Source cards preserve exact cited versions. Pending drafts are not evidence. Explicit saving creates a masked SQLite case snapshot; actual actions, outcome confirmation and editor review precede publication. Only reviewed published records enter future retrieval. Retiring a source removes it from current search while preserving earlier cited versions; deleting saved cases remains future work.
 
-The application access field accepts a backend agent/editor key. Local mode allows key-free agent requests; editor features require a configured TELEASSIST_EDITOR_KEY in the backend and a successful /admin/access check. The server still enforces each privileged endpoint. No dropdown can grant authority. Shared keys are a prototype control, not enterprise user identity. Keep this local dashboard bound to localhost; public deployment needs identity, TLS and session/retention controls.
+## Access and presentation
 
-Evidence updates accept the backend's strict IngestRequest schema rather than duplicating every validator in the UI. Review the batch and expected versions, submit once, and inspect the returned job ID. A network timeout does not prove the server rejected an update; check job/audit state before resubmitting. Topic approval also requires a rationale and explicit review confirmation.
+Local agents can leave the application key blank. Knowledge Editor requires a configured editor key and /admin/access verification. `.env.example` contains the public local-demo key `editor`; replace it before shared deployment. Application keys are separate from the Gemini provider key. Advanced access uses an explicit Apply access key action; changing identity clears displayed case state.
 
-## Optional split services
+Light/Dark appearance is session-level presentation. Readable forms, badges and tables replace raw editor JSON; developer batch import and health diagnostics remain collapsed. Topic categories can be filtered. Backend data supplies counts, job state, health and case outcomes; empty data is shown honestly. Customer and evidence strings render as plain text.
 
-In the dashboard terminal, set deployment addresses before startup:
+The Streamlit server receives the entered application key, but the launcher strips provider credentials from its environment and the dashboard does not read the provider .env. Keys are not stored in browser local storage or dashboard files. Public deployment still needs appropriate identity, TLS and storage/retention controls.
 
-```powershell
-$env:TELEASSIST_API_URL='http://127.0.0.1:8002'
-$env:TELEASSIST_EDITOR_URL='http://127.0.0.1:8001'
-./.venv/Scripts/python.exe -m streamlit run dashboard.py
-```
+## Code and verification
 
-Resolution/search/citation reads use the API address. Catalog/topic/metrics editor requests use the editor address (retrieval). The existing split-service backend configuration remains as documented in [service deployment](09-service-deployment.md). Credentials must be accepted by both relevant services. The UI uses bounded HTTP timeouts and displays failures without inventing successful results.
+`frontend/app.py` owns role/navigation, `frontend/views/` contains screens, `frontend/client.py` handles HTTP errors, and components/styles provide shared presentation. Backend algorithms and permissions remain outside the UI.
 
-Case save/list/outcome/review requests also use the retrieval/editor service address. That address setting does not grant editor permissions: agents can save/report outcomes, while review/publication is enforced as editor-only by the backend. Saved Cases lists the latest 100 cases in the shared prototype workspace. It is persistent operational storage, not chatbot memory.
-
-## Explain the code
-
-dashboard.py builds four screens and displays results. dashboard_client.py sends HTTP requests and translates connection/auth/version failures into readable messages. FastAPI remains responsible for decisions and permission checks. Native Streamlit widgets keep the interface small and maintainable. Layout follows the reviewed Case workspace's top navigation and complaint/review columns; it is not a pixel-exact reproduction of the HTML preview.
-
-## Verified checkpoint
-
-55 behavioural tests pass with Streamlit 1.65.0 and pip check reports no broken requirements. Dashboard tests cover application credentials, exact source versions, separate editor routing, independent submissions, clearing, identity changes and API failures. An editor-screen integration test runs against the actual FastAPI application, submits an evidence batch to an isolated in-memory catalog, confirms publication and observes the live count/version change. It does not modify the working catalog or use provider credentials. UI testing follows Streamlit's [AppTest interface](https://docs.streamlit.io/develop/api-reference/app-testing/st.testing.v1.apptest).
-
-A headless browser checked the running dashboard on port 8501 against the real local API on port 8000: keyword evidence appeared, the configured provider returned a cited resolution draft, New complaint cleared inputs, and 360px rendering had no page errors or horizontal overflow. Local editor screens require an editor key; none is automatically created or bundled. Broader independent applicability/urgency evaluation remains pending as documented separately.
+The current checkpoint passes 93 tests, dependency checks and real-model HTTP/browser verification. These include case persistence/publication, individual clarification answers, identity isolation, exact source versions, stale updates, service outages and both themes. Native pill and mobile navigation contrast checks exceed 4.5:1. Earlier 55-test combined-dashboard and fresh 50-test setup checks are historical checkpoints, not current test totals. Independent answer applicability and urgency evaluation remain open.

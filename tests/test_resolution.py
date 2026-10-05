@@ -3,10 +3,10 @@ from pathlib import Path
 import tempfile
 import unittest
 from fastapi.testclient import TestClient
-from api import create_app
-from llm import ProviderUnavailable
-from privacy import mask
-from resolution import Resolver, select_evidence, canonical_action, churn_signal
+from teleassist.services.combined import create_app
+from teleassist.resolution.llm import ProviderUnavailable
+from teleassist.common.privacy import mask
+from teleassist.resolution.pipeline import Resolver, select_evidence, canonical_action, churn_signal
 
 
 class FakeProvider:

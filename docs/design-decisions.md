@@ -17,7 +17,7 @@ The prototype turns a complaint into a reviewed, source-backed draft. It preserv
 | Background index replacement | Readers keep the old version until a validated replacement is published | File storage and publication are single-writer |
 | Human-reviewed lexical topic proposals | Explainable emerging-topic signals without automatic fixes | Similar language is not proof of a new fault |
 | Bounded per-process metrics | Inspect latency, errors, outcomes and resources without complaint logging | Restart resets counters; production needs external collection |
-| Optional separate retrieval/resolution services | Demonstrate real HTTP boundaries while retaining easy local setup | Horizontal scaling requires shared version storage, durable jobs and distributed quotas |
+| Default separate retrieval/resolution services | Demonstrate real HTTP boundaries while retaining easy local setup | Horizontal scaling requires shared version storage, durable jobs and distributed quotas |
 | Independent case submissions | Simple workflow with explicit observations and attempted actions | No chatbot memory; each request supplies all required context |
 | Separate Streamlit Case workspace | Python-native forms/top navigation call the real FastAPI API; presentation and decisions stay separate | Additional process/dependency; native layout rather than pixel-exact preview styling |
 

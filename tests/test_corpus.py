@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from evidence import public_records, build_public_evaluation
-from generate_corpus import Article, validate_batch
+from teleassist.retrieval.evidence import public_records, build_public_evaluation
+from scripts.data.generate_corpus import Article, validate_batch
 
 
 class CorpusTests(unittest.TestCase):

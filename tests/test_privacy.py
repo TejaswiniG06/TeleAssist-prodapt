@@ -1,5 +1,5 @@
 import unittest
-from privacy import mask
+from teleassist.common.privacy import mask
 
 
 class PrivacyTests(unittest.TestCase):

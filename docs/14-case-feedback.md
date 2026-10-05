@@ -4,7 +4,7 @@ Explain the feedback loop this way: a generated response is a suggestion; an age
 
 ## Workflow
 
-1. Prepare a response in Support Assistant and choose **Save pending case**. Saving is explicit, not automatic. The backend masks the complaint, observations, draft and classification before storing a case in `runtime/cases.sqlite3`.
+1. Prepare a response in Support Assistant and choose **Save case for follow-up**. Saving is explicit, not automatic. The backend masks the complaint, observations, draft and classification before storing a case in `runtime/cases.sqlite3`.
 2. Open **Saved Cases**. Record actions actually performed, a resolved/not-resolved outcome and how that outcome was confirmed. Do not copy proposed actions unless they were actually performed. Confirm the report before submitting.
 3. An editor reviews the complaint, actual actions and reported outcome, supplies corrected product/category, applicability, a title and rationale, and approves or rejects publication.
 4. Approval uses the existing background ingestion worker. Searches retain the previous index until replacement indexes publish successfully. A reviewed resolved case becomes resolved history; an unsuccessful case becomes unresolved history and cannot supply successful resolution steps.
@@ -21,7 +21,7 @@ No additional LLM calls are made by saving, outcome capture or review. The origi
 | POST /cases/{id}/outcome | Agent: record an actual outcome with expected case revision |
 | POST /admin/cases/{id}/review | Editor: reject or submit reviewed evidence for indexing |
 
-`cases.py` defines schemas and a small SQLite ledger. `case_api.py` coordinates access, revisions and the existing catalog. The SQLite module is part of Python's standard library: no external database service or API is needed. API factories use in-memory SQLite by default for isolated tests; executable single-process and retrieval services persist to the ignored runtime database.
+`teleassist/cases/store.py` defines schemas and a small SQLite ledger. `teleassist/services/case_routes.py` coordinates access, revisions and the existing catalog. The SQLite module is part of Python's standard library: no external database service or API is needed. API factories use in-memory SQLite by default for isolated tests; executable single-process and retrieval services persist to the ignored runtime database.
 
 In split mode, case operations use the dashboard's editor/evidence service address, including agent save/outcome requests. Address routing does not grant editor permissions: each backend endpoint enforces its own role. Case storage lives with the retrieval service, which publishes evidence. Requests to /resolve remain independent and never send saved-case or conversation history to the LLM.
 
@@ -41,4 +41,4 @@ The frozen 487-record evaluation remains a base-corpus checkpoint. Operationally
 
 78 behavioural tests and dependency checks pass. Eight case backend tests cover masking, idempotent saves, permissions, stale revisions, actual-action requirements, rejected/unresolved outcomes, failed-index retries and two restart reconciliation paths. Two dashboard tests cover the empty state and the full save → actual outcome → editor review → future search path against the real API. No provider calls are made by that workflow test.
 
-`python smoke_case_feedback.py` uses a fictional case, temporary databases/catalog files and the real local embedding model. Its pending case is absent from retrieval; after review/publication, the source appears at rank 1 in keyword, semantic and hybrid searches within the broadband resolved-history pool. Case and evidence survive a reconstructed application. The initial corpus contains 487 records, with no live evidence modified and zero LLM calls. This is a functional publication check, not a relevance benchmark.
+`python -m scripts.smoke.smoke_case_feedback` uses a fictional case, temporary databases/catalog files and the real local embedding model. Its pending case is absent from retrieval; after review/publication, the source appears at rank 1 in keyword, semantic and hybrid searches within the broadband resolved-history pool. Case and evidence survive a reconstructed application. The initial corpus contains 487 records, with no live evidence modified and zero LLM calls. This is a functional publication check, not a relevance benchmark.

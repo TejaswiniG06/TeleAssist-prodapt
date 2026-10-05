@@ -3,9 +3,9 @@ from pathlib import Path
 import tempfile
 import unittest
 from fastapi.testclient import TestClient
-from access import AccessPolicy
-from api import create_app
-from topics import TopicMonitor, TopicReview
+from teleassist.common.access import AccessPolicy
+from teleassist.services.combined import create_app
+from teleassist.topics import TopicMonitor, TopicReview
 
 CASES = ['Satellite dish alignment causes recurring signal loss during rain.',
          'Satellite dish alignment causes recurring signal loss during storms.',

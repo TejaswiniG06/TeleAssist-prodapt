@@ -9,7 +9,7 @@ Explain it this way: health tells us what is available, metrics tell us how the 
 
 Metrics use route templates rather than raw URLs and retain no complaint bodies, observations, keys or unmatched paths. Latency percentiles use the latest 256 samples per route, while counters cover the process lifetime. A metrics request is itself in flight when inspected. Counters reset on restart and are per process; deployments need an external collector and shared service dashboards.
 
-`python benchmark_local.py` runs a repeatable small load check against FastAPI TestClient with 24 requests per mode and concurrency 4, using the real local model. It writes ignored `runtime/local-load-report.json`. It measures first hybrid request time separately from the warm requests and reports error counts, p50/p95, throughput and resources. It makes no LLM calls. It is an in-process measurement with cached weights, not network latency, production capacity or answer quality.
+`python -m scripts.evaluation.benchmark_local` runs a repeatable small load check against FastAPI TestClient with 24 requests per mode and concurrency 4, using the real local model. It writes ignored `runtime/local-load-report.json`. It measures first hybrid request time separately from the warm requests and reports error counts, p50/p95, throughput and resources. It makes no LLM calls. It is an in-process measurement with cached weights, not network latency, production capacity or answer quality.
 
 Operational checkpoints: compare warm/cold latency, investigate increasing fallback/error ratios, confirm ingestion failures leave readiness intact, and review memory as evidence grows. Alerts and targets should be set from actual deployment needs and repeated measurements, not from an invented SLA.
 

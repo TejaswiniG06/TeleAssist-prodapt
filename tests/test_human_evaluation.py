@@ -2,9 +2,9 @@ import hashlib
 import json
 from pathlib import Path
 import unittest
-from evaluate_human_language import (BaselineProvider, FixedClassificationResolver,
+from scripts.evaluation.evaluate_human_language import (BaselineProvider, FixedClassificationResolver,
     NO_REPEAT, repetition, repetition_summary, feature_summary)
-from resolution import Classification
+from teleassist.resolution.pipeline import Classification
 
 
 class HumanEvaluationTests(unittest.TestCase):

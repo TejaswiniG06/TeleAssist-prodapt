@@ -3,9 +3,9 @@ from pathlib import Path
 import tempfile
 import unittest
 from fastapi.testclient import TestClient
-from api import create_app
-from semantic import SemanticIndex, HybridIndex
-from retrieval import KeywordIndex, searchable_text
+from teleassist.services.combined import create_app
+from teleassist.retrieval.semantic import SemanticIndex, HybridIndex
+from teleassist.retrieval.keyword import KeywordIndex, searchable_text
 
 
 class Encoder:

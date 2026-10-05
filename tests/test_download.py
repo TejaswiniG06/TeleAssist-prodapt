@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 import httpx
-from download_public import checked_download
+from scripts.data.download_public import checked_download
 
 
 class DownloadTests(unittest.TestCase):

@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from fastapi.testclient import TestClient
 from fastapi import HTTPException
-from access import AccessPolicy
-from api import create_app
+from teleassist.common.access import AccessPolicy
+from teleassist.services.combined import create_app
 
 
 class NoProvider:

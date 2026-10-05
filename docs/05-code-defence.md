@@ -4,15 +4,15 @@ Start with the flow: complaint → mask common identifiers → classify and iden
 
 | File | Responsibility | How to explain the choice | Limit to acknowledge |
 | --- | --- | --- | --- |
-| privacy.py | Mask common identifiers | Reduce exposed identifiers before retrieval and provider calls | Patterns do not recognize every name, address or secret |
-| retrieval.py | BM25 keyword search | Establish an inexpensive exact-term baseline | Different wording can miss relevant records |
-| semantic.py | Local vectors, cosine similarity, rank fusion | Match meaning locally; combine two rankings with RRF | Similarity and fusion are retrieval signals, not proof a fix applies |
-| evidence.py | Load evidence and preserve trust/provenance | Include past suggestions honestly without assuming successful outcomes | Synthetic outcomes are scenario labels; public outcomes are unknown |
-| llm.py | Free provider calls and structured JSON | One provider, explicit configuration, bounded retry and pacing | Free quotas can interrupt generation; fallback is necessary |
-| resolution.py | Classify, select and check steps | Use source-backed actions and avoid repeating completed/failed actions | Exact quote and customer-text checks cannot establish full semantic entailment |
-| api.py | Validate inputs and expose services | Keep HTTP handling separate from retrieval and grounding | Single-process default; optional split services and agent/editor access are implemented |
+| teleassist/common/privacy.py | Mask common identifiers | Reduce exposed identifiers before retrieval and provider calls | Patterns do not recognize every name, address or secret |
+| teleassist/retrieval/keyword.py | BM25 keyword search | Establish an inexpensive exact-term baseline | Different wording can miss relevant records |
+| teleassist/retrieval/semantic.py | Local vectors, cosine similarity, rank fusion | Match meaning locally; combine two rankings with RRF | Similarity and fusion are retrieval signals, not proof a fix applies |
+| teleassist/retrieval/evidence.py | Load evidence and preserve trust/provenance | Include past suggestions honestly without assuming successful outcomes | Synthetic outcomes are scenario labels; public outcomes are unknown |
+| teleassist/resolution/llm.py | Free provider calls and structured JSON | One provider, explicit configuration, bounded retry and pacing | Free quotas can interrupt generation; fallback is necessary |
+| teleassist/resolution/pipeline.py | Classify, select and check steps | Use source-backed actions and avoid repeating completed/failed actions | Exact quote and customer-text checks cannot establish full semantic entailment |
+| teleassist/services/ | Validate HTTP inputs and expose two services | Separate service processes call over HTTP; shared schemas avoid duplicate validation | Retrieval state is single-writer; service separation does not prove horizontal capacity |
 | web/index.html | Agent review interface | A single page calls the API and exposes evidence | Agent review is still required |
-| dashboard.py / dashboard_client.py | Case workspace screens and HTTP client | Separate Python presentation calls the real API; no duplicated decision logic | Extra process; API keys are prototype roles, not individual identities |
+| frontend/app.py, frontend/views/, frontend/client.py | Case workspace screens and HTTP client | Separate Python presentation calls the real API; no duplicated decision logic | Extra process; API keys are prototype roles, not individual identities |
 
 ## Why the source filter was simplified
 
@@ -29,4 +29,4 @@ Explain this as: **choose eligible sources first, rank those sources second, ret
 - **Is it production ready?** Access roles, versioned updates, monitoring and local capacity/quality pilots are implemented. External identity, shared storage/queues, coordinated quotas and independent quality validation remain outstanding.
 - **Is it unique?** The useful combination is trust-aware historical grounding plus attempted-action handling and inspectable evidence. The underlying retrieval techniques are established.
 
-Keep functions organized around these responsibilities. Simplify indirection when it obscures the flow, but retain validation, failure handling and meaningful tests. Final file cleanup waits until all agreed prototype features are complete.
+Keep functions organized around these responsibilities. Simplify indirection when it obscures the flow, but retain validation, failure handling and meaningful tests. The completed cleanup groups implementations by responsibility and retains the existing startup entry points. See [project structure](16-project-structure.md).
