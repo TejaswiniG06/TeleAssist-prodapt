@@ -4,7 +4,7 @@ This guide explains the user flow from a complaint to reviewed historical eviden
 
 ## What these screenshots demonstrate
 
-Captured from application code at commit `6e5af6c` on 4 October 2026 from the actual Streamlit dashboard connected to separate retrieval and resolution APIs, using local semantic retrieval and the configured confirmed-free Gemini provider. All complaints, guidance and outcomes shown here are fictional demonstration records in an isolated database. The working application's saved cases were not changed. No API credentials are displayed.
+Captured on 5 October 2026 from the actual Streamlit dashboard connected to separate retrieval and resolution APIs, using local semantic retrieval and the configured confirmed-free Gemini provider. All complaints, guidance and outcomes shown here are fictional demonstration records in an isolated database. The working application's saved cases were not changed. No API credentials are displayed.
 
 The E-901 guide was added specifically for this walkthrough and is labelled `synthetic_demo`; E-901 is a demonstration identifier, not a claimed manufacturer error code. Its conditions explicitly describe an unplugged, intact external power cable that can safely be reconnected. This simple example demonstrates traceable grounding, not independently verified telecom troubleshooting quality. Screenshot counts and source references reflect this isolated capture state, not fixed values for every installation.
 
@@ -22,7 +22,7 @@ The default clone includes 230 synthetic records. The optional public download a
 
 Enter the customer's complaint. Device involved and additional observations are optional. Select action tags only for actions actually tried; report whether they helped in the observations. Load an example is a collapsed demo shortcut. Advanced search preserves the original-wording comparison mode.
 
-**Prepare troubleshooting draft** runs masking, classification, retrieval, drafting and response checks. **Search supporting sources** performs retrieval without drafting. No case is stored merely by preparing a response. Expand Classification and checks to inspect the proposed product, category, severity, sentiment, attempted actions and explicit cancellation signal. Processed complaint and masking counts shows the text processed after common identifiers are masked; pattern masking is limited, so avoid unnecessary personal data.
+**Prepare troubleshooting draft** runs masking, classification, retrieval, step selection and response checks. The AI selects actions from retrieved evidence; code validates their source/version and supporting quote, then displays the source's instruction wording. Recognized already-tried actions, including unknown outcomes, are excluded before selection and checked again afterward. Recognition is the limitation; the system cannot exclude an action it fails to recognize. **Search supporting sources** performs retrieval without preparing a resolution. No case is stored merely by preparing a response. Expand Classification and checks to inspect the proposed product, category, severity, sentiment, attempted actions and explicit cancellation signal. Processed complaint and masking counts shows the text processed after common identifiers are masked; pattern masking is limited, so avoid unnecessary personal data.
 
 ## 3. Review the cited draft and attempted fixes
 
@@ -66,7 +66,9 @@ After publication succeeds, the case shows its historical source reference and v
 
 Evidence Explorer searches articles and past tickets, including approved cases. Choose matching words, similar meaning or both; product/type filters narrow the pool. Similarity alone does not prove applicability. A specific source/version lookup lets reviewers inspect a citation even after newer versions exist.
 
-The current dashboard displays Relevance rank: N of M, with M representing the returned results (added after these screenshots). Exact BM25, cosine similarity and hybrid ranking scores remain under Match details. They are retrieval scores, not answer-confidence percentages. Source text is expandable. The resolution view now displays each selected step once, with its source reference and optional applicability details; complete cited sources are grouped in a collapsed section.
+The dashboard displays Relevance rank: N of M, with M representing the returned results. Exact BM25, cosine similarity and hybrid ranking scores remain under Match details. They are retrieval scores, not answer-confidence percentages. Read source expands the source text. The resolution view displays each selected step once, with its source reference and optional applicability details; complete cited sources are grouped in a collapsed section. Earlier standalone search results collapse when a response is prepared.
+
+Open a source by ID is a direct lookup, not a complaint search. Enter an ID such as KB-003; version 0 opens the latest, while another number retrieves that exact saved version.
 
 ## 9. Maintain the evidence collection
 
@@ -74,7 +76,7 @@ The current dashboard displays Relevance rank: N of M, with M representing the r
 
 Add creates an article or historical record with explicit origin and conditions. Update loads a current source for review. Retire removes it from current search while preserving citation history. Forms construct the existing API request; backend validation, permissions and expected-version conflicts still apply. Jobs build replacement indexes while readers retain the active snapshot.
 
-Check an evidence update reports whether the submitted job is queued, building, published or failed. Publication activity records changes. Optional developer batch import is available, but human editors do not need to enter JSON for normal maintenance.
+Check an evidence update reports whether the submitted job is queued, building, published or failed. Publication activity records changes. Advanced batch import — for developers accepts reviewed JSON batches, but human editors use the normal forms for everyday maintenance.
 
 ## 10. Review emerging issues
 
@@ -88,7 +90,7 @@ Reviewers can add a category or dismiss a proposal, with a rationale and confirm
 
 ![Live readiness, latency and error measurements](assets/dashboard/11-system-health.png)
 
-Health reports searchable sources, meaning-based search readiness, AI configuration and separate service status. Response times, errors, outcomes and update state come from the running APIs. Configured AI settings do not confirm provider availability or remaining quota. Counters include dashboard checks and reset on process restart; these measurements are not evaluation accuracy scores.
+Health reports searchable sources, meaning-based search readiness, AI configuration and separate service status. Response times, errors, outcomes and update state come from the running APIs. Configured AI settings do not confirm provider availability or remaining quota. Fallback counts describe historical requests, with readable reasons; they are not a live AI availability check. Counters include dashboard checks and reset on process restart. Response times retain up to 256 recent requests per endpoint. Monitoring does not store raw complaint text; explicitly saved cases are separate. These measurements are not evaluation accuracy scores.
 
 ![The same live Health screen in dark appearance](assets/dashboard/12-dark-health.png)
 

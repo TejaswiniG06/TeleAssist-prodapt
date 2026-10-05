@@ -1,16 +1,18 @@
 # TeleAssist — Telecom Support Assistant
 
-TeleAssist helps a support agent turn a customer complaint into a cited troubleshooting draft. It classifies the complaint, retrieves relevant knowledge-base articles and historical tickets, and checks proposed steps against the evidence. It supports broadband, mobile, fixed voice and IPTV scenarios for Prodapt problem statement 2.
+TeleAssist is a telecom support assistant built for Prodapt problem statement 2. It classifies customer complaints, searches knowledge-base articles and historical tickets, and selects troubleshooting steps with source citations. It supports broadband, mobile, fixed voice and IPTV.
 
-Its central feature is **attempted-fix awareness**: when a customer says “I already restarted the router,” the system extracts that action and excludes it from recommendations. When information or evidence is insufficient, it asks for clarification or returns an agent-review outcome.
+Its main feature is **attempted-fix awareness**. When the system recognizes a fix the customer has already tried, it removes that action before step selection and checks again before displaying the response. If details or evidence are missing, it asks questions or recommends specialist review.
 
-**Status:** working prototype with production-oriented design. Core services and the connected dashboard are implemented; independent evaluation and production deployment requirements remain open.
+**Status:** working microservices prototype with a connected dashboard, persistent case storage, versioned evidence, monitoring and **93 passing tests**. Production requirements and evaluation limits are described below.
 
 [Dashboard walkthrough](docs/17-dashboard-walkthrough.md) · [Features](#core-functionality) · [Stack](#tech-stack) · [Setup](#run-locally) · [Results](#evaluation-results) · [Scope](#scope-and-production-considerations)
 
 ![TeleAssist workspace choices](docs/assets/dashboard/01-workspaces.png)
 
-For a guided demo, follow the [dashboard walkthrough](docs/17-dashboard-walkthrough.md): complaint → checked response or clarification → saved outcome → reviewed history → future search. Screenshots use isolated fictional cases; they are demonstrations, not answer-quality scores.
+**User flow:** complaint → cited resolution or clarification → recorded outcome → editor review → searchable history.
+
+The [dashboard walkthrough](docs/17-dashboard-walkthrough.md) explains each screen. Screenshots were updated on 5 October 2026 using synthetic demo cases in separate storage.
 
 ## Core functionality
 
@@ -18,15 +20,15 @@ For a guided demo, follow the [dashboard walkthrough](docs/17-dashboard-walkthro
 | --- | --- |
 | Complaint understanding | Extract product, category, severity, sentiment, symptoms and attempted actions; flag explicit cancellation intent separately from frustration |
 | Retrieval | BM25 keyword search, local semantic search and hybrid reciprocal-rank fusion |
-| Query enrichment | Append product, category, normalized symptoms/actions using the existing classification; no extra rewriting LLM call; raw mode remains available |
-| Grounded drafting | Prefer relevant KB and resolved histories; disclose unverified suggestions; validate source versions, source actions, quotes and customer applicability evidence |
-| Attempted fixes and fallback | Exclude already-tried actions; clarify or escalate when evidence or dependencies are insufficient |
+| Query enrichment | Add product, category, symptoms and normalized actions from the existing classification; no extra model call; original-query mode remains available |
+| Evidence-based step selection | Prefer relevant KB articles and resolved history; label unverified suggestions; check source versions, actions, quotes and applicability evidence |
+| Attempted fixes and fallback | Exclude recognized already-tried actions; ask questions or recommend review when a supported resolution is unavailable |
 | Privacy and access | Mask common identifiers before provider calls; backend-enforced agent/editor application keys |
 | Evolving evidence | Validate editor updates, build indexes in the background, publish atomically, retire records and preserve citation history |
 | Case feedback loop | Explicitly save pending drafts, record actual actions/outcomes, and publish historical evidence only after editor review |
 | Emerging-topic review | Group weak-match complaints with TF-IDF/cosine; editor approval controls taxonomy changes |
 | Monitoring | Liveness/readiness, request/error/fallback counters, bounded latency measurements and process resources |
-| Case workspace | Separate Streamlit dashboard with agent/editor landing cards, collapsed demo examples, optional device context, clarification replies, light/dark appearance, source cards and readable case/editor/health screens; independent submissions with no chatbot memory |
+| Case workspace | Agent/editor workspaces, optional device details, clarification answers, relevance ranks, light/dark appearance and readable editor screens; no chatbot memory |
 
 ## Tech stack
 
@@ -38,31 +40,40 @@ For a guided demo, follow the [dashboard walkthrough](docs/17-dashboard-walkthro
 | Keyword search | Repository BM25 implementation | Inspectable baseline for exact terms |
 | Semantic search | Sentence Transformers, `all-MiniLM-L6-v2`, PyTorch on CPU | Local embeddings and cosine similarity |
 | Hybrid ranking | Reciprocal-rank fusion (RRF) | Combine keyword and semantic rankings |
-| LLM | Configurable Gemini API; checkpoint uses Gemini 3.5 Flash-Lite | Structured classification and drafting |
+| Runtime LLM | Configurable Gemini API; checkpoint uses Gemini 3.5 Flash-Lite | Structured classification and evidence-step selection |
 | Topic grouping | scikit-learn TF-IDF/cosine | Emerging-topic proposals |
 | Storage and monitoring | SQLite case ledger, versioned JSON evidence, embedding cache, psutil | Prototype persistence and process measurements |
 | Clients and testing | HTTPX, unittest, Streamlit AppTest | Service calls and behavioural verification |
 
-Embeddings run locally. Tests and retrieval do not need an LLM key. Live generation requires the reviewer's own confirmed-free provider project; there is no paid-provider fallback.
+Embeddings run locally. Tests and retrieval work without a provider key. Live classification and resolution need a key from a confirmed free-tier project. There is no paid-provider fallback.
 
 ## Workflow and architecture
 
 ```mermaid
 flowchart LR
-    UI[Streamlit Case workspace] --> API[FastAPI]
-    API --> Mask[Mask identifiers]
+    UI[Streamlit dashboard] --> Resolution[Resolution API]
+    UI --> Retrieval[Retrieval and evidence API]
+    Resolution --> Mask[Mask identifiers]
     Mask --> Classify[Classify complaint and attempted actions]
     Classify --> Query[Build raw or enriched query]
-    Query --> Retrieve[Keyword / semantic / hybrid retrieval]
-    Evidence[Versioned KB and tickets] --> Retrieve
-    Retrieve --> Select[Select evidence by product and trust]
-    Select --> Draft[Draft with source actions]
-    Draft --> Check[Validate citations and applicability]
-    Check --> Result[Cited draft / clarification / agent review]
+    Query --> Retrieval
+    Evidence[Versioned KB and tickets] --> Retrieval
+    Retrieval --> Select[Filter by product, trust and attempted actions]
+    Select --> Steps[Select source actions]
+    Steps --> Check[Validate citations and applicability]
+    Check --> Result[Cited resolution / clarification / specialist review]
     Result --> UI
 ```
 
-The recommended startup runs retrieval and resolution as two separate HTTP services, with Streamlit as a third process. The combined backend remains a compatibility mode. Enrichment changes retrieval text only: original masked customer text remains the evidence used for drafting and applicability checks. Explicit case saving starts a separate feedback loop: pending draft → actual outcome → editor review → published history. Only published evidence is retrieved by future queries.
+The launcher starts two FastAPI services and a separate Streamlit dashboard:
+
+- **Retrieval and evidence service:** owns search, embeddings, ingestion, cases and topics.
+- **Resolution service:** calls retrieval over HTTP and handles masking, classification, step selection and response checks.
+- **Dashboard:** sends API requests and presents the results. The backend enforces permissions.
+
+The embedding cache uses the model and evidence text to reuse unchanged vectors. Evidence updates build a replacement index in the background and publish it atomically. Searches keep using the active index during the update. Source versions remain available for old citations.
+
+Query enrichment changes search text only. The original masked complaint is used for applicability checks. Saving a case starts a separate feedback loop; pending drafts enter searchable history only after outcome recording and editor approval. The combined API remains available as a compatibility mode.
 
 See [architecture and production deployment](docs/architecture.md), [design decisions](docs/design-decisions.md) and [split-service setup](docs/09-service-deployment.md).
 
@@ -71,14 +82,14 @@ See [architecture and production deployment](docs/architecture.md), [design deci
 | Evidence | Records | Treatment |
 | --- | ---: | --- |
 | Synthetic KB articles | 28 | Illustrative guidance |
-| Synthetic resolved histories | 162 | 160 generated plus two original histories; explicit scenario outcomes |
+| Synthetic resolved histories | 162 | Explicit scenario actions and outcomes |
 | Synthetic unresolved histories | 40 | Unsuccessful outcomes cannot supply successful fixes |
 | Public ticket candidates | 257 | Unverified suggestions with attribution |
 | Full evaluation corpus | **487** | Bundled synthetic records plus optional public candidates |
 
 A fresh clone includes **230 synthetic records**. `scripts/data/download_public.py` recreates the 257 public candidates from a pinned, checksum-verified CSV. Committed synthetic records do not need regeneration.
 
-Synthetic guidance is not provider-approved advice; synthetic outcomes do not demonstrate real customer success. Public ticket origins/outcomes remain unverified. The public dataset is attributed to Tobi-Bueck / Softoft under its declared CC-BY-NC-4.0 licence. See [dataset audit and provenance](docs/dataset-audit.md).
+Synthetic records represent telecom scenarios; their outcomes are not measured customer results. Public tickets retain unverified labels and attribution to Tobi-Bueck / Softoft under CC-BY-NC-4.0. See [dataset audit and provenance](docs/dataset-audit.md).
 
 ## Run locally
 
@@ -95,7 +106,7 @@ py -3.13 -m venv .venv
 ./.venv/Scripts/python.exe -m unittest discover -s tests -v
 ```
 
-`requirements-lock.txt` contains verified dependency versions; `requirements.txt` contains compatible ranges. The latest checkpoint passes **93 tests**. Behavioural tests use local/fake dependencies without provider credentials. An earlier published checkpoint was also verified in a fresh Python 3.13 environment.
+`requirements-lock.txt` pins tested dependency versions; `requirements.txt` lists compatible ranges. The suite passes **93 unit, integration and UI tests**. Tests use local models or test doubles and do not require provider credentials. A previous checkpoint was also tested in a fresh Python 3.13 environment.
 
 ### 2. Start the microservices and dashboard
 
@@ -118,7 +129,7 @@ The combined backend remains available: `./.venv/Scripts/python.exe start.py --m
 
 Try `slow broadband speed` in Evidence Explorer. Keyword search works without model downloads. Semantic/hybrid search needs internet for the initial local model download. Without an LLM key, resolution returns a clarification fallback; the interface and retrieval remain usable.
 
-Search result cards show **Relevance rank: N of M**, where M is the number of results returned, not the full corpus size. Expand Match details for BM25 word-match scores, cosine meaning similarity, or hybrid reciprocal-rank fusion (RRF) with its component scores. These are not percentages of answer correctness or proof that a fix will work. The agent's supporting-source search uses the same presentation. Suggested resolutions retain citation checks rather than an invented confidence percentage.
+Search cards show **Relevance rank: N of M**, where M is the number of results returned. Match details contains BM25, cosine similarity and hybrid RRF scores. These describe retrieval relevance, not answer accuracy or the chance that a fix will work. Resolution steps show their source references and expandable supporting evidence.
 
 ### 3. Optional: enable live drafting
 
@@ -132,7 +143,7 @@ if (-not (Test-Path -LiteralPath .env)) {
 
 Set your own `GEMINI_API_KEY` locally and set `LLM_FREE_PLAN_CONFIRMED=true` only after confirming the intended free plan. Keep the example model/pacing settings initially; restart the backend after configuration changes. Quotas and model availability can vary, and the flag does not inspect billing settings.
 
-The provider key stays on the backend. `.env`, downloaded weights, public downloads and runtime files are ignored by Git. Reviewers do not need the author's credentials or to regenerate the corpus.
+The provider key stays on the backend. `.env`, model weights, public downloads and runtime files are ignored by Git. Use your own key; the bundled corpus does not need regeneration.
 
 Editor screens require a backend-configured `TELEASSIST_EDITOR_KEY`, entered in the dashboard. The example uses `editor` as a public localhost demo key; change it before any shared deployment. This is an application access key, with no user accounts or password database. Application agent/editor keys are separate from the Gemini key. Local mode permits anonymous agent access only. See [access controls](docs/06-access-and-updates.md) and [dashboard configuration](docs/11-case-workspace.md).
 
@@ -168,7 +179,7 @@ The download recreates public candidates in ignored local storage. Cached classi
 
 ## Evaluation results
 
-These are **development checkpoints**, not independently validated real-world accuracy. Synthetic pilot queries share vocabulary with the corpus. The ten casual/typo queries were separately composed by the coding assistant, not independently written or adjudicated by a human. Reference labels are partial: other returned sources may also be relevant.
+These results use development query sets and partial reference labels. Synthetic pilot queries share vocabulary with the corpus. The separate ten-query challenge uses casual wording and typos. The query sets and labels have not had independent human review, so these results do not establish real-world accuracy. Other retrieved sources may also be relevant.
 
 ### Retrieval: raw → enriched
 
@@ -198,26 +209,26 @@ Enrichment helps casual wording but regresses pilot keyword/hybrid results. Both
 | Repetition among answers containing steps | 1/4 (25%) | 0/6 (0%) |
 | Provider / grounding failures | 0 / 0 | 0 / 0 |
 
-This earlier **raw-query ablation** matches model, complaint, evidence, product/trust selection and citation checks. The baseline removes attempted-action extraction from drafting, action exclusion and the no-repeat prompt. Execution order alternates; six contexts contain a labelled repeat opportunity. This is a small comparison, not a benchmark of all RAG systems or a fresh score for enriched generation. Repeat labels still need manual review.
+This **raw-query ablation** uses the same model, complaints, evidence, product/trust selection and citation checks. The baseline disables attempted-action handling and its no-repeat prompt. Six contexts contain an opportunity to repeat a labelled action. This small comparison evaluates the safeguard; it does not measure all RAG systems or enriched-generation quality. Repeat labels need independent review.
 
 ### Classification and grounding
 
 | Diagnostic | Result | Qualification |
 | --- | --- | --- |
-| Product / category, eight user feature cases | 8/8 each | Author-labelled cases and frozen accepted category aliases |
+| Product / category, eight feature cases | 8/8 each | Development labels and fixed accepted category aliases |
 | Product / category, 13 feature + supplemental cases | 13/13 / 11/13 | Two category mismatches retained |
 | Attempted-action extraction | 7/8 (87.5%) | All expected actions found per complaint; one miss retained |
 | Mechanical citation pass rate | 6/6 step-bearing answers; seven steps | Seven no-step outcomes excluded; membership/version/quote checks, not semantic entailment |
 | User feature checks | 8/8 | Masking, casual restart, mobile, churn, clarification, injection and out-of-scope abstention |
-| Earlier product/category/sentiment pilot | 6/6 each | Six fictional cases; independent review pending |
-| Earlier severity pilot | 2/6 | Approved urgency policy and independent adjudication pending |
+| Earlier product/category/sentiment pilot | 6/6 each | Six synthetic cases; independent review pending |
+| Earlier severity pilot | 2/6 | Needs an approved urgency policy and independent review |
 | Public complaint retrieval | Not scored | 25 queries with self/near-duplicate exclusions; relevance labels pending |
 
 See [generation evaluation](docs/12-human-language-evaluation.md) and [committed diagnostic results](data/human_language_results_v1.json). Enriched-generation evaluation and independent applicability review remain open.
 
 ### Reliability and system health
 
-All **93 behavioural tests** pass, covering access, masking, attempted actions, dependency failures, unsupported citations, stale updates, failed publication, retirement, reviewed topics, split-service outages, process-tree shutdown and independent dashboard submissions. Case tests cover persistence, idempotent saving, stale revisions, editor-only publication, unresolved/rejected outcomes and restart/failure recovery; the same dashboard lifecycle is tested against both combined and split APIs. UI tests also cover role gating, explicit access-key submission, collapsed examples without submission, device context, clarification continuation/reset, case-card selection, theme input preservation, evidence forms with stale-version rejection, partial service outages and exact-version source navigation. Live checks exercised provider-backed drafts, source cards, reduced motion, mobile layout and add/search/retire without restarting the API.
+All **93 tests** pass. They cover masking, attempted-fix exclusion, citation checks, permissions, service failures, version conflicts, evidence updates and case recovery. Integration tests cover case saving, outcome review and publication against both combined and split APIs. UI tests cover clarification replies, role checks, themes, case navigation and evidence forms. Live browser checks cover provider-backed responses, narrow screens and add/search/retire without restarting the API.
 
 A local load checkpoint recorded 72 warm requests without errors. Hybrid warm p50/p95 latency was approximately 444/547 ms; the first hybrid search took about 30 seconds, with approximately 537 MiB process RSS at that checkpoint. These are local measurements, not production capacity. See [monitoring methodology](docs/07-monitoring.md).
 
@@ -236,7 +247,7 @@ Module syntax keeps project imports consistent. The tool inventory is:
 | Scripts / arguments | Requirements and purpose |
 | --- | --- |
 | `scripts/evaluation/evaluate_benchmark.py`, `scripts/evaluation/evaluate_human_language.py` | Local model; raw retrieval baselines; public setup needed for recorded corpus |
-| `scripts/evaluation/evaluate_public.py` | Public data and local model; retrieval with leakage exclusions, no invented accuracy |
+| `scripts/evaluation/evaluate_public.py` | Public data and local model; excludes originating tickets and near duplicates before retrieval evaluation |
 | `scripts/smoke/smoke_services.py`, `scripts/smoke/smoke_updates.py`, `scripts/smoke/smoke_evolving_data.py` | Local dependencies; model for semantic checks; retrieval and evidence lifecycle |
 | `scripts/smoke/smoke_case_feedback.py` | Real local model, isolated storage; pending case → reviewed history → search and restart recovery; no LLM calls |
 | `scripts/smoke/smoke_split.py`, `scripts/evaluation/benchmark_local.py` | Local model (cached for split check); HTTP separation and local load |
@@ -267,7 +278,7 @@ The prototype demonstrates the complaint-to-draft workflow, evolving evidence, r
 
 Production deployment needs per-user identity, TLS, shared versioned storage, durable queues, coordinated publication, shared provider quota controls, backups, retention rules and capacity validation. Current file persistence/in-process locks assume a single writer; application keys are not enterprise user identity. Pattern masking is not comprehensive anonymization, and citation validation cannot prove full semantic applicability.
 
-UI refinement and folder modularisation are complete. Remaining work: independent relevance/applicability labels, an approved severity policy, enriched-generation and broader topic-quality evaluation, and the architecture/code-defence rehearsal. See [architecture](docs/architecture.md) and [evaluation methodology](docs/10-evaluation.md).
+Further evaluation needs independent relevance/applicability labels, an approved severity policy, enriched-generation results and broader topic-quality measurement. See [architecture](docs/architecture.md) and [evaluation methodology](docs/10-evaluation.md).
 
 ## Documentation
 

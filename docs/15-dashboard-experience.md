@@ -16,9 +16,11 @@ Prepare troubleshooting draft invokes the existing /resolve endpoint. Search sup
 
 ## Waiting and results
 
-The synchronous resolution API does not stream intermediate stage events. The loading panel says Preparing your draft with a simple skeleton; it never invents completed stages. The returned status determines whether the UI presents a draft, clarification or specialist review. Toast messages distinguish a draft from a non-resolution response.
+The synchronous resolution API does not stream intermediate stage events. The loading panel says Preparing your response with a simple skeleton. The returned status determines whether the UI presents Suggested resolution, clarification or specialist review. Toast messages distinguish a resolution from a request for more information or review.
 
-Already-tried actions are highlighted before the response. Each resolution step has an accordion containing its full instruction, tier label, support quote, conditions, matching customer text and exact source version. Supporting sources use Previous/Next cards; controls preserve cited versions, including retired history. Generated/customer/evidence strings render as text; the HTML badge helper escapes labels and allowlists styles.
+Previously tried actions are highlighted before the response. Each selected step appears once with its source tier and version. Why step N was suggested expands the support quote, conditions and customer text used. Cited sources is collapsed and uses Previous/Next cards; Read source opens the full record. Controls preserve cited versions, including retired history. Customer and evidence strings render as text; the HTML badge helper escapes labels and allowlists styles.
+
+Search results show Relevance rank: N of M, where M is the number of returned sources. Match details contains exact BM25, cosine and hybrid RRF scores; these are not answer-confidence percentages. Standalone search results collapse after a response is prepared. Open a source by ID explains how to inspect a specific record/version.
 
 Clarification responses show one answer field directly beneath each unique question and one Continue button. Repeated question text is removed from the response summary; submitted observations keep each question paired with its answer. This submits the retained original complaint with accumulated observations to the same /resolve endpoint. It does not create chatbot memory, consume a call for empty answers, or save a case automatically. Starting another case clears clarification and device state.
 
@@ -32,7 +34,7 @@ Evidence management provides Add, Update and Retire forms for all four evidence 
 
 Topics explains weak-match complaint grouping, renders proposal cards and provides a searchable, collapsed list of existing categories. It does not rename stored categories or change clustering thresholds.
 
-Health shows available sources, search readiness, AI configuration, individual service availability, response times and errors from live APIs. An unavailable service is reported while the surviving service remains visible. Raw readiness/process counters remain in optional Technical details. Configuration is not proof of provider availability, and request counters include dashboard checks.
+Health shows available sources, search readiness, AI configuration, individual service availability, response times and errors from live APIs. An unavailable service is reported while the surviving service remains visible. Raw readiness/process counters remain in optional Technical details. Configuration is not proof of provider availability. Fallback counts describe historical requests using readable reasons, not a live provider outage. Counters reset on restart, include dashboard checks and retain up to 256 recent latency samples per endpoint. Monitoring does not store complaint text.
 
 ## Styling and accessibility
 
