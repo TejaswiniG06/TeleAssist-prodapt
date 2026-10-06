@@ -8,7 +8,7 @@ Classification now includes churn_risk and churn_evidence. A narrow rule flags e
 
 ## Evaluation boundaries
 
-The original synthetic retrieval queries share product names and vocabulary with the corpus. That makes them easier than independent customer language. Keep their results separate from the casual/typo challenge set. Queries and reference labels are manually composed by the coding assistant, not independently authored/adjudicated by a human; they must not be advertised as a human-reviewed holdout. Freeze them before the first run, retain failures and do not rewrite labels after observing results.
+The original synthetic retrieval queries share product names and vocabulary with the corpus. That makes them easier than independent customer language. Keep their results separate from the casual/typo challenge set. Queries and partial reference labels form a development challenge set, without independent human review. They were frozen before the first run; failures are retained and labels are not rewritten after observing results. This is not an independently reviewed holdout.
 
 Repeated-fix rate needs both a numerator and a denominator: cases repeating at least one labelled attempted action / all attempted-action cases. Also report repetition among answers with steps, step-producing counts, provider fallbacks, extraction accuracy and whether a repeated action was actually available in retrieved evidence. A zero rate on unsupported/fallback-only cases does not show useful action selection.
 

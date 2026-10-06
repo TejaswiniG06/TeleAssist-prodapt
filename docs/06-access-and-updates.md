@@ -1,6 +1,6 @@
 # Access and evidence updates
 
-Explain access this way: an agent can search and prepare drafts; an editor can also change evidence. Keys map to those two roles. They are application credentials, separate from the Gemini provider key, and are never committed.
+An agent can search and prepare drafts; an editor can also change evidence. Keys map to those two roles. They are application credentials, separate from the Gemini provider key, and are never committed.
 
 `AUTH_MODE=local` keeps the localhost reviewer demo usable without credentials. Anonymous users have agent permissions only. Editor access always needs `TELEASSIST_EDITOR_KEY`. In `required` mode, both agent and editor keys must be present and different or configuration fails. An absent/invalid request key returns 401; a valid agent key used on editor routes returns 403. `/admin/access` verifies editor access.
 
@@ -16,4 +16,4 @@ The endpoint returns a job ID and HTTP 202. Poll `/admin/jobs/{job_id}`. The sin
 
 `GET /admin/audit` records role, UTC time, source IDs/versions/status and index version, without complaints or keys. Updated evidence and audit/history live in ignored `runtime/evidence_state.json`. Do not commit operational data. Restarts restore published updates. To undo content, retrieve a historical version and submit its content as a new revision using the current expected versions.
 
-The prototype supports one application process and one ingestion worker. Job statuses are in memory; interrupted unpublished jobs are not durable/replayed. Atomic file replacement protects the published state, but this is not a multi-host transaction system. Multiple processes need shared storage, coordination, a persistent queue and per-user audit identity. Pattern masking is still not comprehensive anonymization. Keep the original datasets unchanged; updates are an overlay.
+The prototype supports one retrieval/catalog writer and one ingestion worker. The resolution service runs separately and calls retrieval over HTTP. Job statuses are in memory; interrupted unpublished jobs are not durable/replayed. Atomic file replacement protects the published state, but this is not a multi-host transaction system. Multiple processes need shared storage, coordination, a persistent queue and per-user audit identity. Pattern masking is still not comprehensive anonymization. Keep the original datasets unchanged; updates are an overlay.

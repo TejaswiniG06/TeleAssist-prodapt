@@ -1,6 +1,6 @@
 # Emerging topics and reviewed taxonomy
 
-Explain it this way: repeated weak matches suggest that the existing evidence may miss a topic. The system groups similar complaints and asks an editor to review a proposed category; it never invents a fix from a cluster.
+Repeated weak matches suggest that the existing evidence may miss a topic. The system groups similar complaints and asks an editor to review a proposed category; it never invents a fix from a cluster.
 
 Unfiltered search records weak semantic/hybrid matches below 0.40, or keyword searches with no matches. These are heuristics, not a calibrated novelty model. Resolution also records no-applicable-evidence fallbacks. Provider outages or missing keys do not count as topic novelty. Deliberately filtered/excluded searches and increased score thresholds are excluded from this signal.
 

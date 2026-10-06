@@ -1,6 +1,6 @@
 # Monitoring and local measurements
 
-Explain it this way: health tells us what is available, metrics tell us how the service is behaving, and labelled evaluations tell us whether its answers are useful. These are different questions.
+Health tells us what is available, metrics tell us how the service is behaving, and labelled evaluations tell us whether its answers are useful. These are different questions.
 
 - `/live` reports that the HTTP process responds. It does not contact the provider.
 - `/ready` reports keyword readiness. `/ready?require_semantic=true` returns 503 until semantic search is loaded successfully. This explicit option prevents a keyword-only reviewer setup being treated as a failure.

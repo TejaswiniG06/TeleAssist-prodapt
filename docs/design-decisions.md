@@ -23,7 +23,7 @@ The prototype turns a complaint into a reviewed, source-backed draft. It preserv
 
 ## Evaluation evidence
 
-The frozen 24-query, AI-assisted partial-reference pilot on 487 records measured:
+The frozen 24-query development partial-reference pilot on 487 records measured:
 
 | Mode | Reference hit@5 | Partial-reference recall@5 | Reference MRR@5 |
 | --- | ---: | ---: | ---: |

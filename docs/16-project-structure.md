@@ -1,75 +1,65 @@
-# Project structure and reading order
+# Project structure and module guide
 
-The cleanup groups existing code by responsibility. Retrieval/drafting algorithms, API request/response contracts, evidence data and local case storage are preserved. This is package organisation and view extraction, not a change to the problem scope.
+The dashboard sends HTTP requests; the backend owns classification, retrieval, evidence updates and permission checks. Modules are grouped by responsibility.
 
 ```text
 TeleAssist-prodapt/
   start.py                   Local process launcher
-  dashboard.py               Small Streamlit entry point
+  dashboard.py               Streamlit entry point
   api.py                     Combined compatibility entry point
   retrieval_api.py           Retrieval service entry point
   resolution_api.py          Resolution service entry point
   teleassist/
-    services/                HTTP routes, shared schemas and case routes
-    retrieval/               Keyword, semantic/hybrid, query building and evidence loading
-    resolution/              Classification/drafting/checks and free-provider client
-    ingestion/               Validated catalog updates and index publication
+    services/                HTTP routes and request schemas
+    retrieval/               BM25, semantic/hybrid search and query building
+    resolution/              Classification, state checks, selection and provider client
+    ingestion/               Versioned catalog updates and index publication
     cases/                   Transactional SQLite case store
-    common/                  Access, masking, metrics and stable project paths
+    common/                  Access, masking, metrics and project paths
     topics.py                Topic grouping and reviewed taxonomy
   frontend/
     app.py                   Role selection and navigation
-    client.py                HTTP boundary
-    components.py            Safe shared rendering, examples and source navigation
-    styles.css               Existing theme/animations
+    client.py                HTTP client
+    components.py            Shared rendering and source navigation
+    styles.css               Light/dark styling and animations
     views/                   Agent, cases, evidence, topics and health
   scripts/
-    data/                    Download/filter/generate/repair tools
-    evaluation/              Retrieval, classification, language and load measurements
-    smoke/                   Real-model and service integration checks
-  tests/                     Behaviour and failure checks
+    data/                    Download, preparation and corpus tools
+    evaluation/              Retrieval, classification and load measurements
+    smoke/                   Model and HTTP integration checks
+  tests/                     Behaviour, UI and failure regression tests
   data/                      Evidence, frozen queries and evaluation summaries
-  docs/                      Scope, design, setup and limitations
-  web/                       Preserved original lightweight interface
-  runtime/                   Ignored persistent SQLite, caches and logs
-  scratch/                   Ignored development diagnostics; not submission code
+  docs/                      Setup, design, evaluation and user guides
+  web/                       Original lightweight interface
+  runtime/                   Ignored SQLite storage, state, caches and logs
+  scratch/                   Ignored optional downloads and local diagnostics
 ```
 
-## Reading the complaint path
+## Complaint path
 
-1. Start at `frontend/views/agent.py`: form, Prepare draft, cited response and explicit saving.
-2. `frontend/client.py` sends HTTP; it contains no retrieval or model decisions.
-3. `teleassist/services/resolution.py` validates requests and calls the resolver.
-4. `teleassist/resolution/pipeline.py` masks/classifies, excludes attempted actions, retrieves evidence and validates a response.
-5. `teleassist/retrieval/` implements BM25, local embeddings, hybrid rank fusion and classification-aware query construction.
-6. `teleassist/ingestion/catalog.py` manages versioned evidence; `teleassist/cases/store.py` keeps pending cases and actual outcomes before reviewed publication.
+1. `frontend/views/agent.py` collects the complaint, observations and clarification answers.
+2. `frontend/client.py` sends HTTP requests to the configured API.
+3. `teleassist/services/resolution.py` validates inputs and calls the resolver.
+4. `teleassist/common/privacy.py` masks supported identifiers before processing.
+5. `teleassist/resolution/pipeline.py` classifies, excludes recognized attempted actions and checks selected steps. `state.py` handles common prerequisite questions and answered-state tracking; `llm.py` handles the provider, pacing and bounded retries.
+6. `teleassist/retrieval/` constructs the search query and ranks evidence with BM25, local embeddings and RRF.
+7. The response returns cited steps, clarification or escalation to the dashboard. Saving is a separate explicit operation.
 
-HTTP schemas live in `teleassist/services/schemas.py`; resolution does not import the combined application just to obtain its input models. The combined/retrieval factory shares the existing catalog and case implementation; separate-service mode is a process/HTTP boundary, not duplicated algorithms.
+## Evidence and case ownership
 
-## Running and reusing tools
+`teleassist/ingestion/catalog.py` validates editor batches, builds replacement indexes and publishes versions. `teleassist/cases/store.py` stores pending cases and actual reported outcomes in SQLite. Reviewed cases enter retrieval through the same ingestion path. `teleassist/topics.py` groups weak-match complaints for taxonomy review.
 
-Existing commands remain valid:
+The retrieval service owns catalog, case and topic storage. Resolution calls it over HTTP. The combined compatibility service reuses the same modules. `teleassist/common/paths.py` anchors data and runtime paths to the repository root.
+
+## Running and checking
 
 ```powershell
 ./.venv/Scripts/python.exe start.py
-./.venv/Scripts/python.exe start.py --mode combined
-./.venv/Scripts/python.exe -m streamlit run dashboard.py
-```
-
-The root API files are small deployment entry points; `uvicorn retrieval_api:app`, `uvicorn resolution_api:app` and `uvicorn api:app` remain valid. The launcher still configures the real dashboard addresses and supports both modes.
-
-Run moved tools using standard Python module syntax from the repository root:
-
-```powershell
+./.venv/Scripts/python.exe -m unittest discover -s tests -q
 ./.venv/Scripts/python.exe -m scripts.smoke.smoke_split
-./.venv/Scripts/python.exe -m scripts.data.prepare_tickets --help
-./.venv/Scripts/python.exe -m scripts.evaluation.evaluate_query_enrichment
+./.venv/Scripts/python.exe -m scripts.evaluation.evaluate_query_enrichment --replay-frozen-classifications
 ```
 
-`teleassist/common/paths.py` anchors data, model-cache and web assets to the repository root. SQLite keeps the same `runtime/cases.sqlite3` name; evidence/topic files and `TELEASSIST_STATE_DIR` work as before. Moving a Python file does not create a new database or regenerate datasets. Frozen classification replay normalizes only the three moved imports in its V1 source fingerprint; changed classifier logic still invalidates the cache. No evaluation labels or scores were edited to make the cleanup pass.
+The final command replays historical classification predictions; it does not evaluate the updated classifier. Use explicit refresh for new predictions. See the [README](../README.md), [deployment guide](09-service-deployment.md) and [evaluation guide](13-query-enrichment.md) for setup and limits.
 
-The old duplicate tier labels and unused citation-rendering/editor-composition helpers were removed. Shared safe source rendering lives in one component module. The two requirement files have different purposes (compatible ranges versus reproducible lock) and remain. Existing data-generation and repair tools remain available for provenance/reproducibility.
-
-No new runtime dependencies, inheritance layers or plugin mechanisms were added. The cleanup checkpoint passed 87 tests; later UI changes increased the current suite to 93 tests; real HTTP and browser checks verify integration separately.
-
-Cleanup verification: all 87 tests passed; real HTTP split checks covered retrieval, case publication, future search, retirement/history and outage fallback. A fresh isolated browser audit with real MiniLM passed editor login, all editor screens, topic approval, case publication, evidence addition/retirement and narrow-screen layout. The live agent/editor browser checks also passed. All 11 committed data files are byte-for-byte unchanged, and the 13 extracted screen functions retain their original syntax trees. No provider calls were needed for this refactor.
+`requirements.txt` contains compatible ranges; `requirements-lock.txt` pins the tested environment. Runtime storage and provider/application keys are excluded from Git. The README reports the current test count. Functional tests and integration checks do not establish real-world answer accuracy.

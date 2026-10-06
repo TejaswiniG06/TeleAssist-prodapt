@@ -1,4 +1,4 @@
-# Suggested dataset inspection
+# Dataset selection and provenance
 
 Source: https://github.com/santhoshmishra/Ticket_data
 
@@ -16,7 +16,7 @@ No licence file was present in the inspected repository tree. Redistribution or 
 
 ## Decision
 
-Do not silently transform these municipal records into factual telecom resolutions. The data can inform adapter/schema experiments, subject to reuse terms, but it is unsuitable as authoritative telecom grounding. Inspect the suggested Telecom Conversation Corpus next and supplement missing resolution evidence with clearly labelled synthetic telecom records, as permitted by the brief.
+These municipal records are excluded from telecom grounding because their domain and reuse terms do not fit the prototype. The selected public tickets, synthetic telecom evidence and inspected Telecom Conversation Corpus are described below.
 
 ## Tobi-Bueck support tickets (2026-10-03)
 
@@ -31,7 +31,7 @@ Columns: subject, body, answer, type, queue, priority, language, version, tag_1 
 
 The stricter terms broadband, telecom, mobile network, SIM card, VoIP, internet service, fiber/fibre, 4G, and 5G matched none of those candidates. The broader matches are largely router, Wi-Fi, modem, or internet-connection references. Manual inspection of rows 12, 42, 74, 179, 183 and 245 found VPN infrastructure, doorbell integration, NAS connectivity, adapter/OS compatibility, analytics integration, and smart-camera connectivity. These are adjacent IT/device problems, not verified telecom service fixes. Row 245's answer even assumes dual-band router capability without the complaint establishing it.
 
-Updated decision after scope correction: index all 257 as lower-trust `unverified_ticket` evidence. Similar replies may inform an explicitly qualified suggestion, never a confirmed historical fix. Synthetic history with explicit outcomes and an expanded KB supplements these records. Nonresolved history cannot supply successful fixes. Telecom Conversation Corpus inspection is documented below; provider-approved policy evidence remains future work. The original nine records remain preserved.
+Selection decision: index all 257 as lower-trust `unverified_ticket` evidence. Similar replies may inform an explicitly qualified suggestion, never a confirmed historical fix. Synthetic history with explicit outcomes and an expanded KB supplements these records. Nonresolved history cannot supply successful fixes. Telecom Conversation Corpus inspection is documented below; provider-approved policy evidence remains future work.
 
 Twenty-five public complaint texts are reserved as query-only evaluation cases, with their original indexed record excluded during evaluation. These are public-language queries of unverified origin, not confirmed real customer data. Manual relevance labels and near-duplicate review remain necessary before reporting quality metrics. Source attribution and licence are retained.
 
@@ -45,4 +45,4 @@ Inspected the [Talkmap dataset card and preview](https://huggingface.co/datasets
 
 The bounded sample has 100 utterances spanning seven conversation IDs: 52 agent and 48 client turns. Columns are conversation_id, speaker, date_time and text, with no explicit resolved-outcome column. Visible dialogue includes mobile reception/dropped-call complaints, attempted restarts, identity/PIN exchanges, escalation and offers of provider-specific concessions. Some utterances contain grammatical artifacts or contradictory statements. A friendly closing or a proposed remedy does not prove it worked.
 
-Decision: suitable for conversation/query/topic scenarios with synthetic-origin labels; unsuitable for automatic import as confirmed resolution history or provider policy. The inspected raw sample remains ignored in scratch storage and is not redistributed. Preserve the existing 257 unverified tickets and explicit synthetic histories; this inspection does not remove any agreed evidence. A future larger conversation adapter should reconstruct turns by conversation ID and separately review outcomes and policy claims.
+Decision: suitable for conversation/query/topic scenarios with synthetic-origin labels; unsuitable for automatic import as confirmed resolution history or provider policy. The inspected raw sample remains ignored in scratch storage and is not redistributed. Preserve the existing 257 unverified tickets and explicit synthetic histories; the conversation sample is not part of the indexed resolution corpus. A future larger conversation adapter should reconstruct turns by conversation ID and separately review outcomes and policy claims.

@@ -273,7 +273,7 @@ Live runs consume free-tier quota and can vary. Human-language live reports rema
 | Dashboard | `frontend/app.py`, five `frontend/views/`, shared components/styles and HTTP client; `dashboard.py` is the entry point |
 | Supporting material | `scripts/data/`, `scripts/evaluation/`, `scripts/smoke/`, `data/`, `tests/`, `docs/` |
 
-The dashboard renders results and sends HTTP requests; the backend owns decisions and permission checks. See [project structure](docs/16-project-structure.md) and [module walkthrough and code defence](docs/05-code-defence.md).
+The dashboard renders results and sends HTTP requests; the backend owns decisions and permission checks. See [project structure](docs/16-project-structure.md).
 
 ## Scope and production considerations
 
@@ -294,4 +294,4 @@ Further evaluation needs independent relevance/applicability labels, an approved
 | Dashboard user flow | [Screenshot walkthrough](docs/17-dashboard-walkthrough.md), [interaction design](docs/15-dashboard-experience.md) |
 | Interface and deployment | [Case workspace](docs/11-case-workspace.md), [split services](docs/09-service-deployment.md), [original interface](docs/04-interface.md) |
 | Evaluation | [Pilot method](docs/10-evaluation.md), [human-language comparison](docs/12-human-language-evaluation.md), [query enrichment](docs/13-query-enrichment.md) |
-| Design | [Architecture](docs/architecture.md), [design decisions](docs/design-decisions.md), [code defence](docs/05-code-defence.md) |
+| Design | [Architecture](docs/architecture.md), [design decisions](docs/design-decisions.md), [project structure](docs/16-project-structure.md) |

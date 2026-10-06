@@ -1,4 +1,4 @@
-# Architecture and design defence
+# Architecture
 
 ## Executable prototype today
 
@@ -29,7 +29,7 @@ The recommended reviewer startup runs retrieval_api and resolution_api as separa
 
 The source corpus contains synthetic KB/history and lower-trust public replies. A failed historical outcome cannot supply a successful fix. Citation checks validate membership and copied evidence, but do not prove full semantic entailment or real-world resolution. A support agent reviews the draft.
 
-## Decisions the author should be able to explain
+## Design rationale
 
 | Decision | Reason | Tradeoff / validation needed |
 | --- | --- | --- |
