@@ -21,20 +21,13 @@ The prototype turns a complaint into a reviewed, source-backed draft. It preserv
 | Independent case submissions | Simple workflow with explicit observations and attempted actions | No chatbot memory; each request supplies all required context |
 | Separate Streamlit Case workspace | Python-native forms/top navigation call the real FastAPI API; presentation and decisions stay separate | Additional process/dependency; native layout rather than pixel-exact preview styling |
 
-## Evaluation evidence
 
-The frozen 24-query development partial-reference pilot on 487 records measured:
+## Evidence for the choices
 
-| Mode | Reference hit@5 | Partial-reference recall@5 | Reference MRR@5 |
-| --- | ---: | ---: | ---: |
-| Keyword | 0.9583 | 0.9375 | 0.6458 |
-| Semantic | 0.9583 | 0.9583 | 0.7653 |
-| Hybrid | 1.0000 | 1.0000 | 0.7882 |
-
-These are development pilot results, not real-world accuracy. Six live classification cases matched product/category/sentiment in 6/6 each and severity in 2/6. Severity policy and independent label review remain pending. Public queries have self/near-duplicate exclusions but no independently reviewed relevance score. See [evaluation](10-evaluation.md) and [local latency measurements](07-monitoring.md).
+The [evaluation report](evaluation.md) includes the 24-query pilot, ten casual-language queries, paired attempted-fix comparison, classification/citation checks and local latency measurements. Query enrichment improves the casual set but regresses some pilot rankings; raw mode remains available. These are small development sets rather than independent production validation.
 
 ## Production-scale considerations
 
-The executable prototype supports a single catalog writer. Running more workers against its files is unsafe. Before production, introduce shared versioned storage, a durable ingestion queue, coordinated publication and provider quotas, external identity, encrypted transport/storage, backups and retention policies. Choose a vector database only when measured corpus size, memory or query rate justifies it. Free generation quotas are a dependency constraint, not a throughput promise.
+The catalog supports one writer. Multiple workers require shared versioned storage, a durable ingestion queue, coordinated publication and provider quotas. Shared application keys should be replaced with per-user identity for public use. Production also requires TLS, encryption, backups, retention controls and capacity measurements. A vector database is justified by measured needs rather than by the microservice requirement itself.
 
-The [architecture production deployment section](architecture.md#production-deployment-path--beyond-the-local-prototype) includes the proposed diagram. The [deployment walkthrough](09-service-deployment.md) distinguishes the executable split mode from the remaining scale work.
+See the [architecture deployment path](architecture.md#production-deployment-path) and [deployment guide](deployment.md) for the implemented boundaries and remaining work.

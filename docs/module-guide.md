@@ -60,6 +60,6 @@ The retrieval service owns catalog, case and topic storage. Resolution calls it 
 ./.venv/Scripts/python.exe -m scripts.evaluation.evaluate_query_enrichment --replay-frozen-classifications
 ```
 
-The final command replays historical classification predictions; it does not evaluate the updated classifier. Use explicit refresh for new predictions. See the [README](../README.md), [deployment guide](09-service-deployment.md) and [evaluation guide](13-query-enrichment.md) for setup and limits.
+The final command replays historical classification predictions; it does not evaluate the updated classifier. Use explicit refresh for new predictions. See the [README](../README.md), [deployment guide](deployment.md) and [evaluation guide](evaluation.md#query-enrichment-comparison) for setup and limits.
 
 `requirements.txt` contains compatible ranges; `requirements-lock.txt` pins the tested environment. Runtime storage and provider/application keys are excluded from Git. The README reports the current test count. Functional tests and integration checks do not establish real-world answer accuracy.

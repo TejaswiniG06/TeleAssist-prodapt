@@ -109,7 +109,7 @@ Integration checks also exercise real local embeddings and separate HTTP service
 
 These are development results on small query sets; full comparisons, including regressions, are linked below.
 
-[Evaluation methodology](docs/10-evaluation.md) · [Query-enrichment comparison](docs/13-query-enrichment.md) · [Attempted-fix comparison](docs/12-human-language-evaluation.md)
+[Full evaluation report and reproduction commands](docs/evaluation.md)
 
 <a id="run-locally"></a>
 
@@ -157,7 +157,7 @@ Run tests:
 ./.venv/Scripts/python.exe -m unittest discover -s tests -q
 ```
 
-[Detailed deployment instructions](docs/09-service-deployment.md)
+[Detailed deployment instructions](docs/deployment.md)
 
 ## Tech stack
 
@@ -199,7 +199,7 @@ Public tickets come from [Tobi-Bueck/customer-support-tickets](https://huggingfa
 
 Synthetic outcomes represent demonstration scenarios. Public replies are not treated as confirmed successful resolutions. The suggested municipal dataset was inspected and excluded from telecom grounding.
 
-[Dataset selection and provenance](docs/dataset-audit.md)
+[Dataset selection and provenance](docs/dataset-guide.md)
 
 ## Project structure
 
@@ -229,4 +229,4 @@ Future work includes broader independent evaluation, stronger semantic applicabi
 
 ## Documentation
 
-[Dashboard walkthrough](docs/17-dashboard-walkthrough.md) · [Architecture](docs/architecture.md) · [Design decisions](docs/design-decisions.md) · [Evaluation](docs/10-evaluation.md) · [Deployment](docs/09-service-deployment.md) · [Module guide](docs/16-project-structure.md)
+[Dashboard walkthrough](docs/dashboard-walkthrough.md) · [Architecture](docs/architecture.md) · [Design decisions](docs/design-decisions.md) · [Evaluation](docs/evaluation.md) · [Deployment](docs/deployment.md) · [Module guide](docs/module-guide.md)

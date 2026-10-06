@@ -1,6 +1,12 @@
-# Local microservice deployment
+# Deployment and configuration
 
 The recommended reviewer setup runs **two separate FastAPI services** and a Streamlit dashboard. No Docker installation is needed. Each backend has its own process, port, lifecycle and metrics; the resolution service calls retrieval over HTTP.
+
+## Install and configure
+
+Follow the [README quick start](../README.md#run-locally): create the Python 3.13 environment, install `requirements-lock.txt` and copy `.env.example` to `.env`. Configure a confirmed-free API project for live classification/drafting. Without a provider key, search and limited classification fallback remain available. The initial semantic-model download requires internet.
+
+The clone includes 230 synthetic records. Run `python -m scripts.data.download_public` for the optional 257 public records used in the frozen evaluations. Runtime state and keys are ignored by Git.
 
 ## One-command startup
 
@@ -70,3 +76,33 @@ The launcher accepts `--retrieval-port`, `--resolution-port`, `--dashboard-port`
 The regression suite covers combined and split case workflows, access roles, version conflicts, topic forwarding, upstream failures, busy ports and owned-process shutdown. Integration checks verify case publication, future retrieval, restart recovery and historical citations using isolated synthetic records. These functional checks do not establish independent resolution quality. The README reports the current test count.
 
 Production deployment still requires HTTPS, external identity/service credentials, coordinated provider quotas, shared versioned storage, durable jobs, backups and measured capacity. Docker is optional packaging; the executable service boundary is already HTTP between independent processes.
+
+## Application access
+
+An agent can search and prepare drafts; an editor can also change evidence. Keys map to those two roles. They are application credentials, separate from the Gemini provider key, and should be kept private. The example editor key `editor` is intentionally provided for the local demo; replace it before shared hosting.
+
+`AUTH_MODE=local` keeps the localhost reviewer demo usable without credentials. Anonymous users have agent permissions only. Editor access always needs `TELEASSIST_EDITOR_KEY`. In `required` mode, both agent and editor keys must be present and different or configuration fails. An absent/invalid request key returns 401; a valid agent key used on editor routes returns 403. `/admin/access` verifies editor access.
+
+Supply `X-API-Key` in API requests, use the Swagger Authorize control, or enter the agent key in the browser access field. The dashboard holds the application key in its current session. Raw source links opened in a new tab cannot carry this custom header in required mode; “View evidence” fetches with the header. Switch role clears the dashboard access session.
+
+This is role-based access for a local prototype, not full user identity management. Public hosting requires required mode behind HTTPS and per-user identity/OIDC, rotation/revocation and shared quotas. Public health and the interface shell contain no evidence text or credentials. Bind local mode to 127.0.0.1.
+
+
+## Provider configuration and quotas
+
+
+Use the Gemini Developer API free tier through a key created in Google AI Studio. A Gemini app/Google AI Pro subscription is separate from API billing. Store the key only in ignored `.env`; `.env.example` contains safe configuration placeholders. The client requires an explicit free-plan configuration, limits model choices to a checked free-tier allowlist, and never upgrades billing or switches automatically to a paid service. The recorded evaluations use Gemini 3.5 Flash-Lite. Model availability and free quotas depend on the provider and account; check the official pricing and rate-limit pages before enabling generation. Regular free-tier text generation is used, not Google Search grounding or separately priced Batch API jobs.
+
+The client spaces requests, honors bounded Retry-After backoff and retries quota/temporary server errors at most twice. Persistent quota or provider errors yield a clarification fallback. These are regular API calls asking for 25 records each, not a provider's separately priced Batch API. Pacing is process-local and must be replaced with a shared limiter for multiple workers. Actual limits depend on the account; batching also has to respect token quotas.
+
+Official references: [Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing), [API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits), [Groq rate limits](https://console.groq.com/docs/rate-limits).
+
+## Common startup checks
+
+- If a port is occupied, stop the previous application or use the launcher's port options.
+- If semantic warmup times out, pre-download the model or use `--skip-warmup` for keyword-only startup.
+- If editor access fails, check `TELEASSIST_EDITOR_KEY`; the provider key does not grant application permissions.
+- If generation falls back, inspect the returned reason and backend logs for configuration, quota, provider or grounding failures.
+- If an update returns 409, reload the latest source/case/index version before resubmitting.
+
+Use synthetic or appropriately anonymized demonstration inputs. Pattern masking does not cover every personal identifier.
