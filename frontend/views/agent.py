@@ -119,7 +119,10 @@ def assistant(client):
                     st.caption('When this applies'); text(step.get('condition', ''))
                     st.caption('Customer information used'); text(step.get('applicability_evidence', ''))
             if result.get('generation') == 'fallback':
-                st.warning('A supported resolution could not be prepared. More details or specialist review may be needed.')
+                if result.get('reason') == 'state_confirmation_required':
+                    st.info('Confirm the current device or connection state so we can choose the next step.')
+                else:
+                    st.warning('A supported resolution could not be prepared. More details or specialist review may be needed.')
             if result['status'] != 'clarification':
                 for question in questions: text(question)
             if result.get('steps'): st.caption('Check that each step applies to the customer’s situation.')

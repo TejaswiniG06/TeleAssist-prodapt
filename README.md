@@ -4,7 +4,7 @@ TeleAssist is a telecom support assistant built for Prodapt problem statement 2.
 
 Its main feature is **attempted-fix awareness**. When the system recognizes a fix the customer has already tried, it removes that action before step selection and checks again before displaying the response. If details or evidence are missing, it asks questions or recommends specialist review.
 
-**Status:** working microservices prototype with a connected dashboard, persistent case storage, versioned evidence, monitoring and **103 passing tests**. Production requirements and evaluation limits are described below.
+**Status:** working microservices prototype with a connected dashboard, persistent case storage, versioned evidence, monitoring and **107 passing tests**. Production requirements and evaluation limits are described below.
 
 [Dashboard walkthrough](docs/17-dashboard-walkthrough.md) · [Features](#core-functionality) · [Stack](#tech-stack) · [Setup](#run-locally) · [Results](#evaluation-results) · [Scope](#scope-and-production-considerations)
 
@@ -107,7 +107,7 @@ py -3.13 -m venv .venv
 ./.venv/Scripts/python.exe -m unittest discover -s tests -v
 ```
 
-`requirements-lock.txt` pins tested dependency versions; `requirements.txt` lists compatible ranges. The suite passes **103 unit, integration and UI tests**. Tests use local models or test doubles and do not require provider credentials. A previous checkpoint was also tested in a fresh Python 3.13 environment.
+`requirements-lock.txt` pins tested dependency versions; `requirements.txt` lists compatible ranges. The suite passes **107 unit, integration and UI tests**. Tests use local models or test doubles and do not require provider credentials. A previous checkpoint was also tested in a fresh Python 3.13 environment.
 
 ### 2. Start the microservices and dashboard
 
@@ -231,7 +231,7 @@ See [generation evaluation](docs/12-human-language-evaluation.md) and [committed
 
 ### Reliability and system health
 
-All **103 tests** pass. They cover masking, attempted-fix exclusion, current-state clarification, citation checks, permissions, service failures, version conflicts, evidence updates and case recovery. Integration tests cover case saving, outcome review and publication against both combined and split APIs. UI tests cover clarification replies, role checks, themes, case navigation and evidence forms. Live browser checks cover provider-backed responses, narrow screens and add/search/retire without restarting the API.
+All **107 tests** pass. They cover masking, attempted-fix exclusion, current-state clarification, citation checks, permissions, service failures, version conflicts, evidence updates and case recovery. Integration tests cover case saving, outcome review and publication against both combined and split APIs. UI tests cover clarification replies, role checks, themes, case navigation and evidence forms. Live browser checks cover provider-backed responses, narrow screens and add/search/retire without restarting the API.
 
 A local load checkpoint recorded 72 warm requests without errors. Hybrid warm p50/p95 latency was approximately 444/547 ms; the first hybrid search took about 30 seconds, with approximately 537 MiB process RSS at that checkpoint. These are local measurements, not production capacity. See [monitoring methodology](docs/07-monitoring.md).
 

@@ -1,4 +1,4 @@
-"""Clarify common service-disabling changes until restoration is confirmed.
+"""Clarify common service-disabling changes until the current state is known.
 
 These bounded rules supplement the classifier; they do not diagnose a cause.
 The last explicit change wins, including answers from the clarification form.
@@ -49,7 +49,7 @@ def pending_state_questions(text):
         if not changes:
             continue
         # The UI appends the exact question followed by the customer's answer.
-        confirmation = re.escape(question) + r'\s*Answer:\s*yes[.!]?\s*(?:\n|$)'
+        confirmation = re.escape(question) + r'\s*Answer:\s*(?:yes|no)[.!]?\s*(?:\n|$)'
         restorations = list(positive_matches(restored, text))
         restorations.extend(m.start() for m in re.finditer(confirmation, text, re.I))
         # A complete off/on toggle in the same clause confirms restoration.
@@ -68,3 +68,29 @@ def pending_state_questions(text):
         if not restorations or max(changes) > max(restorations):
             questions.append(question)
     return questions[:4]
+
+
+def answered_state_questions(text):
+    """A negative answer establishes state too; it does not establish recovery."""
+    answered = set()
+    for changed, _, question in RULES:
+        pattern = re.escape(question) + r'\s*Answer:\s*(?:yes|no)[.!]?\s*(?:\n|$)'
+        answers = [m.start() for m in re.finditer(pattern, text, re.I)]
+        changes = list(positive_matches(changed, text))
+        if answers and (not changes or max(answers) > max(changes)):
+            answered.add(question)
+    return answered
+
+
+def repeats_answered_state(question, answered):
+    """Catch common paraphrases of the six state questions, not unrelated questions."""
+    signatures = [
+        r'\bsim\b.*(?:insert|back|removed)|(?:insert|back|removed).*\bsim\b',
+        r'\bcable\b.*(?:connect|plug)|(?:connect|plug).*\bcable\b',
+        r'(?:device|router|phone|modem|ont|box).*(?:power|switched|turned).*(?:on|off)',
+        r'wi[ -]?fi.*(?:enabled|disabled|on|off)',
+        r'mobile\s+data.*(?:enabled|disabled|on|off)',
+        r'(?:airplane|flight)\s+mode.*(?:enabled|disabled|on|off)',
+    ]
+    return any(stable in answered and (question == stable or re.search(pattern, question, re.I))
+               for (_, _, stable), pattern in zip(RULES, signatures))

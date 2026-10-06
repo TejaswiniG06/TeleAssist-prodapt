@@ -58,8 +58,51 @@ class StateClarificationTests(unittest.TestCase):
             text, f'{question}\nAnswer: yes')
         self.assertEqual(result['status'], 'resolution')
         self.assertEqual(len(provider.payloads), 2)
-        self.assertTrue(pending_state_questions(text + f'\n{question}\nAnswer: no'))
+        self.assertEqual(pending_state_questions(text + f'\n{question}\nAnswer: no'), [])
         self.assertTrue(pending_state_questions(text + f'\n{question}\nAnswer: yes, but it is still disconnected'))
+
+    def test_negative_answers_establish_state_across_all_local_questions(self):
+        changes = ['I removed the SIM.', 'I unplugged the cable.', 'I switched off the router.',
+                   'I disabled Wi-Fi.', 'I disabled mobile data.', 'I enabled airplane mode.']
+        for text in changes:
+            with self.subTest(text=text):
+                question = pending_state_questions(text)[0]
+                self.assertEqual(pending_state_questions(text + f'\n{question}\nAnswer: no'), [])
+                self.assertTrue(pending_state_questions(text + f'\n{question}\nAnswer: not sure'))
+                self.assertTrue(pending_state_questions(text + f'\n{question}\nAnswer: yes\n{text}'))
+
+    def test_negative_sim_answer_can_proceed_to_supported_insertion(self):
+        text = 'My mobile cannot call. I removed the SIM.'
+        question = pending_state_questions(text)[0]
+        context = text + f'\n{question}\nAnswer: no'
+        classification = dict(CLASSIFICATION, product='mobile', prerequisite_questions=[
+            {'evidence': 'I removed the SIM.', 'question': 'Is the SIM currently inserted?'}])
+        record = article('insert_sim')
+        record['product'] = 'mobile'
+        record['steps'][0].update(instruction='Insert the physical SIM following the phone instructions.',
+                                 condition='The physical SIM is currently absent.')
+        choice = draft(action='insert_sim', quote=record['steps'][0]['instruction'])
+        choice['steps'][0]['applicability_evidence'] = 'Answer: no'
+        provider = FakeProvider([classification, choice])
+        result = Resolver(lambda q, e: [hit(record)], provider).resolve(context)
+        self.assertEqual(result['status'], 'resolution')
+        self.assertEqual(result['steps'][0]['action_id'], 'insert_sim')
+        self.assertEqual(result['questions'], [])
+
+    def test_model_cannot_reask_answered_state_and_no_evidence_escalates(self):
+        text = 'My mobile cannot call. I removed the SIM.'
+        context = text + f'\n{pending_state_questions(text)[0]}\nAnswer: no'
+        classification = dict(CLASSIFICATION, product='mobile')
+        repeated = {'status': 'clarification', 'steps': [],
+                    'questions': ['Have you reinserted the SIM card?']}
+        result = Resolver(lambda q, e: [hit(dict(article(), product='mobile'))],
+                          FakeProvider([classification, repeated])).resolve(context)
+        self.assertEqual(result['status'], 'escalation')
+        self.assertEqual(result['questions'], [])
+        self.assertEqual(result['steps'], [])
+        result = Resolver(lambda q, e: [], FakeProvider([classification])).resolve(context)
+        self.assertEqual(result['status'], 'escalation')
+        self.assertEqual(result['reason'], 'no_applicable_evidence')
 
     def test_classifier_can_flag_other_prerequisites_with_customer_evidence(self):
         text = 'IPTV is blank. I took the viewing card out of the receiver.'

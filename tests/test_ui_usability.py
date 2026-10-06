@@ -21,6 +21,31 @@ class Encoder:
 
 
 class UsabilityTests(unittest.TestCase):
+    def test_state_question_has_neutral_message_and_no_answer_can_end_clarification(self):
+        calls = []
+        question = 'Is the SIM currently inserted in the phone?'
+        def send(client, path, payload=None, **kwargs):
+            calls.append(deepcopy(payload))
+            pending = len(calls) == 1
+            return {'status':'clarification' if pending else 'escalation',
+                    'answer':question if pending else 'The current state is confirmed. Refer to authorized support.',
+                    'questions':[question] if pending else [], 'classification':{},
+                    'masked_complaint':payload['complaint'], 'citations':[], 'mask_counts':{},
+                    'steps':[], 'query_mode':payload['query_mode'], 'generation':'fallback',
+                    'reason':'state_confirmation_required' if pending else 'no_applicable_evidence'}
+        with patch.object(DashboardClient, 'request', send):
+            app = AppTest.from_string('from frontend.views.agent import assistant\nfrom frontend.client import DashboardClient\nassistant(DashboardClient())').run()
+            app.text_area(key='complaint').set_value('My mobile cannot call. I removed the SIM.')
+            next(b for b in app.button if b.label == 'Prepare troubleshooting draft').click().run()
+            self.assertFalse(app.warning)
+            self.assertTrue(any('Confirm the current' in item.value for item in app.info))
+            next(item for item in app.text_area if item.label == question).set_value('no')
+            next(b for b in app.button if b.label == 'Continue').click().run()
+            self.assertFalse(app.exception)
+            self.assertIn(question + '\nAnswer: no', calls[-1]['observations'])
+            self.assertFalse(any(item.label == question for item in app.text_area))
+            self.assertTrue(any(item.value == 'A support specialist should review this' for item in app.subheader))
+
     def test_device_clarification_continues_original_case_and_new_case_clears_answers(self):
         calls = []
         def send(client, path, payload=None, **kwargs):
