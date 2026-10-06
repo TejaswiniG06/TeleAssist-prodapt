@@ -4,7 +4,7 @@ TeleAssist is a telecom support assistant built for Prodapt problem statement 2.
 
 Its main feature is **attempted-fix awareness**. When the system recognizes a fix the customer has already tried, it removes that action before step selection and checks again before displaying the response. If details or evidence are missing, it asks questions or recommends specialist review.
 
-**Status:** working microservices prototype with a connected dashboard, persistent case storage, versioned evidence, monitoring and **93 passing tests**. Production requirements and evaluation limits are described below.
+**Status:** working microservices prototype with a connected dashboard, persistent case storage, versioned evidence, monitoring and **103 passing tests**. Production requirements and evaluation limits are described below.
 
 [Dashboard walkthrough](docs/17-dashboard-walkthrough.md) · [Features](#core-functionality) · [Stack](#tech-stack) · [Setup](#run-locally) · [Results](#evaluation-results) · [Scope](#scope-and-production-considerations)
 
@@ -23,6 +23,7 @@ The [dashboard walkthrough](docs/17-dashboard-walkthrough.md) explains each scre
 | Query enrichment | Add product, category, symptoms and normalized actions from the existing classification; no extra model call; original-query mode remains available |
 | Evidence-based step selection | Prefer relevant KB articles and resolved history; label unverified suggestions; check source versions, actions, quotes and applicability evidence |
 | Attempted fixes and fallback | Exclude recognized already-tried actions; ask questions or recommend review when a supported resolution is unavailable |
+| Current-state clarification | Distinguish an attempted action from a restored prerequisite; confirm removed SIMs, disconnected cables, powered-off devices and disabled settings before selecting steps |
 | Privacy and access | Mask common identifiers before provider calls; backend-enforced agent/editor application keys |
 | Evolving evidence | Validate editor updates, build indexes in the background, publish atomically, retire records and preserve citation history |
 | Case feedback loop | Explicitly save pending drafts, record actual actions/outcomes, and publish historical evidence only after editor review |
@@ -106,7 +107,7 @@ py -3.13 -m venv .venv
 ./.venv/Scripts/python.exe -m unittest discover -s tests -v
 ```
 
-`requirements-lock.txt` pins tested dependency versions; `requirements.txt` lists compatible ranges. The suite passes **93 unit, integration and UI tests**. Tests use local models or test doubles and do not require provider credentials. A previous checkpoint was also tested in a fresh Python 3.13 environment.
+`requirements-lock.txt` pins tested dependency versions; `requirements.txt` lists compatible ranges. The suite passes **103 unit, integration and UI tests**. Tests use local models or test doubles and do not require provider credentials. A previous checkpoint was also tested in a fresh Python 3.13 environment.
 
 ### 2. Start the microservices and dashboard
 
@@ -155,7 +156,7 @@ To retain a handled complaint, choose **Save case for follow-up** after preparin
 
 ```powershell
 ./.venv/Scripts/python.exe -m scripts.data.download_public
-./.venv/Scripts/python.exe -m scripts.evaluation.evaluate_query_enrichment
+./.venv/Scripts/python.exe -m scripts.evaluation.evaluate_query_enrichment --replay-frozen-classifications
 ```
 
 The download recreates public candidates in ignored local storage. Cached classifications allow the paired comparison to run **without an LLM key**. Without public setup, the corpus has 230 records and scores may differ from the 487-record checkpoint.
@@ -180,6 +181,8 @@ The download recreates public candidates in ignored local storage. Cached classi
 ## Evaluation results
 
 These results use development query sets and partial reference labels. Synthetic pilot queries share vocabulary with the corpus. The separate ten-query challenge uses casual wording and typos. The query sets and labels have not had independent human review, so these results do not establish real-world accuracy. Other retrieved sources may also be relevant.
+
+These frozen results predate the October 6 current-state clarification update. Historical retrieval replay uses the earlier cached predictions; the updated classifier needs a separate evaluation before claiming the same quality scores. Common prerequisite rules are bounded, and broader state interpretation still depends on the LLM; neither guarantees coverage of every complaint.
 
 ### Retrieval: raw → enriched
 
@@ -228,7 +231,7 @@ See [generation evaluation](docs/12-human-language-evaluation.md) and [committed
 
 ### Reliability and system health
 
-All **93 tests** pass. They cover masking, attempted-fix exclusion, citation checks, permissions, service failures, version conflicts, evidence updates and case recovery. Integration tests cover case saving, outcome review and publication against both combined and split APIs. UI tests cover clarification replies, role checks, themes, case navigation and evidence forms. Live browser checks cover provider-backed responses, narrow screens and add/search/retire without restarting the API.
+All **103 tests** pass. They cover masking, attempted-fix exclusion, current-state clarification, citation checks, permissions, service failures, version conflicts, evidence updates and case recovery. Integration tests cover case saving, outcome review and publication against both combined and split APIs. UI tests cover clarification replies, role checks, themes, case navigation and evidence forms. Live browser checks cover provider-backed responses, narrow screens and add/search/retire without restarting the API.
 
 A local load checkpoint recorded 72 warm requests without errors. Hybrid warm p50/p95 latency was approximately 444/547 ms; the first hybrid search took about 30 seconds, with approximately 537 MiB process RSS at that checkpoint. These are local measurements, not production capacity. See [monitoring methodology](docs/07-monitoring.md).
 
@@ -238,7 +241,7 @@ Run tools from the repository root with module syntax, for example:
 
 ```powershell
 ./.venv/Scripts/python.exe -m scripts.smoke.smoke_split
-./.venv/Scripts/python.exe -m scripts.evaluation.evaluate_query_enrichment
+./.venv/Scripts/python.exe -m scripts.evaluation.evaluate_query_enrichment --replay-frozen-classifications
 ./.venv/Scripts/python.exe -m scripts.data.prepare_tickets --help
 ```
 

@@ -36,6 +36,12 @@ The client spaces requests, honors bounded Retry-After backoff and retries quota
 
 Official references: [Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing), [API rate limits](https://ai.google.dev/gemini-api/docs/rate-limits), [Groq rate limits](https://console.groq.com/docs/rate-limits).
 
+## Current-state clarification
+
+Current-state clarification checks whether a reported change may still interrupt service. Removing a SIM does not establish that it was reinserted; unplugging a cable does not establish reconnection. A small local rule module covers common service prerequisites, and the existing classification call can propose questions for other missing or contradictory states using exact customer quotes. Pending states return questions before retrieval or step selection. Later explicit restoration or a yes answer to the matching clarification question allows the request to continue. No extra provider call is added.
+
+SIM reseating aliases also cover opaque source action IDs, so recognized completed reseating is excluded from future options. Historical step selection is instructed to require the stated circumstances, rather than infer an OS update or warning from a shared symptom. Exact quote checks are still mechanical; these changes do not establish complete semantic applicability or coverage of every wording. The frozen earlier evaluation results remain measurements of the earlier classifier.
+
 ## Public-query evaluation
 
 `python -m teleassist.retrieval.evidence` reserves 25 public complaint queries with stable hash-based selection. `python -m scripts.evaluation.evaluate_public` compares keyword, semantic and hybrid results while excluding the original public record from each query. All public records remain searchable for normal requests. Use `--resolve` only when intentionally evaluating generation and its API quota.

@@ -57,7 +57,8 @@ def show_metrics(metrics):
                   'provider_unavailable':'AI provider unavailable or quota reached',
                   'generation_not_configured':'AI settings missing',
                   'no_applicable_evidence':'No applicable evidence found',
-                  'no_safe_applicable_steps':'No suitable untried steps found'}
+                  'no_safe_applicable_steps':'No suitable untried steps found',
+                  'state_confirmation_required':'Current device or connection state needs confirmation'}
         st.table([{'Reason':labels.get(key, key.replace('_', ' ')), 'Count':count} for key, count in fallbacks.items()])
     jobs = metrics.get('ingestion_jobs', {})
     if jobs:

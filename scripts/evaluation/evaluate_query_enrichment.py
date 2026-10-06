@@ -31,7 +31,9 @@ def query_sets():
     return {'pilot_24':pilot['cases'],'hard_10':human['hard_queries']}
 
 
-def classify_queries(sets, refresh=False):
+def classify_queries(sets, refresh=False, replay_frozen=False):
+    if refresh and replay_frozen:
+        raise SystemExit('Choose current classification refresh or historical replay, not both.')
     categories=sorted({r.get('category','unknown') for r in load_records(DATA)}|{'unknown'})
     # Normalize Git line endings so a Windows reviewer can replay the cache.
     code=(ROOT/'teleassist/resolution/pipeline.py').read_text(encoding='utf-8')
@@ -44,8 +46,10 @@ def classify_queries(sets, refresh=False):
     code_hash=hashlib.sha256(code.encode()).hexdigest()
     cache=json.loads(CACHE.read_text(encoding='utf-8')) if CACHE.exists() else {'rows':{}}
     if cache.get('classification_code_sha256') not in (None,code_hash):
-        if not refresh: raise SystemExit('Classifier changed; regenerate predictions explicitly before comparing.')
-        cache={'rows':{}}
+        if not refresh and not replay_frozen:
+            raise SystemExit('Classifier changed; refresh predictions or explicitly use --replay-frozen-classifications for historical retrieval only.')
+        if refresh:
+            cache={'rows':{}}
     if not refresh and not CACHE.exists():
         raise SystemExit('Create the classification cache with --refresh-classifications and your confirmed-free key.')
     provider=FreeLLM() if refresh else None
@@ -83,9 +87,9 @@ def classify_queries(sets, refresh=False):
     return cache,calls
 
 
-def run(refresh=False):
+def run(refresh=False, replay_frozen=False):
     sets=query_sets()
-    cache,calls=classify_queries(sets,refresh)
+    cache,calls=classify_queries(sets,refresh,replay_frozen)
     records=load_records(DATA)
     report={'version':'query-enrichment-pilot-v1','measured_at':datetime.now(timezone.utc).isoformat(),
             'corpus_sha256':hashlib.sha256(json.dumps(records,sort_keys=True).encode()).hexdigest(),
@@ -94,6 +98,7 @@ def run(refresh=False):
             'active_sources':sum(r['status']=='active' for r in records),
             'classifier':{k:cache[k] for k in ('provider','model','classification_code_sha256','category_schema_sha256','min_call_interval_seconds')},
             'new_classification_calls_this_run':calls,'query_rewrite_llm_calls':0,
+            'classification_mode':'historical_frozen_predictions' if replay_frozen else 'current_classifier',
             'settings':{'limit':20,'assessed_k':5,'min_semantic_score':.30,'product_filter':None,'record_type_filter':None},
             'notice':'Same frozen queries, references, corpus, models, ranking and thresholds. Shared cached prediction per query; expected labels never enrich the query. Partial-reference development results, not independent human accuracy.',
             'cohorts':{}}
@@ -128,5 +133,7 @@ def run(refresh=False):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
-    parser.add_argument('--refresh-classifications',action='store_true',help='Create/resume predictions with one existing classification call per query. Default uses the committed cache without a key.')
-    run(parser.parse_args().refresh_classifications)
+    parser.add_argument('--refresh-classifications',action='store_true',help='Create/resume current predictions with one classification call per query.')
+    parser.add_argument('--replay-frozen-classifications',action='store_true',help='Replay historical predictions without a key; does not evaluate the current classifier.')
+    args=parser.parse_args()
+    run(args.refresh_classifications, args.replay_frozen_classifications)

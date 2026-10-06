@@ -13,9 +13,16 @@ class QueryEnrichmentTests(unittest.TestCase):
     def test_committed_predictions_replay_without_provider_calls(self):
         from scripts.evaluation.evaluate_query_enrichment import classify_queries, query_sets
         with patch('scripts.evaluation.evaluate_query_enrichment.FreeLLM',side_effect=AssertionError('Unexpected provider initialization')):
-            cache,calls=classify_queries(query_sets())
+            cache,calls=classify_queries(query_sets(), replay_frozen=True)
         self.assertEqual(calls,0)
         self.assertEqual(len(cache['rows']),34)
+    def test_changed_classifier_requires_explicit_historical_replay(self):
+        from scripts.evaluation.evaluate_query_enrichment import classify_queries, query_sets
+        with patch('scripts.evaluation.evaluate_query_enrichment.FreeLLM',side_effect=AssertionError('Unexpected provider initialization')):
+            with self.assertRaisesRegex(SystemExit, 'Classifier changed'):
+                classify_queries(query_sets())
+            with self.assertRaisesRegex(SystemExit, 'not both'):
+                classify_queries(query_sets(), refresh=True, replay_frozen=True)
     def test_raw_is_unchanged_and_metadata_is_bounded_and_masked(self):
         prediction={'product':'mobile','category':'mobile_data','symptoms':['pages fail','pages fail','call demo@example.com'],
                     'attempted_actions':[{'action_id':'toggle_airplane_mode'}],'severity':'critical','sentiment':'negative'}
