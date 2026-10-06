@@ -2,7 +2,6 @@
 from teleassist.common.paths import PROJECT_ROOT
 from contextlib import asynccontextmanager
 import os
-from pathlib import Path
 from urllib.parse import quote
 import httpx
 from fastapi import Depends, FastAPI, HTTPException, Query

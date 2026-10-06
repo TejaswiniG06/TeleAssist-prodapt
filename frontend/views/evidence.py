@@ -3,7 +3,7 @@ from urllib.parse import quote
 from uuid import uuid4
 import json
 import streamlit as st
-from frontend.components import source_view, search_hit_view, carousel, text
+from frontend.components import source_view, search_hit_view, carousel
 
 PRODUCTS = ['broadband', 'mobile', 'fixed_voice', 'iptv', 'unknown']
 KINDS = ['article', 'resolved_ticket', 'unresolved_ticket', 'unverified_ticket']

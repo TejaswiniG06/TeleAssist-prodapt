@@ -7,7 +7,7 @@ import httpx
 from fastapi.testclient import TestClient
 from teleassist.common.access import AccessPolicy
 from teleassist.services.retrieval import create_retrieval_app
-from teleassist.services.resolution import create_resolution_app, RemoteEvidence
+from teleassist.services.resolution import create_resolution_app
 
 
 class NoProvider:

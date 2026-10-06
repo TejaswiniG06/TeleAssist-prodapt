@@ -101,6 +101,7 @@ Official references: [Gemini pricing](https://ai.google.dev/gemini-api/docs/pric
 
 - If a port is occupied, stop the previous application or use the launcher's port options.
 - If semantic warmup times out, pre-download the model or use `--skip-warmup` for keyword-only startup.
+- Warmup access errors name the application-key configuration; model-loading/readiness failures and timeouts include the skip-warmup recovery command. Skipping warmup does not make an unavailable model ready.
 - If editor access fails, check `TELEASSIST_EDITOR_KEY`; the provider key does not grant application permissions.
 - If generation falls back, inspect the returned reason and backend logs for configuration, quota, provider or grounding failures.
 - If an update returns 409, reload the latest source/case/index version before resubmitting.

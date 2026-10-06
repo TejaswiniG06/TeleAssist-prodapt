@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from fastapi.testclient import TestClient
 from teleassist.services.combined import create_app
-from teleassist.retrieval.keyword import DATA
 
 
 def main():

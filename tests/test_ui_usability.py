@@ -21,6 +21,36 @@ class Encoder:
 
 
 class UsabilityTests(unittest.TestCase):
+    def test_no_key_message_keeps_search_and_case_save_available(self):
+        class NoKeyProvider:
+            configured = False
+        api = create_app(provider=NoKeyProvider(), encoder=Encoder(), include_public=False)
+        with TestClient(api) as backend:
+            def send(client, path, payload=None, **kwargs):
+                response = backend.request('POST' if payload is not None else 'GET', path, json=payload)
+                response.raise_for_status()
+                return response.json()
+            with patch.object(DashboardClient, 'request', send):
+                app = AppTest.from_string(
+                    'from frontend.views.agent import assistant\n'
+                    'from frontend.client import DashboardClient\nassistant(DashboardClient())'
+                ).run()
+                app.text_area(key='complaint').set_value('My broadband is slow. I restarted the router.')
+                next(b for b in app.button if b.label == 'Prepare troubleshooting draft').click().run()
+                self.assertFalse(app.exception)
+                self.assertFalse(app.warning)
+                self.assertTrue(any(item.value == 'AI drafting is off' for item in app.subheader))
+                self.assertTrue(any('GEMINI_API_KEY' in item.value for item in app.info))
+                self.assertFalse(any(b.label == 'Continue' for b in app.button))
+                self.assertTrue(any(b.label == 'Save case for follow-up' for b in app.button))
+                self.assertTrue(any(
+                    item.label == 'Technical details — optional' and not item.proto.expanded
+                    for item in app.expander
+                ))
+                next(b for b in app.button if b.label == 'Search supporting sources').click().run()
+                self.assertFalse(app.exception)
+                self.assertTrue(app.session_state['quick_evidence']['results'])
+
     def test_state_question_has_neutral_message_and_no_answer_can_end_clarification(self):
         calls = []
         question = 'Is the SIM currently inserted in the phone?'

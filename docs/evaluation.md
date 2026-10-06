@@ -162,7 +162,7 @@ The first hybrid call took 30.11 seconds including process/model startup and ini
 
 ## Software and integration checks
 
-The current recorded suite has 107 passing unit, integration and UI tests. Run `python -m unittest discover -s tests -q` for the current checkout. Tests cover retrieval/cache behaviour, masking, roles, citations, attempted actions, clarification continuation, version conflicts, publication recovery, topic review and service failures.
+The current recorded suite has 113 passing unit, integration and UI tests. Run `python -m unittest discover -s tests -q` for the current checkout. Tests cover retrieval/cache behaviour, masking, roles, citations, attempted actions, clarification continuation, version conflicts, publication recovery, topic review and service failures. No-key UI coverage verifies that search and saving remain available; launcher checks distinguish access errors, model unavailability, timeouts and connection failures.
 
 | Command | Checks | Provider calls |
 | --- | --- | --- |

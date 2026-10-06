@@ -6,7 +6,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.responses import FileResponse
 from teleassist.retrieval.keyword import DATA, KeywordIndex
-from teleassist.retrieval.semantic import SemanticIndex, HybridIndex
+from teleassist.retrieval.semantic import HybridIndex
 from teleassist.retrieval.evidence import load_records
 from teleassist.resolution.pipeline import Resolver
 from teleassist.retrieval.query import build_search_query

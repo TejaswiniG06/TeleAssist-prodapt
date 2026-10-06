@@ -1,7 +1,6 @@
 """Idempotent, explicitly synthetic development evidence expansion."""
 from teleassist.common.paths import PROJECT_ROOT
 import json
-from pathlib import Path
 
 
 def expand():

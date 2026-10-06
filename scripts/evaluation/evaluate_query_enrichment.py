@@ -4,7 +4,6 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
-from pathlib import Path
 from fastapi.testclient import TestClient
 from teleassist.common.access import AccessPolicy
 from teleassist.services.combined import create_app

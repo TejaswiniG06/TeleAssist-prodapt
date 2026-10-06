@@ -59,9 +59,9 @@ flowchart LR
 
 | Component | Responsibility |
 |---|---|
-| **Retrieval service — port 8001** | Evidence, embeddings, search, ingestion, saved cases, topics and editor operations |
-| **Resolution service — port 8002** | Masking, classification, state checks, query enrichment, step selection and citation validation |
-| **Dashboard — port 8501** | Streamlit workspaces for support agents and knowledge editors |
+| **Retrieval service — port 8001** ([code](teleassist/services/retrieval.py)) | Evidence, embeddings, search, ingestion, saved cases, topics and editor operations |
+| **Resolution service — port 8002** ([code](teleassist/services/resolution.py)) | Masking, classification, state checks, query enrichment, step selection and citation validation |
+| **Dashboard — port 8501** ([code](frontend/app.py)) | Streamlit workspaces for support agents and knowledge editors |
 
 The resolution service calls retrieval over HTTP. Provider credentials remain in the backend.
 
@@ -103,7 +103,7 @@ On **eight complaints mentioning attempted fixes**:
 
 ### Software verification
 
-**107 passing unit, integration and UI tests** cover retrieval, masking, attempted actions, clarification, citations, access permissions, evidence updates, case publication and service failures.
+**113 passing unit, integration and UI tests** cover retrieval, masking, attempted actions, clarification, citations, access permissions, evidence updates, case publication and service failures.
 
 Integration checks also exercise real local embeddings and separate HTTP services.
 
@@ -133,7 +133,7 @@ For AI drafting, configure `.env` before starting:
 - Set `LLM_FREE_PLAN_CONFIRMED=true` only when using a confirmed free-plan project.
 - Keep `.env` private.
 
-Without a provider key, search, the dashboard and limited classification fallback remain available.
+Without a provider key, the dashboard explains that AI drafting is off. Search, limited local classification and case/editor workflows remain available.
 
 The clone includes **230 bundled synthetic records**. To add the optional public tickets and reproduce the **487-record evaluation corpus**:
 
@@ -148,6 +148,20 @@ Start the application:
 ```
 
 Open **http://127.0.0.1:8501/**.
+
+If the first semantic-model download fails or times out, retry or start with `./.venv/Scripts/python.exe start.py --skip-warmup`. This skips semantic warmup; keyword search is available, while semantic/hybrid search still needs the model.
+
+For macOS/Linux, the equivalent commands below are provided for convenience; this setup has not been verified on those platforms:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-lock.txt
+cp .env.example .env
+# Configure .env as described above before starting.
+.venv/bin/python start.py
+```
+
+Use `.venv/bin/python start.py --skip-warmup` for the same startup recovery option.
 
 The example configuration sets the local editor key to **`editor`**. Replace it before sharing or deploying the application. The first semantic-model download requires internet access.
 

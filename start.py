@@ -62,6 +62,40 @@ def wait_ready(url, children):
     raise RuntimeError('Startup timed out. Check runtime/logs before retrying.')
 
 
+def warm_search(url, api_key=''):
+    """Load semantic search and report authentication, download and transport failures."""
+    retry_hint = 'Retry, or run: python start.py --skip-warmup. Check runtime/logs for details.'
+    headers = {'X-API-Key': api_key} if api_key else {}
+    try:
+        with httpx.Client(timeout=180) as client:
+            response = client.post(
+                url + '/search', headers=headers,
+                json={'query': 'slow broadband speed', 'mode': 'hybrid'},
+            )
+            if response.status_code in (401, 403):
+                raise RuntimeError(
+                    'Search warmup access was denied. Check the retrieval application key '
+                    '(RETRIEVAL_API_KEY or TELEASSIST_AGENT_KEY) and AUTH_MODE.'
+                )
+            if response.status_code == 503:
+                raise RuntimeError('Semantic search could not load its model/cache. ' + retry_hint)
+            if not response.is_success:
+                raise RuntimeError(
+                    f'Search warmup returned HTTP {response.status_code}. Check runtime/logs.'
+                )
+            if not client.get(url + '/ready?require_semantic=true').is_success:
+                raise RuntimeError('Semantic search is not ready. ' + retry_hint)
+    except httpx.TimeoutException:
+        raise RuntimeError(
+            'Semantic search warmup timed out; the first model download may still be pending. '
+            + retry_hint
+        ) from None
+    except httpx.RequestError:
+        raise RuntimeError(
+            'Could not reach retrieval during search warmup. Check the service and runtime/logs.'
+        ) from None
+
+
 def run(args):
     load_environment(ROOT / '.env')
     AccessPolicy.from_environment()  # Fail before starting any children on invalid authentication.
@@ -99,14 +133,7 @@ def run(args):
         wait_ready(evidence_url + '/live', children)
         if not args.skip_warmup:
             print('Loading local semantic search (no LLM call)...', flush=True)
-            headers = {'X-API-Key': env['RETRIEVAL_API_KEY']} if env['RETRIEVAL_API_KEY'] else {}
-            with httpx.Client(timeout=180) as client:
-                response = client.post(evidence_url + '/search', headers=headers,
-                    json={'query': 'slow broadband speed', 'mode': 'hybrid'})
-                if not response.is_success:
-                    raise RuntimeError('Search warmup failed. Check authentication and service logs.')
-                if not client.get(evidence_url + '/ready?require_semantic=true').is_success:
-                    raise RuntimeError('Semantic search is unavailable. Check model download/cache and logs.')
+            warm_search(evidence_url, env['RETRIEVAL_API_KEY'])
         if args.mode == 'split':
             start('resolution_api', ['uvicorn', 'resolution_api:app', '--host', '127.0.0.1', '--port', str(args.resolution_port)])
             wait_ready(api_url + '/ready', children)

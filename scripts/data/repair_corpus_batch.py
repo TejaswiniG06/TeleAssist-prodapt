@@ -3,7 +3,6 @@ from teleassist.common.paths import PROJECT_ROOT
 import argparse
 from collections import Counter
 import json
-from pathlib import Path
 from scripts.data.generate_corpus import Ticket, atomic_json, validate_batch
 
 

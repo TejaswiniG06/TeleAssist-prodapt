@@ -28,7 +28,10 @@ def prepare_response(client, complaint, observations, query_mode, panel):
         st.session_state.case_inputs = {'complaint':complaint, 'observations':observations}
         st.session_state.case_request_id = uuid4().hex
         st.session_state.pop('saved_case_id', None)
-        st.toast('Suggested resolution ready' if result['status'] == 'resolution' else 'Response ready — more information or review needed')
+        if result.get('reason') == 'generation_not_configured':
+            st.toast('AI drafting is off — search is still available')
+        else:
+            st.toast('Suggested resolution ready' if result['status'] == 'resolution' else 'Response ready — more information or review needed')
     finally:
         waiting.empty()
 
@@ -96,20 +99,29 @@ def assistant(client):
             return
         classification = result['classification']
         attempts = classification.get('attempted_actions', [])
+        drafting_off = result.get('reason') == 'generation_not_configured'
         if attempts:
             st.info('Previously tried')
             for action in attempts:
                 text(action.get('action_id', '').replace('_', ' ') + ' · ' + action.get('outcome', 'unknown'))
         with st.container(border=True, key='response_panel'):
-            st.subheader({'resolution':'Suggested resolution', 'clarification':'A few details are needed',
-                          'escalation':'A support specialist should review this'}.get(result['status'], result['status']))
+            if drafting_off:
+                st.subheader('AI drafting is off')
+                st.info(
+                    'Add a Google AI Studio key to GEMINI_API_KEY in .env and confirm your free plan '
+                    'with LLM_FREE_PLAN_CONFIRMED=true, then restart TeleAssist. See the README quick start. '
+                    'Search, limited local classification and the case/editor screens remain available.'
+                )
+            else:
+                st.subheader({'resolution':'Suggested resolution', 'clarification':'A few details are needed',
+                              'escalation':'A support specialist should review this'}.get(result['status'], result['status']))
             questions = list(dict.fromkeys(q.strip() for q in result.get('questions', []) if q.strip()))
             answer = result['answer']
             if result['status'] == 'clarification' and questions:
                 for question in questions:
                     answer = answer.replace(question, '')
                 answer = ' '.join(answer.split())
-            if answer and not result.get('steps'): text(answer)
+            if answer and not result.get('steps') and not drafting_off: text(answer)
             for number, step in enumerate(result.get('steps', []), 1):
                 text(f"{number}. {step['instruction']}")
                 tier_badge(step.get('evidence_tier', 'unknown'))
@@ -118,7 +130,7 @@ def assistant(client):
                     st.caption('Supporting quote'); text(step.get('support_quote', ''))
                     st.caption('When this applies'); text(step.get('condition', ''))
                     st.caption('Customer information used'); text(step.get('applicability_evidence', ''))
-            if result.get('generation') == 'fallback':
+            if result.get('generation') == 'fallback' and not drafting_off:
                 if result.get('reason') == 'state_confirmation_required':
                     st.info('Confirm the current device or connection state so we can choose the next step.')
                 else:
@@ -126,7 +138,7 @@ def assistant(client):
             if result['status'] != 'clarification':
                 for question in questions: text(question)
             if result.get('steps'): st.caption('Check that each step applies to the customer’s situation.')
-        if result['status'] == 'clarification':
+        if result['status'] == 'clarification' and not drafting_off:
             with st.form('clarification_' + st.session_state.case_request_id):
                 st.caption('Answer each question below. Leave an answer blank if you do not know; your original complaint is kept.')
                 replies = []
@@ -171,11 +183,16 @@ def assistant(client):
             else:
                 st.caption('No explicit cancellation threat detected.')
             if attempts: st.dataframe(attempts, hide_index=True)
-            st.caption('Citation check: ' + result.get('citation_check', 'unknown'))
-            st.caption('Search approach: ' + result.get('query_mode', 'unknown'))
+            if result.get('steps'):
+                st.caption('Source checks: passed' if result.get('citation_check') == 'passed' else 'Source checks: review needed')
+            else:
+                st.caption('No troubleshooting steps were selected; there are no step citations to check.')
+            st.caption('Search approach: ' + {'enriched': 'Complaint plus extracted terms', 'raw': 'Original complaint wording'}.get(result.get('query_mode'), 'Not run'))
             if attempts:
                 for action in attempts: text(action.get('evidence', ''))
-            if result.get('reason'): st.caption('Response reason: ' + result['reason'])
+            with st.expander('Technical details — optional'):
+                st.caption('Citation check: ' + result.get('citation_check', 'unknown'))
+                if result.get('reason'): st.caption('Response reason: ' + result['reason'])
         if result.get('citations'):
             with st.expander('Cited sources'):
                 carousel(result['citations'], 'citation_sources',
